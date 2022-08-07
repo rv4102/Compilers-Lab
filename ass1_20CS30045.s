@@ -1,77 +1,102 @@
-	.file	"asgn1.c"										# Name of the input C file
-	.text													# 
+	.file	"asgn1.c"										# name of the source file
+	.text											# code starts from here
 	.section	.rodata										# read-only data section
-	.align 8												# align LC0 with 8-byte boundary by enforcing alignment 
-															# on a memory address that is a multiple of the value 8
+	.align 8										# align LC0 with 8-byte boundary by enforcing alignment 
+													# on a memory address that is a multiple of the value 8
 .LC0:														# Label of f-string - 1st printf
-	.string	"Enter the string (all lowrer case): "			#
+	.string	"Enter the string (all lowrer case): "
 .LC1:														# Label of f-string - scanf 
-	.string	"%s"											#
+	.string	"%s"
 .LC2:														# Label of f-string - 2nd printf
-	.string	"Length of the string: %d\n"					#
-	.align 8												# align LC3 with 8-byte boundary by enforcing alignment 
-															# on a memory address that is a multiple of the value 8
+	.string	"Length of the string: %d\n"
+	.align 8										# align LC3 with 8-byte boundary by enforcing alignment 
+													# on a memory address that is a multiple of the value 8
 .LC3:														# Label of f-string - 3rd printf
-	.string	"The string in descending order: %s\n"			#
-	.text													# Code starts
-	.globl	main											# main is a global name
-	.type	main, @function									# main is a function:
-main:														# main: starts
-.LFB0:														# Local label
-	.cfi_startproc											# CFI directive to start process
-	endbr64													# Terminate indirect branch in 64-bit
-	pushq	%rbp											# Save old base pointer
-	.cfi_def_cfa_offset 16									# Offset 16 bytes from current stack pointer for CFA
-	.cfi_offset 6, -16										# Previous value of register is saved at offset=offset from CFA
-	movq	%rsp, %rbp										# rbp <-- rsp set new stack base pointer
-	.cfi_def_cfa_register 6									# Uses new register '6' instead of old one from now on
-	subq	$80, %rsp										# Create space for local array and variables
-	movq	%fs:40, %rax									# rbp <-- fs:0+40 (here fs:0 contains the address "pointed to" by fs itself, therefore fs:40 loads value stored at fs:0+40)
-	movq	%rax, -8(%rbp)									# rbp-8 <-- rax move function return value to stack base pointer
-	xorl	%eax, %eax										# bitwise XOR value stored at eax by itself, to obtain 0
-	leaq	.LC0(%rip), %rdi								# load LC0 label into instruction pointer register and load the effective address
-															# of the register into rdi register
-	movl	$0, %eax										# move 0 to last 32 bits of rax register
-	call	printf@PLT										# call printf and print the LC0 string to the console from rdi register
-	leaq	-64(%rbp), %rax									# rax <-- rbp-64 load immediately 64 bits from rbp(stack base pointer) to rax
-	movq	%rax, %rsi										# rsi <-- rax move value stored in rax to rsi
-	leaq	.LC1(%rip), %rdi								# load LC1 label into instruction pointer register and load the effective address
-	movl	$0, %eax										# move 0 to eax register
-	call	__isoc99_scanf@PLT								# call scanf function
-	leaq	-64(%rbp), %rax									# load immediately, value of rbp-64 into rax
-	movq	%rax, %rdi										# rdi <-- rax
-	call	length											# call the length function
-	movl	%eax, -68(%rbp)									# rbp-68 <-- eax 
-	movl	-68(%rbp), %eax									# eax <-- rbp-68
-	movl	%eax, %esi										# esi <-- eax
-	leaq	.LC2(%rip), %rdi								# load LC2 label into instruction pointer register and load the effective address
-	movl	$0, %eax										# eax <-- 0
-	call	printf@PLT										# call the printf function
-	leaq	-32(%rbp), %rdx									# load immediately rbp-32 to rdx
-	movl	-68(%rbp), %ecx									# ecx <-- rbp-68
-	leaq	-64(%rbp), %rax									# load immediately rbp-64 to rax
-	movl	%ecx, %esi										# move ecx to esi
-	movq	%rax, %rdi										# move rax to tdi
-	call	sort											# call the sort function
-	leaq	-32(%rbp), %rax									# load immediately rbp-32 to rax
-	movq	%rax, %rsi										# move rax to rsi
-	leaq	.LC3(%rip), %rdi								# load LC3 label into instruction pointer register and load the effective address
-	movl	$0, %eax										# move 0 to eax
-	call	printf@PLT										# call the printf function
-	movl	$0, %eax										# move 0 to eax
-	movq	-8(%rbp), %rcx									# move rbp-8 to rcx
-	xorq	%fs:40, %rcx									# calculate XOR of value at fs:0+40 and rcx
-	je	.L3													# Jump to L3 if ZF(Zero Flag, which is set by arithmetic operations, i.e. the last performed XOR) is set to 1
-	call	__stack_chk_fail@PLT							# call the __stack_chk_fail function
-.L3:														# Label L3
-	leave													# Set rsp to rbp, then pop the top of the stack into rbp
-	.cfi_def_cfa 7, 8										# rule for CFA to take address from register 7 and add offset 8 to it
-	ret														# return (Pop return address from stack and jump there)
-	.cfi_endproc											# End the CFI directive and close the unwind entry previously opened by .cfi_startproc
-.LFE0:														# Label LFE0
-	.size	main, .-main									# it declares that the size of the label 'main' is the number of lines from where main is defined to this line(72-19=53)
-	.globl	length											# the symbol length should be global
-	.type	length, @function								# length is a function
+	.string	"The string in descending order: %s\n"
+	.text											# code starts
+	.globl	main										# specifies that main is a global name
+	.type	main, @function								# specifies the type of main, which is a function
+main:												# start of 'main'
+.LFB0:
+	.cfi_startproc									# initialize internal structures and emit initial CFI for entry in .eh_frame
+	endbr64										# Terminate indirect branch in 64-bit
+	pushq	%rbp									# save base pointer(rbp) in stack
+	.cfi_def_cfa_offset 16						# set CFA at an offset of 16 bytes from the current stack pointer
+	.cfi_offset 6, -16								# set value of register 6 at offset 16 from CFA
+	movq	%rsp, %rbp							# rbp <-- rsp, set new stack base pointer
+	.cfi_def_cfa_register 6							# Uses new register '6' for computing CFA
+
+# char str[20], dest[20];
+	subq	$80, %rsp							# rsp <-- rsp - 80, create space for str[20], dest[20], len
+	movq	%fs:40, %rax							# get canary (random variable used for protection from stack buffer overflow attack)
+	movq	%rax, -8(%rbp)						# M[rbp-8] <-- rax, push canary to stack base pointer
+	xorl	%eax, %eax								# destroy canary (only last 32 bits erased as only 32-bit canary was used(probably))
+
+# printf("Enter the string (all lowrer case): ");
+	leaq	.LC0(%rip), %rdi					# load address of .LCO(%rip) into rdi, rdi (starting of the format string) is the first argument of printf 
+	movl	$0, %eax								# eax <-- 0 ############################
+	call	printf@PLT							# call printf with rdi as argument
+														# equivalent to printf("Enter the string (all lowrer case): ")
+
+# scanf("%s", str);
+	leaq	-64(%rbp), %rax						# rax <-- M[rbp - 64], load address of M[rbp - 64] into rax, which is rbp - 64 itself (rax now stores str)
+	movq	%rax, %rsi								# rsi <-- rax, rsi (which is str) is the 2nd argument of the scanf function
+	leaq	.LC1(%rip), %rdi					# load address of .LC1(%rip) into rdi, rdi (starting of the format string) is the first argument of printf
+	movl	$0, %eax								# eax <-- 0 ############################
+	call	__isoc99_scanf@PLT					# call scanf with rdi and rsi as arguments
+														# equivalent to scanf("%s", str)
+
+# len = length(str);
+	leaq	-64(%rbp), %rax						# rax <-- M[rbp - 64], load address of M[rbp - 64] into rax, which is rbp - 64 itself (rax stores &str)
+	movq	%rax, %rdi								# rdi <-- rax, rdi (which is &str) is the 1st argument of the length function
+	call	length								# call the length function with rdi as argument
+														# equivalent to length(str)
+
+# printf("Length of the string: %d\n", len);
+	movl	%eax, -68(%rbp)						# M[rbp-68] <-- eax, load address of eax into rbp - 68 (eax stores len)
+	movl	-68(%rbp), %eax							# eax <-- M[rbp - 68], load address of M[rbp - 68] into eax, which is rbp - 68 itself (eax now stores len)
+	movl	%eax, %esi							# esi <-- eax, esi (which is len) is the 2nd argument to printf
+	leaq	.LC2(%rip), %rdi						# load address of .LC2(%rip) into rdi, rdi (starting of the format string) is the first argument of printf
+	movl	$0, %eax							# eax <-- 0
+	call	printf@PLT								# call the printf function with rdi, esi as arguments
+															# equivalent to printf("Length of the string: %d\n", len)
+
+# sort(str, len, dest);
+	leaq	-32(%rbp), %rdx						# rdx <-- M[rbp - 32], load rbp - 32 into rdx immediately (rdx stores str), 1st argument of sort
+	movl	-68(%rbp), %ecx							# ecx <-- M[rbp-68], move address of rbp - 68 which is rbp - 68 itself, to ecx (ecx stores &len)
+	leaq	-64(%rbp), %rax						# rax <-- M[rbp - 64], load rbp - 64 into rax immediately (rax stores dest)
+	movl	%ecx, %esi								# esi <-- ecx, move ecx to esi (esi now stores &len), 2nd argument of sort
+	movq	%rax, %rdi							# rdi <-- rax, move rax to rdi (rdi now stores dest), 3rd argument of sort
+	call	sort									# call the sort function with rdi, rsi and rdx as arguments
+															# equivalent to sort(str, len, dest)
+
+# printf("The string in descending order: %s\n", dest);
+	leaq	-32(%rbp), %rax						# rax <-- M[rbp - 32], load rbp - 32 into rax immediately (rax stores dest)
+	movq	%rax, %rsi								# rsi <-- rax, move rax to rsi (rsi now stores dest), 2nd argument of printf
+	leaq	.LC3(%rip), %rdi					# load address of .LC3(%rip) into rdi, rdi (starting of the format string) is the 1st argument of printf
+	movl	$0, %eax								# eax <-- 0, printf is a variable argument function, %al is expected to hold the number of vector registers, since here printf has integer argument so eax = 0 (al is the first 8 bits of eax)
+	call	printf@PLT							# call the printf function with rdi, rsi as arguments
+														# equivalent to printf("The string in descending order: %s\n", dest)
+
+# return 0;
+	movl	$0, %eax							# eax <-- 0, (eax stores the return value of main function)
+	movq	-8(%rbp), %rcx							# rcx <-- M[rbp - 8], 
+	xorq	%fs:40, %rcx						# take xor, and check if we get 0 or not, if we get 0 then that means there is no stack overflow, and everything is fine
+
+	je	.L3											# jump to L3 if ZF(Zero Flag, which is set by arithmetic operations, i.e. the last performed XOR) is set to 1
+													# this is executed if there is no stack overflow and we thus go to L3
+	call	__stack_chk_fail@PLT				# if we reach here that indicates a stack overflow, hence the execution is terminated
+.L3:
+	leave											# set rsp to rbp, and pop top of stack into rbp
+	.cfi_def_cfa 7, 8							# for computing CFA, take address from register 7 and add an offset of 8 to it 
+	ret												# pop return address from stack and transfer control back to the return address
+	.cfi_endproc								# close the unwind entry previously opened by .cfi_startproc. and emit it to .eh_frame
+.LFE0:
+	.size	main, .-main							# it declares that the size of the label 'main' is the number of lines from where main is defined to this line(72-19=53)
+	.globl	length								# specifies that 'length' is a global name
+	.type	length, @function						# specifies the type of 'length' is a function
+
+# int length(char str[20])
 length:														# length: starts
 .LFB1:														# declare label .LFB1
 	.cfi_startproc											# CFI directive to start process
@@ -167,7 +192,7 @@ sort:														# sort: begins
 	movl	-8(%rbp), %eax									# 
 	cmpl	-28(%rbp), %eax									# if i < len
 	jl	.L13												# jump to L13
-	movq	-40(%rbp), %rdx									#
+	movq	-40(%rbp), %rdx									# 
 	movl	-28(%rbp), %ecx									#
 	movq	-24(%rbp), %rax									#
 	movl	%ecx, %esi
