@@ -92,37 +92,41 @@ main:												# start of 'main'
 	ret												# pop return address from stack and transfer control back to the return address
 	.cfi_endproc								# close the unwind entry previously opened by .cfi_startproc. and emit it to .eh_frame
 .LFE0:
-	.size	main, .-main							# it declares that the size of the label 'main' is the number of lines from where main is defined to this line(72-19=53)
+	.size	main, .-main							# declares the size of 'main'
+
 	.globl	length								# specifies that 'length' is a global name
 	.type	length, @function						# specifies the type of 'length' is a function
 
 # int length(char str[20])
-length:														# length: starts
-.LFB1:														# declare label .LFB1
-	.cfi_startproc											# CFI directive to start process
-	endbr64													# Terminate indirect branch in 64-bit
-	pushq	%rbp											# save old base pointer
-	.cfi_def_cfa_offset 16									# Offset 16 bytes from current stack pointer for CFA
-	.cfi_offset 6, -16										# Previous value of register is saved at offset=offset from CFA
-	movq	%rsp, %rbp										# rbp <-- rsp set new stack base pointer
-	.cfi_def_cfa_register 6									# Uses new register '6' instead of old one from now on
-	movq	%rdi, -24(%rbp)									# rbp-24 <-- rdi 
-	movl	$0, -4(%rbp)									# rbp-4 <-- 0
-	jmp	.L5													# jump to label L5
-.L6:														# Label L6
-	addl	$1, -4(%rbp)									# rbp-4 <-- (rbp-4) + 1, add the value 1 to data stored at rbp-4
-.L5:														# Label L5
-	movl	-4(%rbp), %eax									# eax <-- rbp-4
-	movslq	%eax, %rdx										# move and sign extend a value from 32-bit eax register to 64-bit rdx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rdx, %rax										# rax <-- rax + rdx
-	movzbl	(%rax), %eax									# move a byte with zero extension into 32 bit eax register
-	testb	%al, %al										# bitwise AND of al with itself
-	jne	.L6													# jumps to label L6 if flag ZF is set to 0
-	movl	-4(%rbp), %eax									# eax <-- rbp-4
-	popq	%rbp											# popping the top of the stack to rbp register
-	.cfi_def_cfa 7, 8										# rule for CFA to take address from register 7 and add offset 8 to it
-	ret														# return (Pop return address from stack and jump there)
+length:											# start of 'length'
+.LFB1:
+	.cfi_startproc									# initialize internal structures and emit initial CFI for entry in .eh_frame
+	endbr64												# terminate indirect branch in 64-bit
+	pushq	%rbp									# save base pointer(rbp) in stack
+	.cfi_def_cfa_offset 16								# set CFA at an offset of 16 bytes from the current stack pointer
+	.cfi_offset 6, -16								# set value of register 6 at offset 16 from CFA
+	movq	%rsp, %rbp									# rbp <-- rsp, set new stack base pointer
+	.cfi_def_cfa_register 6							# use register 6 for computing CFA
+	movq	%rdi, -24(%rbp)								# M[rbp-24] <-- rdi, store the 1st argument str (the string with which length was called)
+
+# int i;
+# for (i = 0; str[i] !='\0'; i++)
+	movl	$0, -4(%rbp)							# M[rbp-4] <-- 0, (M[rbp-4] stores i), equivalent to i = 0
+	jmp	.L5												# unconditional jump to L5
+.L6:
+	addl	$1, -4(%rbp)							# M[rbp-4] <-- M[rbp-4] + 1, increment rbp-4 by 1, equivalent to i = i + 1
+.L5:
+	movl	-4(%rbp), %eax							# eax <-- M[rbp-4], move memory at M[rbp-4] to eax (eax stores i)
+	movslq	%eax, %rdx									# rdx <-- eax, move and sign extend a value from 32-bit eax register to 64-bit rdx register
+	movq	-24(%rbp), %rax							# rax <-- M[rbp-24], move rbp - 24 to rax (rax now stores str)
+	addq	%rdx, %rax									# rax <-- rax + rdx, add rdx to memory location rax & store this in rax (rax stores &str[i])
+	movzbl	(%rax), %eax							# move a byte with zero extension into 32 bit eax register
+	testb	%al, %al									# bitwise AND of al with itself
+	jne	.L6											# jumps to label L6 if flag ZF is set to 0
+	movl	-4(%rbp), %eax								# eax <-- rbp-4
+	popq	%rbp									# popping the top of the stack to rbp register
+	.cfi_def_cfa 7, 8									# rule for CFA to take address from register 7 and add offset 8 to it
+	ret												# return (Pop return address from stack and jump there)
 	.cfi_endproc											# End the CFI directive and close the unwind entry previously opened by .cfi_startproc
 .LFE1:														# declare the label LFE1
 	.size	length, .-length								# it declares that the size of the label 'length' is the number of lines from where main is defined to this line(103-75=28)
