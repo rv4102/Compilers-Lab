@@ -1,5 +1,5 @@
 	.file	"asgn1.c"										# name of the source file
-	.text											# code starts from here
+	.text											# ro data starts from here
 	.section	.rodata										# read-only data section
 	.align 8										# align LC0 with 8-byte boundary by enforcing alignment 
 													# on a memory address that is a multiple of the value 8
@@ -13,6 +13,7 @@
 													# on a memory address that is a multiple of the value 8
 .LC3:														# Label of f-string - 3rd printf
 	.string	"The string in descending order: %s\n"
+
 	.text											# code starts
 	.globl	main										# specifies that main is a global name
 	.type	main, @function								# specifies the type of main, which is a function
@@ -27,6 +28,7 @@ main:												# start of 'main'
 	.cfi_def_cfa_register 6							# Uses new register '6' for computing CFA
 
 # char str[20], dest[20];
+# int len;
 	subq	$80, %rsp							# rsp <-- rsp - 80, create space for str[20], dest[20], len
 	movq	%fs:40, %rax							# get canary (random variable used for protection from stack buffer overflow attack)
 	movq	%rax, -8(%rbp)						# M[rbp-8] <-- rax, push canary to stack base pointer
@@ -80,7 +82,7 @@ main:												# start of 'main'
 
 # return 0;
 	movl	$0, %eax							# eax <-- 0, (eax stores the return value of main function)
-	movq	-8(%rbp), %rcx							# rcx <-- M[rbp - 8], 
+	movq	-8(%rbp), %rcx							# rcx <-- M[rbp - 8], (rcx now stores canary)
 	xorq	%fs:40, %rcx						# take xor, and check if we get 0 or not, if we get 0 then that means there is no stack overflow, and everything is fine
 
 	je	.L3											# jump to L3 if ZF(Zero Flag, which is set by arithmetic operations, i.e. the last performed XOR) is set to 1
@@ -121,96 +123,126 @@ length:											# start of 'length'
 	movq	-24(%rbp), %rax							# rax <-- M[rbp-24], move rbp - 24 to rax (rax now stores str)
 	addq	%rdx, %rax									# rax <-- rax + rdx, add rdx to memory location rax & store this in rax (rax stores &str[i])
 	movzbl	(%rax), %eax							# move a byte with zero extension into 32 bit eax register
-	testb	%al, %al									# bitwise AND of al with itself
-	jne	.L6											# jumps to label L6 if flag ZF is set to 0
-	movl	-4(%rbp), %eax								# eax <-- rbp-4
-	popq	%rbp									# popping the top of the stack to rbp register
-	.cfi_def_cfa 7, 8									# rule for CFA to take address from register 7 and add offset 8 to it
-	ret												# return (Pop return address from stack and jump there)
-	.cfi_endproc											# End the CFI directive and close the unwind entry previously opened by .cfi_startproc
-.LFE1:														# declare the label LFE1
-	.size	length, .-length								# it declares that the size of the label 'length' is the number of lines from where main is defined to this line(103-75=28)
-	.globl	sort											# the symbol sort should be global
-	.type	sort, @function									# sort is a function
-sort:														# sort: begins
-.LFB2:														# declare label LFB2
-	.cfi_startproc											# CFI directive to start process
-	endbr64													# Terminate indirect branch in 64-bit
-	pushq	%rbp											# save old base pointer
-	.cfi_def_cfa_offset 16									# Offset 16 bytes from current stack pointer for CFA
-	.cfi_offset 6, -16										# Previous value of register is saved at offset=offset from CFA
-	movq	%rsp, %rbp										# rbp <-- rsp set new stack base pointer
-	.cfi_def_cfa_register 6									# Uses new register '6' instead of old one from now on
-	subq	$48, %rsp										# Create space for local array and variables
-	movq	%rdi, -24(%rbp)									# rbp-24 <-- rdi
-	movl	%esi, -28(%rbp)									# rbp-28 <-- esi
-	movq	%rdx, -40(%rbp)									# rbp-40 <-- rdx
-	movl	$0, -8(%rbp)									# rbp-8 <-- 0
-	jmp	.L9													# jump to label L9
-.L13:														# declare L13
-	movl	$0, -4(%rbp)									# rbp-4 <-- 0
-	jmp	.L10												# jump to label L10
-.L12:														# declare L12
-	movl	-8(%rbp), %eax									# eax <-- rbp-8
-	movslq	%eax, %rdx										# move and sign extend a value from 32-bit eax register to 64-bit rdx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rdx, %rax										# rax <-- rax + rdx
-	movzbl	(%rax), %edx									# move a byte with zero extension into 32 bit edx register
-	movl	-4(%rbp), %eax									# eax <-- rbp-4
-	movslq	%eax, %rcx										# move and sign extend a value from 32-bit eax register to 64-bit rcx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rcx, %rax										# rax <-- rax+rcx
-	movzbl	(%rax), %eax									# move a byte with zero extension into 32 bit eax register
-	cmpb	%al, %dl										# if value at dl is greater than value at al
-	jge	.L11												# then jump to L11 label
-	movl	-8(%rbp), %eax									# eax <-- rbp-8
-	movslq	%eax, %rdx										# move and sign extend a value from 32-bit eax register to 64-bit rdx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rdx, %rax										# rax <-- rax + rdx
-	movzbl	(%rax), %eax									# move a byte with zero extension into 32 bit eax register
-	movb	%al, -9(%rbp)									# rbp-9 <-- al
-	movl	-4(%rbp), %eax									# eax <-- rbp-4
-	movslq	%eax, %rdx										# move and sign extend a value from 32-bit eax register to 64-bit rdx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rdx, %rax										# rax <-- rax + rdx
-	movl	-8(%rbp), %edx									# edx <-- rbp-8
-	movslq	%edx, %rcx										# move and sign extend a value from 32-bit eax register to 64-bit rcx register
-	movq	-24(%rbp), %rdx									# rdx <-- rbp-24
-	addq	%rcx, %rdx										# rdx <-- rdx+rcx
-	movzbl	(%rax), %eax									# move a byte with zero extension into 32 bit eax register
-	movb	%al, (%rdx)										# move 1 byte from al to last byte of rdx
-	movl	-4(%rbp), %eax									# eax <-- rbp-4
-	movslq	%eax, %rdx										# move and sign extend a value from 32-bit eax register to 64-bit rdx register
-	movq	-24(%rbp), %rax									# rax <-- rbp-24
-	addq	%rax, %rdx										# rdx <-- rdx + rax
-	movzbl	-9(%rbp), %eax									# move a byte with zero extension into 32 bit eax register
-	movb	%al, (%rdx)										# move 1 byte from al to last byte of rdx
-.L11:														# label L11
-	addl	$1, -4(%rbp)									# i <-- i+1
-.L10:														# label L10
-	movl	-4(%rbp), %eax									# 
-	cmpl	-28(%rbp), %eax									# if j < len
-	jl	.L12												# jump to L12
-	addl	$1, -8(%rbp)									# j <-- j+1
-.L9:														# label L9
-	movl	-8(%rbp), %eax									# 
-	cmpl	-28(%rbp), %eax									# if i < len
-	jl	.L13												# jump to L13
-	movq	-40(%rbp), %rdx									# 
-	movl	-28(%rbp), %ecx									#
-	movq	-24(%rbp), %rax									#
-	movl	%ecx, %esi
-	movq	%rax, %rdi
-	call	reverse
-	nop
-	leave
-	.cfi_def_cfa 7, 8
-	ret
-	.cfi_endproc
+	testb	%al, %al									# bitwise AND of al with itself, (if al & al == 0, set ZF = 1)
+	jne	.L6											# jump to L6 if ZF != 0, (equivalent to if i != 0, jump to L6)
+
+# return i;
+	movl	-4(%rbp), %eax								# eax <-- M[rbp-4] (eax stores i)
+	popq	%rbp									# pop top of stack into rbp
+	.cfi_def_cfa 7, 8									# for computing CFA, take address from register 7 and add an offset of 8 to it
+	ret												# transfer control back to the return address
+	.cfi_endproc										# close the unwind entry previously opened by .cfi_startproc. and emit it to .eh_frame
+.LFE1:
+	.size	length, .-length						# declares the size of 'length'
+	.globl	sort										# specifies that 'sort' is a global name
+	.type	sort, @function							# specifies the type of 'sort', which is a function
+
+# void sort(char str[20], int len, char dest[20])
+sort:												# sort: begins
+.LFB2:
+	.cfi_startproc									# initialize internal structures and emit initial CFI for entry in .eh_frame
+	endbr64												# terminate indirect branch in 64-bit
+	pushq	%rbp									# save base pointer(rbp) in stack
+	.cfi_def_cfa_offset 16								# set CFA at an offset of 16 bytes from the current stack pointer
+	.cfi_offset 6, -16								# set value of register 6 at offset 16 from CFA
+	movq	%rsp, %rbp									# rbp <-- rsp, set new stack base pointer
+	.cfi_def_cfa_register 6							# use register 6 for computing CFA
+
+# int i, j;
+# char temp;
+	subq	$48, %rsp								# rsp <-- rsp - 48, create space for i, j, temp
+	movq	%rdi, -24(%rbp)								# M[rbp - 24] <-- rdi, (rbp - 24 now stores str)
+	movl	%esi, -28(%rbp)							# M[rbp - 28] <-- esi, (rbp - 28 now stores len)
+	movq	%rdx, -40(%rbp)								# M[rbp - 40] <-- rdx, (rbp - 40 now stores dest)
+
+# for (i = 0; i < len; i++)
+	movl	$0, -8(%rbp)							# M[rbp - 8] <-- 0, equivalent to i = 0 (rbp - 8 stores i)
+	jmp	.L9												# jump to label L9
+
+# for (j = 0; j < len; j++)
+.L13:
+	movl	$0, -4(%rbp)							# M[rbp - 4] <-- 0, equivalent to j = 0 (rbp - 4 stores j)
+	jmp	.L10											# jump to label L10
+
+.L12:
+# if (str[i] < str[j])
+	movl	-8(%rbp), %eax							# eax <-- M[rbp - 8], (eax now stores i)
+	movslq	%eax, %rdx									# move and sign extend a value from 32-bit eax register to 64-bit rdx register 
+														# (rdx stores i)
+	movq	-24(%rbp), %rax							# rax <-- M[rbp - 24], (rax now stores str)
+	addq	%rdx, %rax									# rax <-- rax + rdx, (rax stores str + i or str[i])
+	movzbl	(%rax), %edx							# move a byte with zero extension into 32 bit edx register (edx stores str + i or str[i])
+	movl	-4(%rbp), %eax								# eax <-- M[rbp - 4], (eax stores j)
+	movslq	%eax, %rcx								# move and sign extend a value from 32-bit eax register to 64-bit rcx register
+													# (rcx stores j)
+	movq	-24(%rbp), %rax								# rax <-- M[rbp - 24], (rax stores str)
+	addq	%rcx, %rax								# rax <-- rax + rcx, (rax stores str + j or str[j])
+	movzbl	(%rax), %eax								# move a byte with zero extension into 32 bit eax register (eax stores &str[j])
+	cmpb	%al, %dl								# compare first byte of edx (str[i]) with eax (str[j])
+	jge	.L11											# jump to L11 if first byte of edx >= eax (str[i] >= str[j])
+
+# temp = str[i];
+	movl	-8(%rbp), %eax							# eax <-- M[rbp - 8], (eax now stores i)
+	movslq	%eax, %rdx									# move and sign extend a value from 32-bit eax register to 64-bit rdx register, (rdx now stores i)
+	movq	-24(%rbp), %rax							# rax <-- M[rbp - 24], (rax now stores str)
+	addq	%rdx, %rax									# rax <-- rax + rdx, (rax now stores str + i or str[i])
+	movzbl	(%rax), %eax							# move a byte with zero extension into 32-bit eax register
+	movb	%al, -9(%rbp)								# M[rbp - 9] <-- al, 1st byte of eax is moved to rbp - 9, (push str[i] to rbp - 9)
+
+# str[i] = str[j];
+	movl	-4(%rbp), %eax							# eax <-- M[rbp - 4], (eax now stores j)
+	movslq	%eax, %rdx									# move and sign extend a value from 32-bit eax register to 64-bit rdx register 
+														# (rdx stores j)
+	movq	-24(%rbp), %rax							# rax <-- M[rbp - 24], (rax now stores str)
+	addq	%rdx, %rax									# rax <-- rax + rdx, (rax now stores str[j])
+	movl	-8(%rbp), %edx							# edx <-- M[rbp - 8], (edx now stores i)
+	movslq	%edx, %rcx									# move and sign extend a value from 32-bit eax register to 64-bit rcx register 
+														# (rcx stores i)
+	movq	-24(%rbp), %rdx							# rdx <-- M[rbp - 24], (rdx stores str)
+	addq	%rcx, %rdx									# rdx <-- rdx + rcx, (rdx stores str + i or str[i])
+	movzbl	(%rax), %eax							# move a byte with zero extension into 32 bit eax register (eax stores str[i])
+	movb	%al, (%rdx)									# move 1 byte from al(str[j]) to last byte of rdx(str[i])
+														# (str[i] = str[j])
+
+# str[j] = temp;
+	movl	-4(%rbp), %eax							# eax <-- M[rbp - 4], (eax now stores j)
+	movslq	%eax, %rdx									# move and sign extend a value from 32-bit eax register to 64-bit rdx register
+	movq	-24(%rbp), %rax							# rax <-- M[rbp - 24], (rax stores str)
+	addq	%rax, %rdx									# rdx <-- rdx + rax, (rdx stores str + i or str[i])
+	movzbl	-9(%rbp), %eax							# move a byte with zero extension into 32 bit eax register (eax now stores temp)
+	movb	%al, (%rdx)									# move 1 byte from al to last byte of rdx (M[rdx] stores address of temp)
+
+
+.L11:
+	addl	$1, -4(%rbp)							# j <-- j+1
+.L10:
+	movl	-4(%rbp), %eax								# eax <-- M[rbp - 4], (eax now stores j)
+	cmpl	-28(%rbp), %eax							# if j < len
+	jl	.L12										# jump to L12
+	addl	$1, -8(%rbp)								# i <-- i+1
+.L9:
+	movl	-8(%rbp), %eax							# eax <-- M[rbp - 8], (eax now stores i) 
+	cmpl	-28(%rbp), %eax								# if i < len
+	jl	.L13											# jump to L13
+
+# reverse(str, len, dest);
+	movq	-40(%rbp), %rdx							# rdx <-- M[rbp - 40], (rdx now stores dest)
+	movl	-28(%rbp), %ecx								# ecx <-- M[rbp - 28], (ecx now stores len) 
+	movq	-24(%rbp), %rax							# rax <-- M[rbp - 24], (rax now stores str)
+	movl	%ecx, %esi									# esi <-- ecx, (esi stores len)
+	movq	%rax, %rdi								# rdi <-- rax, (rdi stores str)
+	call	reverse										# call reverse with 1st, 2nd and 3rd args as str, len and dest
+	nop												# do nothing
+	leave												# set rsp to rbp, and pop top of stack into rbp
+	.cfi_def_cfa 7, 8								# for computing CFA, take address from register 7 and add an offset of 8 to it 
+	ret													# pop return address from stack and transfer control back to the return address
+	.cfi_endproc									# close the unwind entry previously opened by .cfi_startproc. and emit it to .eh_frame
 .LFE2:
-	.size	sort, .-sort
-	.globl	reverse
-	.type	reverse, @function
+	.size	sort, .-sort								# declares the size of sort
+	.globl	reverse									# specifies that 'reverse' is a global name
+	.type	reverse, @function						# specifies the type of 'reverse', which is a function
+
+# void reverse(char str[20], int len, char dest[20])
 reverse:
 .LFB3:
 	.cfi_startproc
