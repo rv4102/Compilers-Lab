@@ -64,11 +64,11 @@ main:												# start of 'main'
 											# equivalent to printf("Length of the string: %d\n", len)
 
 # sort(str, len, dest);
-	leaq	-32(%rbp), %rdx					# rdx <-- M[rbp - 32], load rbp - 32 into rdx immediately (rdx stores str), 1st argument of sort
+	leaq	-32(%rbp), %rdx					# rdx <-- M[rbp - 32], load rbp - 32 into rdx immediately (rdx stores dest), 3rd argument of sort
 	movl	-68(%rbp), %ecx				# ecx <-- M[rbp - 68], move address of rbp - 68 which is rbp - 68 itself, to ecx (ecx stores len)
-	leaq	-64(%rbp), %rax				# rax <-- M[rbp - 64], load rbp - 64 into rax immediately (rax stores dest)
+	leaq	-64(%rbp), %rax				# rax <-- M[rbp - 64], load rbp - 64 into rax immediately (rax stores str)
 	movl	%ecx, %esi						# esi <-- ecx, move ecx to esi (esi now stores len), 2nd argument of sort
-	movq	%rax, %rdi						# rdi <-- rax, move rax to rdi (rdi now stores dest), 3rd argument of sort
+	movq	%rax, %rdi						# rdi <-- rax, move rax to rdi (rdi now stores str), 1st argument of sort
 	call	sort						# call the sort function with rdi, rsi and rdx as arguments
 											# equivalent to sort(str, len, dest)
 
@@ -227,11 +227,11 @@ sort:									# sort: begins
 	jl	.L13							# equivalent to: if i < len, jump to L13 
 
 # reverse(str, len, dest);
-	movq	-40(%rbp), %rdx				# rdx <-- M[rbp - 40], (rdx now stores dest, 1st argument of reverse)
+	movq	-40(%rbp), %rdx				# rdx <-- M[rbp - 40], (rdx now stores dest, 3rd argument of reverse)
 	movl	-28(%rbp), %ecx				# ecx <-- M[rbp - 28], (ecx now stores len) 
 	movq	-24(%rbp), %rax				# rax <-- M[rbp - 24], (rax now stores str)
 	movl	%ecx, %esi						# esi <-- ecx, (esi stores len, 2nd argument of reverse)
-	movq	%rax, %rdi						# rdi <-- rax, (rdi stores str, 3rd argument of reverse)
+	movq	%rax, %rdi						# rdi <-- rax, (rdi stores str, 1st argument of reverse)
 	call	reverse						# call reverse with str, len and dest as arguments
 
 # return;
