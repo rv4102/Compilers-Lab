@@ -382,25 +382,25 @@ reverse:
 	popq	%rbp							# pop top of stack into rbp
 	.cfi_def_cfa 7, 8					# for computing CFA, take address from register 7 and add an offset of 8 to it 
 	ret										# transfer control back to the return address
-	.cfi_endproc						# close the unwind entry previously opened by .cfi_startproc. and emit it to .eh_frame
+	.cfi_endproc						# close the unwind entry previously opened by .cfi_startproc and emit it to .eh_frame
 .LFE3:
-	.size	reverse, .-reverse							# size of 'bsearch'
+	.size	reverse, .-reverse			# size of 'reverse'
 
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
 	.section	.note.GNU-stack,"",@progbits
 	.section	.note.gnu.property,"a"
-	.align 8
+	.align 8							# align with 8-byte boundary
 	.long	 1f - 0f
 	.long	 4f - 1f
 	.long	 5
 0:
 	.string	 "GNU"
 1:
-	.align 8
+	.align 8							# align with 8-byte boundary
 	.long	 0xc0000002
 	.long	 3f - 2f
 2:
 	.long	 0x3
 3:
-	.align 8
+	.align 8							# align with 8-byte boundary
 4:
