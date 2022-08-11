@@ -55,7 +55,7 @@ main:												# start of 'main'
 											# equivalent to length(str)
 
 # printf("Length of the string: %d\n", len);
-	movl	%eax, -68(%rbp)				# M[rbp-68] <-- eax, load address of eax into rbp - 68 (eax stores len)
+	movl	%eax, -68(%rbp)				# M[rbp - 68] <-- eax, load address of eax into rbp - 68 (eax stores len)
 	movl	-68(%rbp), %eax				# eax <-- M[rbp - 68], load address of M[rbp - 68] into eax, which is rbp - 68 itself (eax now stores len)
 	movl	%eax, %esi					# esi <-- eax, esi (which is len) is the 2nd argument to printf
 	leaq	.LC2(%rip), %rdi			# load address of .LC2(%rip) into rdi, rdi (starting of the format string) is the 1st argument of printf
@@ -115,12 +115,12 @@ length:									# start of 'length'
 	movl	$0, -4(%rbp)				# M[rbp - 4] <-- 0, (M[rbp - 4] stores i), equivalent to i = 0
 	jmp	.L5								# unconditional jump to L5
 .L6:
-	addl	$1, -4(%rbp)				# M[rbp - 4] <-- M[rbp - 4] + 1, increment rbp - 4 by 1, equivalent to i = i + 1
+	addl	$1, -4(%rbp)				# M[rbp - 4] <-- M[rbp - 4] + 1, increment rbp - 4 by 1, equivalent to i++
 .L5:
 	movl	-4(%rbp), %eax				# eax <-- M[rbp - 4], move address at M[rbp - 4] to eax (eax stores i)
 	movslq	%eax, %rdx					# rdx <-- eax, move & sign extend a value from 32-bit eax register to 64-bit rdx register (rdx now stores i)
 	movq	-24(%rbp), %rax				# rax <-- M[rbp - 24], move rbp - 24 to rax (rax now stores str)
-	addq	%rdx, %rax					# rdx <-- rdx + rax, (rdx stores str + i or str[i])
+	addq	%rdx, %rax					# rax <-- rax + rdx, (rax stores str + i or str[i])
 	movzbl	(%rax), %eax				# move a byte with zero extension into 32 bit eax register
 	testb	%al, %al					# bitwise AND of al (1st byte of eax) with itself, (if al & al == 0, set ZF = 1)
 	jne	.L6								# jump to L6 if ZF != 0, (equivalent to if i != 0, jump to L6)
@@ -200,7 +200,7 @@ sort:									# sort: begins
 	movq	-24(%rbp), %rdx					# rdx <-- M[rbp - 24], (rdx stores str)
 	addq	%rcx, %rdx						# rdx <-- rdx + rcx, (rdx stores str + i or str[i])
 	movzbl	(%rax), %eax					# move a byte with zero extension into 32 bit eax register (eax stores str[i])
-	movb	%al, (%rdx)					# move the first byte from rax (str[j]) to first byte of rdx (str[i]) (equivalent to str[i] = str[j])
+	movb	%al, (%rdx)					# move the first byte from rax (str[j]) to first byte of rdx (str[i]) (M[rdx] stores address of str[j])
 
 # str[j] = temp;
 	movl	-4(%rbp), %eax				# eax <-- M[rbp - 4], (eax now stores j)
@@ -214,7 +214,7 @@ sort:									# sort: begins
 # j++ (from for loop)
 	addl	$1, -4(%rbp)				# M[rbp - 4] <-- M[rbp - 4] + 1, equivalent to j++
 .L10:
-# j < len; j++ (from for loop)
+# j < len; (from for loop)
 	movl	-4(%rbp), %eax				# eax <-- M[rbp - 4], (eax now stores j)
 	cmpl	-28(%rbp), %eax				# set one of the flags (AF CF OF PF SF ZF) by comparing j and len
 	jl	.L12							# equivalent to: if j < len, jump to L12 
@@ -284,13 +284,13 @@ reverse:
 	###### Thus we are ensured to get correct result in both cases
 
 	cmpl	%eax, -4(%rbp)				# set one of the flags (AF CF OF PF SF ZF) by comparing j and len
-	jl	.L18							# equivalent to: if j < len, jump to L13 
+	jl	.L18							# equivalent to: if j < len, jump to L18
 
 # if (i == j)
 # break;
 	movl	-8(%rbp), %eax				# eax <-- M[rbp - 8], (eax now stores i)
 	cmpl	-4(%rbp), %eax				# set one of the flags (AF CF OF PF SF ZF) by comparing i and j
-	je	.L23							# equivalent to: if j < len, jump to L23
+	je	.L23							# equivalent to: if j == len, jump to L23
 
 # else
 # temp = str[i];
@@ -313,7 +313,7 @@ reverse:
 										# (rcx stores i)
 	movq	-24(%rbp), %rdx					# rdx <-- M[rbp - 24], (rdx now stores str)
 	addq	%rcx, %rdx						# rdx <-- rdx + rcx, (rdx now stores str + i or str[i])
-	movzbl	(%rax), %eax					# move a byte with zero extension into 32 bit edx register (edx stores str + j or str[j])
+	movzbl	(%rax), %eax					# move a byte with zero extension into 32 bit eax register (eax stores str + j or str[j])
 	movb	%al, (%rdx)					# M[rdx] <-- al, rdx now stores str[j] (equivalent to str[i]=str[j])
 
 # str[j] = temp;
@@ -374,7 +374,7 @@ reverse:
 # i < len; (from second for loop)
 	movl	-8(%rbp), %eax				# eax <-- M[rbp - 8], (eax now stores i)
 	cmpl	-28(%rbp), %eax				# set one of the flags (AF CF OF PF SF ZF) by comparing i and len
-	jl	.L22							# equivalent to: if i < len, jump to L20
+	jl	.L22							# equivalent to: if i < len, jump to L22
 
 # return;
 	nop										# do nothing
