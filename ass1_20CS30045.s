@@ -290,7 +290,7 @@ reverse:
 # break;
 	movl	-8(%rbp), %eax				# eax <-- M[rbp - 8], (eax now stores i)
 	cmpl	-4(%rbp), %eax				# set one of the flags (AF CF OF PF SF ZF) by comparing i and j
-	je	.L23							# equivalent to: if j == len, jump to L23
+	je	.L23							# equivalent to: if i == j, jump to L23
 
 # else
 # temp = str[i];
