@@ -69,6 +69,12 @@ int printInt(int n){
     if(n == 0)
         buff[i++] = '0';
     else{
+        if(n == __INT32_MAX__+1){ // if n is INT_MIN
+            buff[i++] = '-';
+            buff[i++] = '8';
+            n /= 10;
+            n = -n;
+        }
         if(n < 0){
             buff[i++] = '-';
             n = -n;
@@ -170,6 +176,10 @@ int printFlt(float n){
     // find the integral part of the float number
     int integral_part = (int)n;
     n -= integral_part;
+
+    if(integral_part > __INT32_MAX__ || 
+        integral_part < (__INT32_MAX__-1))
+        return ERR;
 
     // load the integral part into character array
     while(integral_part != 0){
