@@ -218,9 +218,6 @@ int printFlt(float n){
         buff[leftPtr++] = buff[rightPtr];
         buff[rightPtr--] = temp;
     }
-
-    while(buff[len-1] == '0')
-        len--;
     
     __asm__ __volatile__(
         "movl $1, %%eax \n\t"
