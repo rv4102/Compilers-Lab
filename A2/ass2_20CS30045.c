@@ -1,6 +1,6 @@
 // this program contains definitions for printInt, readInt, printFlt, readFlt, printStr
 #include "myl.h"
-#define BUFFER 20
+#define BUFFER 100
 #define PRECISION 6
 
 int printStr(char *string){
@@ -50,7 +50,9 @@ int readInt(int *n){
         int dig = (int)(inputBuff[idx] - '0');
         n1 *= 10;
         n1 += dig;
-
+        if(n1 > __INT32_MAX__ ){
+            return ERR;
+        }
         idx++;
     }
     n1 = (neg == 1)? -n1 : n1;
@@ -128,6 +130,7 @@ int readFlt(float *n){
     
     int neg = 0, idx = 0;
     float n1 = 0;
+    long long integral_part = 0;
     if(inputBuff[0] == '-'){
         neg = 1; // set flag to true
         idx++; // begin traversing from index 1
@@ -142,12 +145,18 @@ int readFlt(float *n){
         int dig = (int)(inputBuff[idx] - '0');
         n1 *= 10;
         n1 += dig;
+        integral_part *=10;
+        integral_part += dig;
+        if(integral_part > __INT_MAX__){
+            return ERR;
+        }
         idx++;
     }
+    
     // if there are digits after the decimal point, then join them to n
     if(idx < len && inputBuff[idx] == '.'){
         idx++;
-        float shift = 10.F;
+        long long shift = 10;
         while(idx < len && inputBuff[idx] != '\n'){
             if(inputBuff[idx] < '0' || inputBuff[idx] > '9')
                 return ERR;
@@ -156,6 +165,9 @@ int readFlt(float *n){
             n1 += dig;
             shift *= 10;
             idx++;
+            if(shift > __INT_MAX__){
+                break;
+            }
         }
     }
     n1 = (neg == 1)? -n1 : n1;
@@ -173,7 +185,7 @@ int printFlt(float n){
     }
 
     // find the integral part of the float number
-    long integral_part = (long)n;
+    long long integral_part = n;
     n -= integral_part;
 
     if(integral_part > __INT32_MAX__ || 
