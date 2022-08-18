@@ -11,4 +11,4 @@ ass2_20CS30045.o: ass2_20CS30045.c myl.h
 		cc -Wall -c ass2_20CS30045.c
 
 clean:
-		rm ass2 main.o libass2_20CS30045.a ass2_20CS30045.o
+		rm main.o libass2_20CS30045.a ass2_20CS30045.o
