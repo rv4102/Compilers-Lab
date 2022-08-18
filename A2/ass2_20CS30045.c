@@ -168,24 +168,22 @@ int printFlt(float n){
     char buff[BUFFER];
     int len = 0;
     if(n < 0){
-        buff[len] = '-';
-        len++;
+        buff[len++] = '-';
         n = -n;
     }
 
     // find the integral part of the float number
-    int integral_part = (int)n;
+    long integral_part = (long)n;
     n -= integral_part;
 
     if(integral_part > __INT32_MAX__ || 
-        integral_part < (__INT32_MAX__-1))
+        integral_part < (__INT32_MAX__+1)) //integral part less than INT_MIN
         return ERR;
 
     // load the integral part into character array
     while(integral_part != 0){
-        buff[len] = (char)('0' + integral_part % 10);
+        buff[len++] = (char)('0' + (integral_part % 10));
         integral_part /= 10;
-        len++;
     }
     if(len == 0 || buff[len-1] == '-')
         buff[len++] = '0';
@@ -197,10 +195,8 @@ int printFlt(float n){
     }
     while(leftPtr < rightPtr){
         char temp = buff[leftPtr];
-        buff[rightPtr] = buff[rightPtr];
-        buff[leftPtr] = temp;
-        leftPtr++;
-        rightPtr--;
+        buff[leftPtr++] = buff[rightPtr];
+        buff[rightPtr--] = temp;
     }
 
     buff[len++] = '.';
@@ -208,21 +204,19 @@ int printFlt(float n){
     // get the fractional part
     for(int i=0; i<PRECISION; i++)
         n *= 10;
-    int fractional_part = (int)n;
+    long fractional_part = (long)n;
 
     // store fractional part in character array
     for(int i=0; i<PRECISION; i++){
-        buff[len++] = (char)('0' + fractional_part%10);
+        buff[len++] = (char)('0' + (fractional_part%10));
         fractional_part /= 10;
     }
-    leftPtr = len-1 - PRECISION;
+    leftPtr = len - PRECISION;
     rightPtr = len-1;
     while(leftPtr < rightPtr){
         char temp = buff[leftPtr];
-        buff[leftPtr] = buff[rightPtr];
-        buff[rightPtr] = temp;
-        leftPtr++;
-        rightPtr--;
+        buff[leftPtr++] = buff[rightPtr];
+        buff[rightPtr--] = temp;
     }
 
     while(buff[len-1] == '0')

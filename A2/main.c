@@ -1,5 +1,4 @@
 #include "myl.h"
-#define NEWLINE "\n"
 
 int main(){
     printStr("------ 1. Tests for printStr ------\n");
@@ -46,15 +45,18 @@ int main(){
         printStr("\n");
     }
     printStr("\n");
+    printStr("Enter 5 numbers:\n");
     float flt_inp;
     for(int i=1; i<=5; i++){
-        if(readFlt(&flt_inp) == 0)
+        if(readFlt(&flt_inp) == 0){
             printStr("Invalid input.\n");
+            if(i != 5) printStr("Enter next number.\n");
+        }
         else{
             printStr("Float #");
             printInt(i);
             printStr(": ");
-            printInt(flt_inp);
+            printFlt(flt_inp);
             printStr("\n");
         }
     }
