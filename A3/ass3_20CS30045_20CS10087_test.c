@@ -4,7 +4,7 @@ typedef signed int si;
 typedef unsigned long ul;
 
 static const double e = 2.7183;
-double d = .244f;
+double d = .244f; // this is not recognised correctly due to the assignment's definition of lexer
 auto b = 50;
 _Bool tf = 1;
 
@@ -24,7 +24,7 @@ signed main(){
     enum months _m = Feb;
     float f1_ = 2.456;
     float f2_ = .45;
-    float f3_ = -.214e23;
+    float f3_ = -.214e23; // this is not recognised correctly due to the assignment's definition of lexer
     float f4_ = 69.E-2;
     char _1 = '†';
     char _2 = '₹';
@@ -33,11 +33,11 @@ signed main(){
     char *s = "abcd";
     char c1 = ''; // invalid character
     char s[10];
-    s = "abcda\0";
+    s = "abcda\n";
     char *str = "This is group 69.\t jg_in_cf is Jatin\'s codeforces id.\n";
 
     // testing punctuators
-    int a = 6, b = 70l;
+    int a = 6, b = 70l; // this is not recognised correctly due to the assignment's definition of lexer
     a = (a&b) ^ (a|b) + (a*b) + ~b - (a&1);
     b = (a>>b) ^ (b<<a) * b+a;
     a = (a>b)? a:b;
@@ -64,7 +64,7 @@ signed main(){
         j--;
     }while(i<j);
 
-    for(int i = 0; (i < 3 && i >= 0) || (i > 100 && i != 101); i++) {
+    for(int i = 0; (i < 69 && i >= 0) || (i > 169 && i != 420); i++) {
     	continue;
     }
 
