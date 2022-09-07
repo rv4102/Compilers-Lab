@@ -1,5 +1,5 @@
 output.txt: input.txt a.out
-	./a.out<input.txt>output.txt
+	./a.out < input.txt > output.txt
 
 a.out:	lex.yy.c main.c
 	cc lex.yy.c main.c -lfl

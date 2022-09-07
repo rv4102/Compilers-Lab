@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 #define KEYWORD 10
 #define IDENTIFIERS 11
