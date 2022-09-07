@@ -8,34 +8,34 @@ int main(){
     int token;
     while(token=yylex()){
         if(token==KEYWORD){
-            printf("< keyword, %d, %s >\n", token, yytext);
+            printf("< KEYWORD, %s >\n", yytext);
         }
         else if(token==IDENTIFIERS){
-            printf("< identifier, %d, %s >\n", token, yytext);
+            printf("< IDENTIFIER, %s >\n", yytext);
         }
         else if(token==INTEGER_CONSTANT){
-            printf("< integer_constant, %d, %s >\n", token, yytext);
+            printf("< INTEGER CONSTANT, %s >\n", yytext);
         }
         else if(token==FLOATING_CONSTANT){
-            printf("< floating_constant, %d, %s >\n", token, yytext);
+            printf("< FLOATING CONSTANT, %s >\n", yytext);
         }
         else if(token==CHARACTER_CONSTANT){
-            printf("< character_constant, %d, %s >\n", token, yytext);
+            printf("< CHARACTER CONSTANT, %s >\n", yytext);
         }
         else if(token==STRING_LITERAL){
-            printf("< string_literal, %d, %s >\n", token, yytext);
+            printf("< STRING LITERAL, %s >\n", yytext);
         }
         else if(token==PUNCTUATORS){
-            printf("< punctuator, %d, %s >\n", token, yytext);
+            printf("< PUNCTUATOR, %s >\n", yytext);
         }
         else if(token==SINGLE_COMMENT_LINE){
-            printf("< single_line_comment, %d >\n", token);
+            printf("< SINGLE LINE COMMENT >\n");
         }
         else if(token==MULTI_COMMENT_LINE){
-            printf("< multple_line_comment, %d >\n", token);
+            printf("< MULTIPLE LINE COMMENT >\n");
         }
         else{
-            printf("< invalid token, %d, %s >\n", token, yytext);
+            printf("< invalid token, %s >\n", yytext);
         }
     }
 }
