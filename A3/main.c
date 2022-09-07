@@ -17,7 +17,7 @@ int main(){
             printf("< INTEGER CONSTANT, %s >\n", yytext);
         }
         else if(token==FLOATING_CONSTANT){
-            printf("< FLOATING CONSTANT, %s >\n", yytext);
+            printf("< FLOATING POINT CONSTANT, %s >\n", yytext);
         }
         else if(token==CHARACTER_CONSTANT){
             printf("< CHARACTER CONSTANT, %s >\n", yytext);
@@ -35,7 +35,7 @@ int main(){
             printf("< MULTIPLE LINE COMMENT >\n");
         }
         else{
-            printf("< invalid token, %s >\n", yytext);
+            printf("< INVALID TOKEN, %s >\n", yytext);
         }
     }
 }
