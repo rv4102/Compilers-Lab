@@ -74,4 +74,11 @@ signed main(){
     else{
         j ^= i;
     }
+
+    /* This assignment demonstrates the C code that our compiler
+    can accept and certain edge cases where it fails. 
+    Our compiler is called tinyC as it accepts a subset of C language.
+    The lexical analyser is developed using lex.
+    */
+   return 0;
 }
