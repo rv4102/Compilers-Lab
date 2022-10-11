@@ -125,11 +125,11 @@ WS                              [ \n\t]
 
 {SINGLE_COMMENT_STARTED}                    {BEGIN(SINGLE_LINE_COMMENT);}
 <SINGLE_LINE_COMMENT>.                      {}
-<SINGLE_LINE_COMMENT>"\n"                   {BEGIN(INITIAL); return SINGLE_COMMENT_LINE;}
+<SINGLE_LINE_COMMENT>"\n"                   {BEGIN(INITIAL); }
 {MULTILINE_STARTED}                         {BEGIN(MULTIPLE_LINE_COMMENT);}
 <MULTIPLE_LINE_COMMENT>.                    {}
 <MULTIPLE_LINE_COMMENT>"\n"                 {}
-<MULTIPLE_LINE_COMMENT>{MULTILINE_END}      {BEGIN(INITIAL); return MULTI_COMMENT_LINE;}
+<MULTIPLE_LINE_COMMENT>{MULTILINE_END}      {BEGIN(INITIAL); }
 {WS}                                        {}
-.                                           {return OTHER;}
+
 %%
