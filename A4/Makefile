@@ -20,4 +20,4 @@ y.tab.c y.tab.h: asgn4_20CS10087_20CS30045.y
 	bison -dty --report=all asgn4_20CS10087_20CS30045.y
 
 clean:
-	rm parser asgn4_20CS10087_20CS30045_main.o lex.yy.* y.tab.* y.output
+	rm asgn4_20CS10087_20CS30045.o lex.yy.* y.tab.* y.output
