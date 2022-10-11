@@ -51,7 +51,7 @@
 %token COMPLEX
 %token IMAGINARY
 
-%token IDENTIFIERSS
+%token IDENTIFIERS
 %token <int_val> INTEGER_CONSTANT
 %token <float_val> FLOATING_CONSTANT
 %token <char_val> CHARACTER_CONSTANT
@@ -440,7 +440,7 @@ iteration_statement: WHILE PARENTHESIS_OPEN expression PARENTHESIS_CLOSE stateme
                    | FOR PARENTHESIS_OPEN  declaration expression_opt SEMICOLON expression_opt PARENTHESIS_CLOSE statement			{ printf("iteration-statement --> for ( declaration expression-opt ; expression-opt ) statement\n"); }
                    ;
 
-jump_statement: GOTO IDENTIFIERSS SEMICOLON																							{ printf("jump-statement --> goto identifier ;\n"); }
+jump_statement: GOTO IDENTIFIERS SEMICOLON																							{ printf("jump-statement --> goto identifier ;\n"); }
               | CONTINUE SEMICOLON																									{ printf("jump-statement --> continue ;\n"); }
               | BREAK SEMICOLON																										{ printf("jump-statement --> break ;\n"); }
               | RETURN expression_opt SEMICOLON																						{ printf("jump-statement --> return expression-opt ;\n"); }
