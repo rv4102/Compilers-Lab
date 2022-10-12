@@ -57,12 +57,12 @@
 %token <char_val> CHARACTER_CONSTANT
 %token <string_val> STRING_LITERAL
 
-%token SQUARE_BRACE_OPEN
-%token SQUARE_BRACE_CLOSE
-%token PARENTHESIS_OPEN
-%token PARENTHESIS_CLOSE
-%token CURLY_BRACE_OPEN
-%token CURLY_BRACE_CLOSE 
+%token LEFT_SQUARE_BRACKET
+%token RIGHT_SQUARE_BRACKET
+%token LEFT_PARENTHESIS
+%token RIGHT_PARENTHESIS
+%token LEFT_CURLY_BRACKET
+%token RIGHT_CURLY_BRACKET 
 %token DOT
 %token ARROW
 %token INCREMENT
@@ -90,7 +90,7 @@
 %token QUESTION_MARK
 %token COLON
 %token SEMICOLON
-%token THREE_DOTS
+%token ELLIPSIS
 %token ASSIGN
 %token MULTIPLY_ASSIGN
 %token DIVIDE_ASSIGN
@@ -105,7 +105,7 @@
 %token COMMA
 %token HASH
 
-%nonassoc PARENTHESIS_CLOSE
+%nonassoc RIGHT_PARENTHESIS
 %nonassoc ELSE
 
 %start translation_unit
@@ -117,7 +117,7 @@ primary_expression: IDENTIFIERS																										{ printf("primary-expre
 				  | FLOATING_CONSTANT																								{ printf("primary_expression --> floating_constant\n"); }
 				  | CHARACTER_CONSTANT																								{ printf("primary_expression --> character_constant\n"); }
                   | STRING_LITERAL																									{ printf("primary-expression --> string-literal\n"); }
-                  | PARENTHESIS_OPEN expression PARENTHESIS_CLOSE																	{ printf("primary-expression --> ( expression )\n"); }
+                  | LEFT_PARENTHESIS expression RIGHT_PARENTHESIS																	{ printf("primary-expression --> ( expression )\n"); }
                   ;
 
 argument_expression_list_opt: argument_expression_list																				{ printf("argument-expression-list-opt --> argument-expression-list\n"); }
@@ -125,14 +125,14 @@ argument_expression_list_opt: argument_expression_list																				{ prin
                             ;
 
 postfix_expression: primary_expression																								{ printf("postfix-expression --> primary-expression\n"); }
-                  | postfix_expression SQUARE_BRACE_OPEN expression SQUARE_BRACE_CLOSE												{ printf("postfix-expression --> postfix-expression [ expression ]\n"); }
-                  | postfix_expression PARENTHESIS_OPEN argument_expression_list_opt PARENTHESIS_CLOSE								{ printf("postfix-expression --> postfix-expression ( argument-expression-list-opt )\n"); }
+                  | postfix_expression LEFT_SQUARE_BRACKET expression RIGHT_SQUARE_BRACKET												{ printf("postfix-expression --> postfix-expression [ expression ]\n"); }
+                  | postfix_expression LEFT_PARENTHESIS argument_expression_list_opt RIGHT_PARENTHESIS								{ printf("postfix-expression --> postfix-expression ( argument-expression-list-opt )\n"); }
                   | postfix_expression DOT IDENTIFIERS																				{ printf("postfix-expression --> postfix-expression . identifier\n"); }
                   | postfix_expression ARROW IDENTIFIERS																				{ printf("postfix-expression --> postfix-expression -> identifier\n"); }
                   | postfix_expression INCREMENT																					{ printf("postfix-expression --> postfix-expression ++\n"); }
                   | postfix_expression DECREMENT																					{ printf("postfix-expression --> postfix-expression --\n"); }
-                  | PARENTHESIS_OPEN type_name PARENTHESIS_CLOSE CURLY_BRACE_OPEN initializer_list CURLY_BRACE_CLOSE				{ printf("postfix-expression --> ( type-name ) { initializer-list }\n"); }
-                  | PARENTHESIS_OPEN type_name PARENTHESIS_CLOSE CURLY_BRACE_OPEN initializer_list COMMA CURLY_BRACE_CLOSE			{ printf("postfix-expression --> ( type-name ) { initializer-list , }\n"); }
+                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET				{ printf("postfix-expression --> ( type-name ) { initializer-list }\n"); }
+                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET			{ printf("postfix-expression --> ( type-name ) { initializer-list , }\n"); }
                   ;
 
 argument_expression_list: assignment_expression																						{ printf("argument-expression-list --> assignment-expression\n"); }
@@ -144,7 +144,7 @@ unary_expression: postfix_expression																								{ printf("unary-expr
                 | DECREMENT unary_expression																						{ printf("unary-expression --> -- unary-expression\n"); }
                 | unary_operator cast_expression																					{ printf("unary-operator --> cast-expression\n"); }
                 | SIZEOF unary_expression																							{ printf("unary-expression --> sizeof unary-expression\n"); }
-                | SIZEOF PARENTHESIS_OPEN type_name PARENTHESIS_CLOSE																{ printf("unary-expression --> sizeof ( type-name )\n"); }
+                | SIZEOF LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS																{ printf("unary-expression --> sizeof ( type-name )\n"); }
                 ;
 
 unary_operator: BITWISE_AND																											{ printf("unary-operator --> &\n"); }
@@ -156,7 +156,7 @@ unary_operator: BITWISE_AND																											{ printf("unary-operator -
               ;
 
 cast_expression: unary_expression																									{ printf("cast-expression --> unary-expression\n"); }
-               | PARENTHESIS_OPEN type_name PARENTHESIS_CLOSE cast_expression														{ printf("cast-expression --> ( type-name ) cast-expression\n"); }
+               | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS cast_expression														{ printf("cast-expression --> ( type-name ) cast-expression\n"); }
                ;
 
 multiplicative_expression: cast_expression																							{ printf("multiplicative-expression --> cast-expression\n"); }
@@ -293,8 +293,8 @@ identifier_opt: IDENTIFIERS																											{ printf("identifier-opt -
               |																														{ printf("identifier-opt --> epsilon\n"); }
               ;
 
-enum_specifier: ENUM identifier_opt CURLY_BRACE_OPEN enumerator_list CURLY_BRACE_CLOSE												{ printf("enum-specifier --> enum identifier-opt { enumerator-list }\n"); }
-              | ENUM identifier_opt CURLY_BRACE_OPEN enumerator_list COMMA CURLY_BRACE_CLOSE										{ printf("enum-specifier --> enum identifier-opt { enumerator-list , }\n"); }
+enum_specifier: ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list RIGHT_CURLY_BRACKET												{ printf("enum-specifier --> enum identifier-opt { enumerator-list }\n"); }
+              | ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list COMMA RIGHT_CURLY_BRACKET										{ printf("enum-specifier --> enum identifier-opt { enumerator-list , }\n"); }
               | ENUM IDENTIFIERS																										{ printf("enum-specifier --> enum identifier\n"); }
               ;
 
@@ -322,13 +322,13 @@ pointer_opt: pointer																												{ printf("pointer-opt --> pointe
            ;
 
 direct_declarator: IDENTIFIERS																										{ printf("direct-declarator --> identifier\n"); }
-                 | PARENTHESIS_OPEN declarator PARENTHESIS_CLOSE																	{ printf("direct-declarator --> ( declarator )\n"); }
-                 | direct_declarator SQUARE_BRACE_OPEN type_qualifier_list_opt assignment_expression_opt SQUARE_BRACE_CLOSE			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
-                 | direct_declarator SQUARE_BRACE_OPEN STATIC type_qualifier_list_opt assignment_expression SQUARE_BRACE_CLOSE		{ printf("direct-declarator --> direct_declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
-                 | direct_declarator SQUARE_BRACE_OPEN type_qualifier_list STATIC assignment_expression SQUARE_BRACE_CLOSE			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list static assignment-expression ]\n"); }
-                 | direct_declarator SQUARE_BRACE_OPEN type_qualifier_list_opt MULTIPLY SQUARE_BRACE_CLOSE							{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt * ]\n"); }
-                 | direct_declarator PARENTHESIS_OPEN parameter_type_list PARENTHESIS_CLOSE											{ printf("direct-declarator --> direct_declarator ( parameter-type-list )\n"); }
-                 | direct_declarator PARENTHESIS_OPEN identifier_list_opt PARENTHESIS_CLOSE											{ printf("direct-declarator --> direct_declarator ( identifier-list-opt )\n"); }
+                 | LEFT_PARENTHESIS declarator RIGHT_PARENTHESIS																	{ printf("direct-declarator --> ( declarator )\n"); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt assignment_expression_opt RIGHT_SQUARE_BRACKET			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
+                 | direct_declarator LEFT_SQUARE_BRACKET STATIC type_qualifier_list_opt assignment_expression RIGHT_SQUARE_BRACKET		{ printf("direct-declarator --> direct_declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list STATIC assignment_expression RIGHT_SQUARE_BRACKET			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list static assignment-expression ]\n"); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt MULTIPLY RIGHT_SQUARE_BRACKET							{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt * ]\n"); }
+                 | direct_declarator LEFT_PARENTHESIS parameter_type_list RIGHT_PARENTHESIS											{ printf("direct-declarator --> direct_declarator ( parameter-type-list )\n"); }
+                 | direct_declarator LEFT_PARENTHESIS identifier_list_opt RIGHT_PARENTHESIS											{ printf("direct-declarator --> direct_declarator ( identifier-list-opt )\n"); }
                  ;
 
 type_qualifier_list_opt: type_qualifier_list																						{ printf("type-qualifier-list-opt --> type-qualifier-list\n"); }
@@ -352,7 +352,7 @@ type_qualifier_list: type_qualifier																									{ printf("type-quali
                    ;
 
 parameter_type_list: parameter_list																									{ printf("parameter-type-list --> parameter-list\n"); }
-                   | parameter_list COMMA THREE_DOTS																				{ printf("parameter-type-list --> parameter-list , ...\n"); }
+                   | parameter_list COMMA ELLIPSIS																				{ printf("parameter-type-list --> parameter-list , ...\n"); }
                    ;
 
 parameter_list: parameter_declaration																								{ printf("parameter-list --> parameter-declaration\n"); }
@@ -371,8 +371,8 @@ type_name: specifier_qualifier_list																									{ printf("type-name 
          ;
 
 initializer: assignment_expression																									{ printf("initializer --> assignment-expression\n"); }
-           | CURLY_BRACE_OPEN initializer_list CURLY_BRACE_CLOSE																	{ printf("initializer --> { initializer-list }\n"); }
-           | CURLY_BRACE_OPEN initializer_list COMMA CURLY_BRACE_CLOSE																{ printf("initializer --> { initializer-list , }\n"); }
+           | LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET																	{ printf("initializer --> { initializer-list }\n"); }
+           | LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET																{ printf("initializer --> { initializer-list , }\n"); }
            ;
 
 initializer_list: designation_opt initializer																						{ printf("initializer-list --> designation-opt initializer\n"); }
@@ -390,7 +390,7 @@ designator_list: designator																											{ printf("designator-list 
                | designator_list designator																							{ printf("designator-list --> designator-list designator\n"); }
                ;
 
-designator: SQUARE_BRACE_OPEN constant_expression SQUARE_BRACE_CLOSE																{ printf("designator --> [ constant-expression ]\n"); }
+designator: LEFT_SQUARE_BRACKET constant_expression RIGHT_SQUARE_BRACKET																{ printf("designator --> [ constant-expression ]\n"); }
           | DOT IDENTIFIERS																											{ printf("designator --> . identifier\n"); }
           ;
 
@@ -407,7 +407,7 @@ labeled_statement: IDENTIFIERS COLON statement																						{ printf("la
                  | DEFAULT COLON statement																							{ printf("labeled-statement --> default : statement\n"); }
                  ;
 
-compound_statement: CURLY_BRACE_OPEN block_item_list_opt CURLY_BRACE_CLOSE															{ printf("compound-statement --> { block-item-list-opt }\n"); }
+compound_statement: LEFT_CURLY_BRACKET block_item_list_opt RIGHT_CURLY_BRACKET															{ printf("compound-statement --> { block-item-list-opt }\n"); }
                   ;
 
 block_item_list_opt: block_item_list																								{ printf("block-item-list-opt --> block-item-list\n"); }
@@ -429,15 +429,15 @@ expression_opt: expression																											{ printf("expression-opt --
               |																														{ printf("expression-opt --> epsilon\n"); }
               ;
 
-selection_statement: IF PARENTHESIS_OPEN expression PARENTHESIS_CLOSE statement														{ printf("selection-statement --> if ( expression ) statement\n"); }
-                   | IF PARENTHESIS_OPEN expression PARENTHESIS_CLOSE statement ELSE statement										{ printf("selection-statement --> if ( expression ) statement else statement\n"); }
-                   | SWITCH PARENTHESIS_OPEN expression PARENTHESIS_CLOSE statement													{ printf("selection-statement --> switch ( expression ) statement\n"); }
+selection_statement: IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement														{ printf("selection-statement --> if ( expression ) statement\n"); }
+                   | IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement ELSE statement										{ printf("selection-statement --> if ( expression ) statement else statement\n"); }
+                   | SWITCH LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("selection-statement --> switch ( expression ) statement\n"); }
                    ;
 
-iteration_statement: WHILE PARENTHESIS_OPEN expression PARENTHESIS_CLOSE statement													{ printf("iteration-statement --> while ( expression ) statement\n"); }
-                   | DO statement WHILE PARENTHESIS_OPEN expression PARENTHESIS_CLOSE SEMICOLON										{ printf("iteration-statement --> do statement while ( expression ) ;\n"); }
-                   | FOR PARENTHESIS_OPEN expression_opt SEMICOLON expression_opt SEMICOLON expression_opt PARENTHESIS_CLOSE statement							{ printf("iteration-statement --> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
-                   | FOR PARENTHESIS_OPEN  declaration expression_opt SEMICOLON expression_opt PARENTHESIS_CLOSE statement			{ printf("iteration-statement --> for ( declaration expression-opt ; expression-opt ) statement\n"); }
+iteration_statement: WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("iteration-statement --> while ( expression ) statement\n"); }
+                   | DO statement WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS SEMICOLON										{ printf("iteration-statement --> do statement while ( expression ) ;\n"); }
+                   | FOR LEFT_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement							{ printf("iteration-statement --> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
+                   | FOR LEFT_PARENTHESIS  declaration expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement			{ printf("iteration-statement --> for ( declaration expression-opt ; expression-opt ) statement\n"); }
                    ;
 
 jump_statement: GOTO IDENTIFIERS SEMICOLON																							{ printf("jump-statement --> goto identifier ;\n"); }
@@ -469,4 +469,5 @@ declaration_list: declaration																										{ printf("declaration-lis
 
 void yyerror(char *s) {
     printf("Error occured!      line no.: %d       Error: %s      Unable to parse: %s\n",yylineno, s, yytext);  
+    printf("Parsing process terminated due to error.");
 }

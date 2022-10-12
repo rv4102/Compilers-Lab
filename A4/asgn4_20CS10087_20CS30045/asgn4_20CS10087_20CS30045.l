@@ -75,12 +75,12 @@ WS                              [ \n\t]
 {CHARACTER_CONSTANT}                        {return CHARACTER_CONSTANT;}
 {STRING_LITERAL}                            {return STRING_LITERAL;}
 
-"["                             { return SQUARE_BRACE_OPEN; }
-"]"                             { return SQUARE_BRACE_CLOSE; }
-"("                             { return PARENTHESIS_OPEN; }
-")"                             { return PARENTHESIS_CLOSE; }
-"{"                             { return CURLY_BRACE_OPEN; }
-"}"                             { return CURLY_BRACE_CLOSE; }
+"["                             { return LEFT_SQUARE_BRACKET; }
+"]"                             { return RIGHT_SQUARE_BRACKET; }
+"("                             { return LEFT_PARENTHESIS; }
+")"                             { return RIGHT_PARENTHESIS; }
+"{"                             { return LEFT_CURLY_BRACKET; }
+"}"                             { return RIGHT_CURLY_BRACKET; }
 "."                             { return DOT; }
 "->"                            { return ARROW; }
 "++"                            { return INCREMENT; }
@@ -108,7 +108,7 @@ WS                              [ \n\t]
 "?"                             { return QUESTION_MARK; }
 ":"                             { return COLON; }
 ";"                             { return SEMICOLON; }
-"..."                           { return THREE_DOTS; }
+"..."                           { return ELLIPSIS; }
 "="                             { return ASSIGN; }
 "*="                            { return MULTIPLY_ASSIGN; }
 "/="                            { return DIVIDE_ASSIGN; }
