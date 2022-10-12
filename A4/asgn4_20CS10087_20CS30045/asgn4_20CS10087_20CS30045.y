@@ -51,7 +51,7 @@
 %token COMPLEX
 %token IMAGINARY
 
-%token IDENTIFIERS
+%token <string_val> IDENTIFIERS
 %token <int_val> INTEGER_CONSTANT
 %token <float_val> FLOATING_CONSTANT
 %token <char_val> CHARACTER_CONSTANT
@@ -112,357 +112,357 @@
 
 %%
 
-primary_expression: IDENTIFIERS																										{ printf("primary-expression --> identifier\n"); }
-                  | INTEGER_CONSTANT																								{ printf("primary-expression --> integer_constant\n"); }
-				  | FLOATING_CONSTANT																								{ printf("primary_expression --> floating_constant\n"); }
-				  | CHARACTER_CONSTANT																								{ printf("primary_expression --> character_constant\n"); }
-                  | STRING_LITERAL																									{ printf("primary-expression --> string-literal\n"); }
-                  | LEFT_PARENTHESIS expression RIGHT_PARENTHESIS																	{ printf("primary-expression --> ( expression )\n"); }
+primary_expression: IDENTIFIERS																										{ printf("Line no. %d: primary-expression --> identifier\n",yylineno); }
+                  | INTEGER_CONSTANT																								{ printf("Line no. %d: primary-expression --> integer_constant\n",yylineno); }
+				  | FLOATING_CONSTANT																								{ printf("Line no. %d: primary_expression --> floating_constant\n",yylineno); }
+				  | CHARACTER_CONSTANT																								{ printf("Line no. %d: primary_expression --> character_constant\n",yylineno); }
+                  | STRING_LITERAL																									{ printf("Line no. %d: primary-expression --> string-literal\n",yylineno); }
+                  | LEFT_PARENTHESIS expression RIGHT_PARENTHESIS																	{ printf("Line no. %d: primary-expression --> ( expression )\n",yylineno); }
                   ;
 
-argument_expression_list_opt: argument_expression_list																				{ printf("argument-expression-list-opt --> argument-expression-list\n"); }
-                            |																										{ printf("argument-expression-list-opt --> epsilon\n"); }
+argument_expression_list_opt: argument_expression_list																				{ printf("Line no. %d: argument-expression-list-opt --> argument-expression-list\n",yylineno); }
+                            |																										{ printf("Line no. %d: argument-expression-list-opt --> epsilon\n",yylineno); }
                             ;
 
-postfix_expression: primary_expression																								{ printf("postfix-expression --> primary-expression\n"); }
-                  | postfix_expression LEFT_SQUARE_BRACKET expression RIGHT_SQUARE_BRACKET												{ printf("postfix-expression --> postfix-expression [ expression ]\n"); }
-                  | postfix_expression LEFT_PARENTHESIS argument_expression_list_opt RIGHT_PARENTHESIS								{ printf("postfix-expression --> postfix-expression ( argument-expression-list-opt )\n"); }
-                  | postfix_expression DOT IDENTIFIERS																				{ printf("postfix-expression --> postfix-expression . identifier\n"); }
-                  | postfix_expression ARROW IDENTIFIERS																				{ printf("postfix-expression --> postfix-expression -> identifier\n"); }
-                  | postfix_expression INCREMENT																					{ printf("postfix-expression --> postfix-expression ++\n"); }
-                  | postfix_expression DECREMENT																					{ printf("postfix-expression --> postfix-expression --\n"); }
-                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET				{ printf("postfix-expression --> ( type-name ) { initializer-list }\n"); }
-                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET			{ printf("postfix-expression --> ( type-name ) { initializer-list , }\n"); }
+postfix_expression: primary_expression																								{ printf("Line no. %d: postfix-expression --> primary-expression\n",yylineno); }
+                  | postfix_expression LEFT_SQUARE_BRACKET expression RIGHT_SQUARE_BRACKET												{ printf("Line no. %d: postfix-expression --> postfix-expression [ expression ]\n",yylineno); }
+                  | postfix_expression LEFT_PARENTHESIS argument_expression_list_opt RIGHT_PARENTHESIS								{ printf("Line no. %d: postfix-expression --> postfix-expression ( argument-expression-list-opt )\n",yylineno); }
+                  | postfix_expression DOT IDENTIFIERS																				{ printf("Line no. %d: postfix-expression --> postfix-expression . identifier\n",yylineno); }
+                  | postfix_expression ARROW IDENTIFIERS																				{ printf("Line no. %d: postfix-expression --> postfix-expression -> identifier\n",yylineno); }
+                  | postfix_expression INCREMENT																					{ printf("Line no. %d: postfix-expression --> postfix-expression ++\n",yylineno); }
+                  | postfix_expression DECREMENT																					{ printf("Line no. %d: postfix-expression --> postfix-expression --\n",yylineno); }
+                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET				{ printf("Line no. %d: postfix-expression --> ( type-name ) { initializer-list }\n",yylineno); }
+                  | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET			{ printf("Line no. %d: postfix-expression --> ( type-name ) { initializer-list , }\n",yylineno); }
                   ;
 
-argument_expression_list: assignment_expression																						{ printf("argument-expression-list --> assignment-expression\n"); }
-                        | argument_expression_list COMMA assignment_expression														{ printf("argument-expression-list --> argument-expression-list , assignment-expression\n"); }
+argument_expression_list: assignment_expression																						{ printf("Line no. %d: argument-expression-list --> assignment-expression\n",yylineno); }
+                        | argument_expression_list COMMA assignment_expression														{ printf("Line no. %d: argument-expression-list --> argument-expression-list , assignment-expression\n",yylineno); }
                         ;
 
-unary_expression: postfix_expression																								{ printf("unary-expression --> postfix-expression\n"); }
-                | INCREMENT unary_expression																						{ printf("unary-expression --> ++ unary-expression\n"); }
-                | DECREMENT unary_expression																						{ printf("unary-expression --> -- unary-expression\n"); }
-                | unary_operator cast_expression																					{ printf("unary-operator --> cast-expression\n"); }
-                | SIZEOF unary_expression																							{ printf("unary-expression --> sizeof unary-expression\n"); }
-                | SIZEOF LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS																{ printf("unary-expression --> sizeof ( type-name )\n"); }
+unary_expression: postfix_expression																								{ printf("Line no. %d: unary-expression --> postfix-expression\n",yylineno); }
+                | INCREMENT unary_expression																						{ printf("Line no. %d: unary-expression --> ++ unary-expression\n",yylineno); }
+                | DECREMENT unary_expression																						{ printf("Line no. %d: unary-expression --> -- unary-expression\n",yylineno); }
+                | unary_operator cast_expression																					{ printf("Line no. %d: unary-operator --> cast-expression\n",yylineno); }
+                | SIZEOF unary_expression																							{ printf("Line no. %d: unary-expression --> sizeof unary-expression\n",yylineno); }
+                | SIZEOF LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS																{ printf("Line no. %d: unary-expression --> sizeof ( type-name )\n",yylineno); }
                 ;
 
-unary_operator: BITWISE_AND																											{ printf("unary-operator --> &\n"); }
-              | MULTIPLY																											{ printf("unary-operator --> *\n"); }
-              | ADD																													{ printf("unary-operator --> +\n"); }
-              | SUBTRACT																											{ printf("unary-operator --> -\n"); }
-              | BITWISE_NOR																											{ printf("unary-operator --> ~\n"); }
-              | NOT																													{ printf("unary-operator --> !\n"); }
+unary_operator: BITWISE_AND																											{ printf("Line no. %d: unary-operator --> &\n",yylineno); }
+              | MULTIPLY																											{ printf("Line no. %d: unary-operator --> *\n",yylineno); }
+              | ADD																													{ printf("Line no. %d: unary-operator --> +\n",yylineno); }
+              | SUBTRACT																											{ printf("Line no. %d: unary-operator --> -\n",yylineno); }
+              | BITWISE_NOR																											{ printf("Line no. %d: unary-operator --> ~\n",yylineno); }
+              | NOT																													{ printf("Line no. %d: unary-operator --> !\n",yylineno); }
               ;
 
-cast_expression: unary_expression																									{ printf("cast-expression --> unary-expression\n"); }
-               | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS cast_expression														{ printf("cast-expression --> ( type-name ) cast-expression\n"); }
+cast_expression: unary_expression																									{ printf("Line no. %d: cast-expression --> unary-expression\n",yylineno); }
+               | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS cast_expression														{ printf("Line no. %d: cast-expression --> ( type-name ) cast-expression\n",yylineno); }
                ;
 
-multiplicative_expression: cast_expression																							{ printf("multiplicative-expression --> cast-expression\n"); }
-                         | multiplicative_expression MULTIPLY cast_expression														{ printf("multiplicative-expression --> multiplicative-expression * cast-expression\n"); }
-                         | multiplicative_expression DIVIDE cast_expression															{ printf("multiplicative-expression --> multiplicative-expression / cast-expression\n"); }
-                         | multiplicative_expression MODULO cast_expression															{ printf("multiplicative-expression --> multiplicative-expression %% cast-expression\n"); }
+multiplicative_expression: cast_expression																							{ printf("Line no. %d: multiplicative-expression --> cast-expression\n",yylineno); }
+                         | multiplicative_expression MULTIPLY cast_expression														{ printf("Line no. %d: multiplicative-expression --> multiplicative-expression * cast-expression\n",yylineno); }
+                         | multiplicative_expression DIVIDE cast_expression															{ printf("Line no. %d: multiplicative-expression --> multiplicative-expression / cast-expression\n",yylineno); }
+                         | multiplicative_expression MODULO cast_expression															{ printf("Line no. %d: multiplicative-expression --> multiplicative-expression %% cast-expression\n",yylineno); }
                          ;
 
-additive_expression: multiplicative_expression																						{ printf("additive-expression --> multiplicative-expression\n"); }
-                   | additive_expression ADD multiplicative_expression																{ printf("additive-expression --> additive-expression + multiplicative-expression\n"); }
-                   | additive_expression SUBTRACT multiplicative_expression															{ printf("additive-expression --> additive-expression - multiplicative-expression\n"); }
+additive_expression: multiplicative_expression																						{ printf("Line no. %d: additive-expression --> multiplicative-expression\n",yylineno); }
+                   | additive_expression ADD multiplicative_expression																{ printf("Line no. %d: additive-expression --> additive-expression + multiplicative-expression\n",yylineno); }
+                   | additive_expression SUBTRACT multiplicative_expression															{ printf("Line no. %d: additive-expression --> additive-expression - multiplicative-expression\n",yylineno); }
                    ;
 
-shift_expression: additive_expression																								{ printf("shift-expression --> additive-expression\n"); }
-                | shift_expression LSHIFT additive_expression																		{ printf("shift-expression --> shift-expression << additive-expression\n"); }
-                | shift_expression RSHIFT additive_expression																		{ printf("shift-expression --> shift-expression >> additive-expression\n"); }
+shift_expression: additive_expression																								{ printf("Line no. %d: shift-expression --> additive-expression\n",yylineno); }
+                | shift_expression LSHIFT additive_expression																		{ printf("Line no. %d: shift-expression --> shift-expression << additive-expression\n",yylineno); }
+                | shift_expression RSHIFT additive_expression																		{ printf("Line no. %d: shift-expression --> shift-expression >> additive-expression\n",yylineno); }
                 ;
 
-relational_expression: shift_expression																								{ printf("relational-expression --> shift-expression\n"); }
-                     | relational_expression LESS_THAN shift_expression																{ printf("relational-expression --> relational-expression < shift-expression\n"); }
-                     | relational_expression GREATER_THAN shift_expression															{ printf("relational-expression --> relational-expression > shift-expression\n"); }
-                     | relational_expression LESS_THAN_EQUAL shift_expression														{ printf("relational-expression --> relational-expression <= shift-expression\n"); }
-                     | relational_expression GREATER_THAN_EQUAL shift_expression													{ printf("relational-expression --> relational-expression >= shift-expression\n"); }
+relational_expression: shift_expression																								{ printf("Line no. %d: relational-expression --> shift-expression\n",yylineno); }
+                     | relational_expression LESS_THAN shift_expression																{ printf("Line no. %d: relational-expression --> relational-expression < shift-expression\n",yylineno); }
+                     | relational_expression GREATER_THAN shift_expression															{ printf("Line no. %d: relational-expression --> relational-expression > shift-expression\n",yylineno); }
+                     | relational_expression LESS_THAN_EQUAL shift_expression														{ printf("Line no. %d: relational-expression --> relational-expression <= shift-expression\n",yylineno); }
+                     | relational_expression GREATER_THAN_EQUAL shift_expression													{ printf("Line no. %d: relational-expression --> relational-expression >= shift-expression\n",yylineno); }
                      ;
 
-equality_expression: relational_expression																							{ printf("equality-expression --> relational-expression\n"); }
-                   | equality_expression EQUAL relational_expression																{ printf("equality-expression --> equality-expression == relational-expression\n"); }
-                   | equality_expression NOT_EQUAL relational_expression															{ printf("equality-expression --> equality-expression != relational-expression\n"); }
+equality_expression: relational_expression																							{ printf("Line no. %d: equality-expression --> relational-expression\n",yylineno); }
+                   | equality_expression EQUAL relational_expression																{ printf("Line no. %d: equality-expression --> equality-expression == relational-expression\n",yylineno); }
+                   | equality_expression NOT_EQUAL relational_expression															{ printf("Line no. %d: equality-expression --> equality-expression != relational-expression\n",yylineno); }
                    ;
 
-and_expression: equality_expression																									{ printf("AND-expression --> equality-expression\n"); }
-              | and_expression BITWISE_AND equality_expression																		{ printf("AND-expression --> AND-expression & equality-expression\n"); }
+and_expression: equality_expression																									{ printf("Line no. %d: AND-expression --> equality-expression\n",yylineno); }
+              | and_expression BITWISE_AND equality_expression																		{ printf("Line no. %d: AND-expression --> AND-expression & equality-expression\n",yylineno); }
               ;
 
-exclusive_or_expression: and_expression																								{ printf("exclusive-OR-expression --> AND-expression\n"); }
-                       | exclusive_or_expression BITWISE_XOR and_expression															{ printf("exclusive-OR-expression --> exclusive-OR-expression ^ AND-expression\n"); }
+exclusive_or_expression: and_expression																								{ printf("Line no. %d: exclusive-OR-expression --> AND-expression\n",yylineno); }
+                       | exclusive_or_expression BITWISE_XOR and_expression															{ printf("Line no. %d: exclusive-OR-expression --> exclusive-OR-expression ^ AND-expression\n",yylineno); }
                        ;
 
-inclusive_or_expression: exclusive_or_expression																					{ printf("inclusive-OR-expression --> exclusive-OR-expression\n"); }
-                       | inclusive_or_expression BITWISE_OR exclusive_or_expression													{ printf("inclusive-OR-expression --> inclusive-OR-expression | exclusive-OR-expression\n"); }
+inclusive_or_expression: exclusive_or_expression																					{ printf("Line no. %d: inclusive-OR-expression --> exclusive-OR-expression\n",yylineno); }
+                       | inclusive_or_expression BITWISE_OR exclusive_or_expression													{ printf("Line no. %d: inclusive-OR-expression --> inclusive-OR-expression | exclusive-OR-expression\n",yylineno); }
                        ;
 
-logical_and_expression: inclusive_or_expression																						{ printf("logical-AND-expression --> inclusive-OR-expression\n"); }
-                      | logical_and_expression LOGICAL_AND inclusive_or_expression													{ printf("logical-AND-expression --> logical-AND-expression && inclusive-OR-expression\n"); }
+logical_and_expression: inclusive_or_expression																						{ printf("Line no. %d: logical-AND-expression --> inclusive-OR-expression\n",yylineno); }
+                      | logical_and_expression LOGICAL_AND inclusive_or_expression													{ printf("Line no. %d: logical-AND-expression --> logical-AND-expression && inclusive-OR-expression\n",yylineno); }
                       ;
 
-logical_or_expression: logical_and_expression																						{ printf("logical-OR-expression --> logical-AND-expression\n"); }
-                     | logical_or_expression LOGICAL_OR logical_and_expression														{ printf("logical-OR-expression --> logical_or_expression || logical-AND-expression\n"); }
+logical_or_expression: logical_and_expression																						{ printf("Line no. %d: logical-OR-expression --> logical-AND-expression\n",yylineno); }
+                     | logical_or_expression LOGICAL_OR logical_and_expression														{ printf("Line no. %d: logical-OR-expression --> logical_or_expression || logical-AND-expression\n",yylineno); }
                      ;
 
-conditional_expression: logical_or_expression																						{ printf("conditional-expression --> logical-OR-expression\n"); }
-                      | logical_or_expression QUESTION_MARK expression COLON conditional_expression									{ printf("conditional-expression --> logical-OR-expression ? expression : conditional-expression\n"); }
+conditional_expression: logical_or_expression																						{ printf("Line no. %d: conditional-expression --> logical-OR-expression\n",yylineno); }
+                      | logical_or_expression QUESTION_MARK expression COLON conditional_expression									{ printf("Line no. %d: conditional-expression --> logical-OR-expression ? expression : conditional-expression\n",yylineno); }
                       ;
 
-assignment_expression: conditional_expression																						{ printf("assignment-expression --> conditional-expression\n"); }
-                     | unary_expression assignment_operator assignment_expression													{ printf("assignment-expression --> unary-expression assignment-operator assignment-expression\n"); }
+assignment_expression: conditional_expression																						{ printf("Line no. %d: assignment-expression --> conditional-expression\n",yylineno); }
+                     | unary_expression assignment_operator assignment_expression													{ printf("Line no. %d: assignment-expression --> unary-expression assignment-operator assignment-expression\n",yylineno); }
                      ;
 
-assignment_operator: ASSIGN																											{ printf("assignment-operator --> =\n"); }
-                   | MULTIPLY_ASSIGN																								{ printf("assignment-operator --> *=\n"); }
-                   | DIVIDE_ASSIGN																									{ printf("assignment-operator --> /=\n"); }
-                   | MODULO_ASSIGN																									{ printf("assignment-operator --> %%=\n"); }
-                   | ADD_ASSIGN																										{ printf("assignment-operator --> +=\n"); }
-                   | SUBTRACT_ASSIGN																								{ printf("assignment-operator --> -=\n"); }
-                   | LSHIFT_ASSIGN																									{ printf("assignment-operator --> <<=\n"); }
-                   | RSHIFT_ASSIGN																									{ printf("assignment-operator --> >>=\n"); }
-                   | AND_ASSIGN																										{ printf("assignment-operator --> &=\n"); }
-                   | XOR_ASSIGN																										{ printf("assignment-operator --> ^=\n"); }
-                   | OR_ASSIGN																										{ printf("assignment-operator --> |=\n"); }
+assignment_operator: ASSIGN																											{ printf("Line no. %d: assignment-operator --> =\n",yylineno); }
+                   | MULTIPLY_ASSIGN																								{ printf("Line no. %d: assignment-operator --> *=\n",yylineno); }
+                   | DIVIDE_ASSIGN																									{ printf("Line no. %d: assignment-operator --> /=\n",yylineno); }
+                   | MODULO_ASSIGN																									{ printf("Line no. %d: assignment-operator --> %%=\n",yylineno); }
+                   | ADD_ASSIGN																										{ printf("Line no. %d: assignment-operator --> +=\n",yylineno); }
+                   | SUBTRACT_ASSIGN																								{ printf("Line no. %d: assignment-operator --> -=\n",yylineno); }
+                   | LSHIFT_ASSIGN																									{ printf("Line no. %d: assignment-operator --> <<=\n",yylineno); }
+                   | RSHIFT_ASSIGN																									{ printf("Line no. %d: assignment-operator --> >>=\n",yylineno); }
+                   | AND_ASSIGN																										{ printf("Line no. %d: assignment-operator --> &=\n",yylineno); }
+                   | XOR_ASSIGN																										{ printf("Line no. %d: assignment-operator --> ^=\n",yylineno); }
+                   | OR_ASSIGN																										{ printf("Line no. %d: assignment-operator --> |=\n",yylineno); }
                    ;
 
-expression: assignment_expression																									{ printf("expression --> assignment-expression\n"); }
-          | expression COMMA assignment_expression																					{ printf("expression --> expression , assignment-expression\n"); }
+expression: assignment_expression																									{ printf("Line no. %d: expression --> assignment-expression\n",yylineno); }
+          | expression COMMA assignment_expression																					{ printf("Line no. %d: expression --> expression , assignment-expression\n",yylineno); }
           ;
 
-constant_expression: conditional_expression																							{ printf("constant-expression --> conditional-expression\n"); }
+constant_expression: conditional_expression																							{ printf("Line no. %d: constant-expression --> conditional-expression\n",yylineno); }
                    ;
 
-declaration: declaration_specifiers init_declarator_list_opt SEMICOLON																{ printf("declaration --> declaration-specifiers init-declarator-list-opt ;\n"); }
+declaration: declaration_specifiers init_declarator_list_opt SEMICOLON																{ printf("Line no. %d: declaration --> declaration-specifiers init-declarator-list-opt ;\n",yylineno); }
            ;
 
-init_declarator_list_opt: init_declarator_list																						{ printf("init-declarator-list-opt --> init-declarator-list\n"); }
-                         |																											{ printf("init-declarator-list-opt --> epsilon\n"); }
+init_declarator_list_opt: init_declarator_list																						{ printf("Line no. %d: init-declarator-list-opt --> init-declarator-list\n",yylineno); }
+                         |																											{ printf("Line no. %d: init-declarator-list-opt --> epsilon\n",yylineno); }
                          ;
 
-declaration_specifiers: storage_class_specifier declaration_specifiers_opt															{ printf("declaration-specifiers --> storage-class-specifier declaration-specifiers-opt\n"); }
-                      | type_specifier declaration_specifiers_opt																	{ printf("declaration-specifiers --> type-specifier declaration-specifiers-opt\n"); }
-                      | type_qualifier declaration_specifiers_opt																	{ printf("declaration-specifiers --> type-qualifier declaration-specifiers-opt\n"); }
-                      | function_specifier declaration_specifiers_opt																{ printf("declaration-specifiers --> function-specifier declaration-specifiers-opt\n"); }
+declaration_specifiers: storage_class_specifier declaration_specifiers_opt															{ printf("Line no. %d: declaration-specifiers --> storage-class-specifier declaration-specifiers-opt\n",yylineno); }
+                      | type_specifier declaration_specifiers_opt																	{ printf("Line no. %d: declaration-specifiers --> type-specifier declaration-specifiers-opt\n",yylineno); }
+                      | type_qualifier declaration_specifiers_opt																	{ printf("Line no. %d: declaration-specifiers --> type-qualifier declaration-specifiers-opt\n",yylineno); }
+                      | function_specifier declaration_specifiers_opt																{ printf("Line no. %d: declaration-specifiers --> function-specifier declaration-specifiers-opt\n",yylineno); }
                       ;
 
-declaration_specifiers_opt: declaration_specifiers																					{ printf("declaration-specifiers-opt --> declaration-specifiers\n"); }
-                          |																											{ printf("declaration-specifiers-opt --> epsilon\n"); }
+declaration_specifiers_opt: declaration_specifiers																					{ printf("Line no. %d: declaration-specifiers-opt --> declaration-specifiers\n",yylineno); }
+                          |																											{ printf("Line no. %d: declaration-specifiers-opt --> epsilon\n",yylineno); }
                           ;
 
-init_declarator_list: init_declarator																								{ printf("init-declarator-list --> init-declarator\n"); }
-                    | init_declarator_list COMMA init_declarator																	{ printf("init-declarator-list --> init-declarator-list , init-declarator\n"); }
+init_declarator_list: init_declarator																								{ printf("Line no. %d: init-declarator-list --> init-declarator\n",yylineno); }
+                    | init_declarator_list COMMA init_declarator																	{ printf("Line no. %d: init-declarator-list --> init-declarator-list , init-declarator\n",yylineno); }
                     ;
 
-init_declarator: declarator																											{ printf("init-declarator --> declarator\n"); }
-               | declarator ASSIGN initializer 																						{ printf("init-declarator --> declarator = initializer\n"); }
+init_declarator: declarator																											{ printf("Line no. %d: init-declarator --> declarator\n",yylineno); }
+               | declarator ASSIGN initializer 																						{ printf("Line no. %d: init-declarator --> declarator = initializer\n",yylineno); }
                ;
 
-storage_class_specifier: EXTERN																										{ printf("storage-class-specifier --> extern\n"); }
-                       | STATIC																										{ printf("storage-class-specifier --> static\n"); }
-                       | AUTO																										{ printf("storage-class-specifier --> auto\n"); }
-                       | REGISTER																									{ printf("storage-class-specifier --> register\n"); }
+storage_class_specifier: EXTERN																										{ printf("Line no. %d: storage-class-specifier --> extern\n",yylineno); }
+                       | STATIC																										{ printf("Line no. %d: storage-class-specifier --> static\n",yylineno); }
+                       | AUTO																										{ printf("Line no. %d: storage-class-specifier --> auto\n",yylineno); }
+                       | REGISTER																									{ printf("Line no. %d: storage-class-specifier --> register\n",yylineno); }
                        ;
 
-type_specifier: VOID																												{ printf("type-specifier --> void\n"); }
-              | CHAR																												{ printf("type-specifier --> char\n"); }
-              | SHORT																												{ printf("type-specifier --> short\n"); }
-              | INT																													{ printf("type-specifier --> int\n"); }
-              | LONG																												{ printf("type-specifier --> long\n"); }
-              | FLOAT																												{ printf("type-specifier --> float\n"); }
-              | DOUBLE																												{ printf("type-specifier --> double\n"); }
-              | SIGNED																												{ printf("type-specifier --> signed\n"); }
-              | UNSIGNED																											{ printf("type-specifier --> unsigned\n"); }
-              | BOOL																												{ printf("type-specifier --> _Bool\n"); }
-              | COMPLEX																												{ printf("type-specifier --> _Complex\n"); }
-              | IMAGINARY																											{ printf("type-specifier --> _Imaginary\n"); }
-              | enum_specifier																										{ printf("type-specifier --> enum-specifier\n"); }
+type_specifier: VOID																												{ printf("Line no. %d: type-specifier --> void\n",yylineno); }
+              | CHAR																												{ printf("Line no. %d: type-specifier --> char\n",yylineno); }
+              | SHORT																												{ printf("Line no. %d: type-specifier --> short\n",yylineno); }
+              | INT																													{ printf("Line no. %d: type-specifier --> int\n",yylineno); }
+              | LONG																												{ printf("Line no. %d: type-specifier --> long\n",yylineno); }
+              | FLOAT																												{ printf("Line no. %d: type-specifier --> float\n",yylineno); }
+              | DOUBLE																												{ printf("Line no. %d: type-specifier --> double\n",yylineno); }
+              | SIGNED																												{ printf("Line no. %d: type-specifier --> signed\n",yylineno); }
+              | UNSIGNED																											{ printf("Line no. %d: type-specifier --> unsigned\n",yylineno); }
+              | BOOL																												{ printf("Line no. %d: type-specifier --> _Bool\n",yylineno); }
+              | COMPLEX																												{ printf("Line no. %d: type-specifier --> _Complex\n",yylineno); }
+              | IMAGINARY																											{ printf("Line no. %d: type-specifier --> _Imaginary\n",yylineno); }
+              | enum_specifier																										{ printf("Line no. %d: type-specifier --> enum-specifier\n",yylineno); }
               ;
 
-specifier_qualifier_list_opt: specifier_qualifier_list																				{ printf("specifier-qualifier-list-opt --> specifier-qualifier-list\n"); }
-                            |																										{ printf("specifier-qualifier-list-opt --> epsilon\n"); }
+specifier_qualifier_list_opt: specifier_qualifier_list																				{ printf("Line no. %d: specifier-qualifier-list-opt --> specifier-qualifier-list\n",yylineno); }
+                            |																										{ printf("Line no. %d: specifier-qualifier-list-opt --> epsilon\n",yylineno); }
                             ;
 
-specifier_qualifier_list: type_specifier specifier_qualifier_list_opt																{ printf("specifier-qualifier-list --> type-specifier specifier-qualifier-list-opt\n"); }
-                        | type_qualifier specifier_qualifier_list_opt																{ printf("specifier-qualifier-list --> type-qualifier specifier-qualifier-list-opt\n"); }
+specifier_qualifier_list: type_specifier specifier_qualifier_list_opt																{ printf("Line no. %d: specifier-qualifier-list --> type-specifier specifier-qualifier-list-opt\n",yylineno); }
+                        | type_qualifier specifier_qualifier_list_opt																{ printf("Line no. %d: specifier-qualifier-list --> type-qualifier specifier-qualifier-list-opt\n",yylineno); }
                         ;
 
-identifier_opt: IDENTIFIERS																											{ printf("identifier-opt --> identifier\n"); }
-              |																														{ printf("identifier-opt --> epsilon\n"); }
+identifier_opt: IDENTIFIERS																											{ printf("Line no. %d: identifier-opt --> identifier\n",yylineno); }
+              |																														{ printf("Line no. %d: identifier-opt --> epsilon\n",yylineno); }
               ;
 
-enum_specifier: ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list RIGHT_CURLY_BRACKET												{ printf("enum-specifier --> enum identifier-opt { enumerator-list }\n"); }
-              | ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list COMMA RIGHT_CURLY_BRACKET										{ printf("enum-specifier --> enum identifier-opt { enumerator-list , }\n"); }
-              | ENUM IDENTIFIERS																										{ printf("enum-specifier --> enum identifier\n"); }
+enum_specifier: ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list RIGHT_CURLY_BRACKET												{ printf("Line no. %d: enum-specifier --> enum identifier-opt { enumerator-list }\n",yylineno); }
+              | ENUM identifier_opt LEFT_CURLY_BRACKET enumerator_list COMMA RIGHT_CURLY_BRACKET										{ printf("Line no. %d: enum-specifier --> enum identifier-opt { enumerator-list , }\n",yylineno); }
+              | ENUM IDENTIFIERS																										{ printf("Line no. %d: enum-specifier --> enum identifier\n",yylineno); }
               ;
 
-enumerator_list: enumerator																											{ printf("enumerator-list --> enumerator\n"); }
-               | enumerator_list COMMA enumerator																					{ printf("enumerator-list --> enumerator-list , enumerator\n"); }
+enumerator_list: enumerator																											{ printf("Line no. %d: enumerator-list --> enumerator\n",yylineno); }
+               | enumerator_list COMMA enumerator																					{ printf("Line no. %d: enumerator-list --> enumerator-list , enumerator\n",yylineno); }
                ;
 
-enumerator: IDENTIFIERS																												{ printf("enumerator --> enumeration-constant\n"); }
-          | IDENTIFIERS ASSIGN constant_expression																					{ printf("enumerator --> enumeration-constant = constant-expression\n"); }
+enumerator: IDENTIFIERS																												{ printf("Line no. %d: enumerator --> enumeration-constant\n",yylineno); }
+          | IDENTIFIERS ASSIGN constant_expression																					{ printf("Line no. %d: enumerator --> enumeration-constant = constant-expression\n",yylineno); }
           ;
 
-type_qualifier: CONST																												{ printf("type-qualifier --> const\n"); }
-              | RESTRICT																											{ printf("type-qualifier --> restrict\n"); }
-              | VOLATILE																											{ printf("type-qualifier --> volatile\n"); }
+type_qualifier: CONST																												{ printf("Line no. %d: type-qualifier --> const\n",yylineno); }
+              | RESTRICT																											{ printf("Line no. %d: type-qualifier --> restrict\n",yylineno); }
+              | VOLATILE																											{ printf("Line no. %d: type-qualifier --> volatile\n",yylineno); }
               ;
 
-function_specifier: INLINE																											{ printf("function-specifier --> inline\n"); }
+function_specifier: INLINE																											{ printf("Line no. %d: function-specifier --> inline\n",yylineno); }
                   ;
 
-declarator: pointer_opt direct_declarator																							{ printf("declarator --> pointer-opt direct-declarator\n"); }
+declarator: pointer_opt direct_declarator																							{ printf("Line no. %d: declarator --> pointer-opt direct-declarator\n",yylineno); }
           ;
 
-pointer_opt: pointer																												{ printf("pointer-opt --> pointer\n"); }
-           |																														{ printf("pointer-opt --> epsilon\n"); }
+pointer_opt: pointer																												{ printf("Line no. %d: pointer-opt --> pointer\n",yylineno); }
+           |																														{ printf("Line no. %d: pointer-opt --> epsilon\n",yylineno); }
            ;
 
-direct_declarator: IDENTIFIERS																										{ printf("direct-declarator --> identifier\n"); }
-                 | LEFT_PARENTHESIS declarator RIGHT_PARENTHESIS																	{ printf("direct-declarator --> ( declarator )\n"); }
-                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt assignment_expression_opt RIGHT_SQUARE_BRACKET			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt assignment-expression-opt ]\n"); }
-                 | direct_declarator LEFT_SQUARE_BRACKET STATIC type_qualifier_list_opt assignment_expression RIGHT_SQUARE_BRACKET		{ printf("direct-declarator --> direct_declarator [ static type-qualifier-list-opt assignment-expression ]\n"); }
-                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list STATIC assignment_expression RIGHT_SQUARE_BRACKET			{ printf("direct-declarator --> direct_declarator [ type-qualifier-list static assignment-expression ]\n"); }
-                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt MULTIPLY RIGHT_SQUARE_BRACKET							{ printf("direct-declarator --> direct_declarator [ type-qualifier-list-opt * ]\n"); }
-                 | direct_declarator LEFT_PARENTHESIS parameter_type_list RIGHT_PARENTHESIS											{ printf("direct-declarator --> direct_declarator ( parameter-type-list )\n"); }
-                 | direct_declarator LEFT_PARENTHESIS identifier_list_opt RIGHT_PARENTHESIS											{ printf("direct-declarator --> direct_declarator ( identifier-list-opt )\n"); }
+direct_declarator: IDENTIFIERS																										{ printf("Line no. %d: direct-declarator --> identifier\n",yylineno); }
+                 | LEFT_PARENTHESIS declarator RIGHT_PARENTHESIS																	{ printf("Line no. %d: direct-declarator --> ( declarator )\n",yylineno); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt assignment_expression_opt RIGHT_SQUARE_BRACKET			{ printf("Line no. %d: direct-declarator --> direct_declarator [ type-qualifier-list-opt assignment-expression-opt ]\n",yylineno); }
+                 | direct_declarator LEFT_SQUARE_BRACKET STATIC type_qualifier_list_opt assignment_expression RIGHT_SQUARE_BRACKET		{ printf("Line no. %d: direct-declarator --> direct_declarator [ static type-qualifier-list-opt assignment-expression ]\n",yylineno); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list STATIC assignment_expression RIGHT_SQUARE_BRACKET			{ printf("Line no. %d: direct-declarator --> direct_declarator [ type-qualifier-list static assignment-expression ]\n",yylineno); }
+                 | direct_declarator LEFT_SQUARE_BRACKET type_qualifier_list_opt MULTIPLY RIGHT_SQUARE_BRACKET							{ printf("Line no. %d: direct-declarator --> direct_declarator [ type-qualifier-list-opt * ]\n",yylineno); }
+                 | direct_declarator LEFT_PARENTHESIS parameter_type_list RIGHT_PARENTHESIS											{ printf("Line no. %d: direct-declarator --> direct_declarator ( parameter-type-list )\n",yylineno); }
+                 | direct_declarator LEFT_PARENTHESIS identifier_list_opt RIGHT_PARENTHESIS											{ printf("Line no. %d: direct-declarator --> direct_declarator ( identifier-list-opt )\n",yylineno); }
                  ;
 
-type_qualifier_list_opt: type_qualifier_list																						{ printf("type-qualifier-list-opt --> type-qualifier-list\n"); }
-                       |																											{ printf("type-qualifier-list-opt --> epsilon\n"); }
+type_qualifier_list_opt: type_qualifier_list																						{ printf("Line no. %d: type-qualifier-list-opt --> type-qualifier-list\n",yylineno); }
+                       |																											{ printf("Line no. %d: type-qualifier-list-opt --> epsilon\n",yylineno); }
                        ;
 
-assignment_expression_opt: assignment_expression																					{ printf("assignment-expression-opt --> assignment-expression\n"); }
-                         |																											{ printf("assignment-expression-opt --> epsilon\n"); }
+assignment_expression_opt: assignment_expression																					{ printf("Line no. %d: assignment-expression-opt --> assignment-expression\n",yylineno); }
+                         |																											{ printf("Line no. %d: assignment-expression-opt --> epsilon\n",yylineno); }
                          ;
 
-identifier_list_opt: identifier_list																								{ printf("identifier-list-opt --> identifier-list\n"); }
-                   |																												{ printf("identifier-list-opt --> epsilon\n"); }
+identifier_list_opt: identifier_list																								{ printf("Line no. %d: identifier-list-opt --> identifier-list\n",yylineno); }
+                   |																												{ printf("Line no. %d: identifier-list-opt --> epsilon\n",yylineno); }
                    ;
 
-pointer: MULTIPLY type_qualifier_list_opt																							{ printf("pointer --> * type-qualifier-list-opt\n"); }
-       | MULTIPLY type_qualifier_list_opt pointer																					{ printf("pointer --> * type-qualifier-list-opt pointer\n"); }
+pointer: MULTIPLY type_qualifier_list_opt																							{ printf("Line no. %d: pointer --> * type-qualifier-list-opt\n",yylineno); }
+       | MULTIPLY type_qualifier_list_opt pointer																					{ printf("Line no. %d: pointer --> * type-qualifier-list-opt pointer\n",yylineno); }
        ;
 
-type_qualifier_list: type_qualifier																									{ printf("type-qualifier-list --> type-qualifier\n"); }
-                   | type_qualifier_list type_qualifier																				{ printf("type-qualifier-list --> type-qualifier-list type-qualifier\n"); }
+type_qualifier_list: type_qualifier																									{ printf("Line no. %d: type-qualifier-list --> type-qualifier\n",yylineno); }
+                   | type_qualifier_list type_qualifier																				{ printf("Line no. %d: type-qualifier-list --> type-qualifier-list type-qualifier\n",yylineno); }
                    ;
 
-parameter_type_list: parameter_list																									{ printf("parameter-type-list --> parameter-list\n"); }
-                   | parameter_list COMMA ELLIPSIS																				{ printf("parameter-type-list --> parameter-list , ...\n"); }
+parameter_type_list: parameter_list																									{ printf("Line no. %d: parameter-type-list --> parameter-list\n",yylineno); }
+                   | parameter_list COMMA ELLIPSIS																				{ printf("Line no. %d: parameter-type-list --> parameter-list , ...\n",yylineno); }
                    ;
 
-parameter_list: parameter_declaration																								{ printf("parameter-list --> parameter-declaration\n"); }
-              | parameter_list COMMA parameter_declaration																			{ printf("parameter-list --> parameter-list , parameter-declaration\n"); }
+parameter_list: parameter_declaration																								{ printf("Line no. %d: parameter-list --> parameter-declaration\n",yylineno); }
+              | parameter_list COMMA parameter_declaration																			{ printf("Line no. %d: parameter-list --> parameter-list , parameter-declaration\n",yylineno); }
               ;
 
-parameter_declaration: declaration_specifiers declarator																			{ printf("parameter-declaration --> declaration-specifiers declarator\n"); }
-                     | declaration_specifiers																						{ printf("parameter-declaration --> declaration-specifiers\n"); }
+parameter_declaration: declaration_specifiers declarator																			{ printf("Line no. %d: parameter-declaration --> declaration-specifiers declarator\n",yylineno); }
+                     | declaration_specifiers																						{ printf("Line no. %d: parameter-declaration --> declaration-specifiers\n",yylineno); }
                      ;
 
-identifier_list: IDENTIFIERS																											{ printf("identifier-list --> identifier\n"); }
-               | identifier_list COMMA IDENTIFIERS																					{ printf("identifier-list --> identifier_list , identifier\n"); }
+identifier_list: IDENTIFIERS																											{ printf("Line no. %d: identifier-list --> identifier\n",yylineno); }
+               | identifier_list COMMA IDENTIFIERS																					{ printf("Line no. %d: identifier-list --> identifier_list , identifier\n",yylineno); }
                ;
 
-type_name: specifier_qualifier_list																									{ printf("type-name --> specifier-qualifier-list\n"); }
+type_name: specifier_qualifier_list																									{ printf("Line no. %d: type-name --> specifier-qualifier-list\n",yylineno); }
          ;
 
-initializer: assignment_expression																									{ printf("initializer --> assignment-expression\n"); }
-           | LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET																	{ printf("initializer --> { initializer-list }\n"); }
-           | LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET																{ printf("initializer --> { initializer-list , }\n"); }
+initializer: assignment_expression																									{ printf("Line no. %d: initializer --> assignment-expression\n",yylineno); }
+           | LEFT_CURLY_BRACKET initializer_list RIGHT_CURLY_BRACKET																	{ printf("Line no. %d: initializer --> { initializer-list }\n",yylineno); }
+           | LEFT_CURLY_BRACKET initializer_list COMMA RIGHT_CURLY_BRACKET																{ printf("Line no. %d: initializer --> { initializer-list , }\n",yylineno); }
            ;
 
-initializer_list: designation_opt initializer																						{ printf("initializer-list --> designation-opt initializer\n"); }
-                | initializer_list COMMA designation_opt initializer																{ printf("initializer-list --> initializer-list , designation-opt initializer\n"); }
+initializer_list: designation_opt initializer																						{ printf("Line no. %d: initializer-list --> designation-opt initializer\n",yylineno); }
+                | initializer_list COMMA designation_opt initializer																{ printf("Line no. %d: initializer-list --> initializer-list , designation-opt initializer\n",yylineno); }
                 ;
 
-designation_opt: designation																										{ printf("designation-opt --> designation\n"); }
-               |																													{ printf("designation-opt --> epsilon\n"); }
+designation_opt: designation																										{ printf("Line no. %d: designation-opt --> designation\n",yylineno); }
+               |																													{ printf("Line no. %d: designation-opt --> epsilon\n",yylineno); }
                ;
 
-designation: designator_list ASSIGN																									{ printf("designation --> designator-list =\n"); }
+designation: designator_list ASSIGN																									{ printf("Line no. %d: designation --> designator-list =\n",yylineno); }
            ;
 
-designator_list: designator																											{ printf("designator-list --> designator\n"); }
-               | designator_list designator																							{ printf("designator-list --> designator-list designator\n"); }
+designator_list: designator																											{ printf("Line no. %d: designator-list --> designator\n",yylineno); }
+               | designator_list designator																							{ printf("Line no. %d: designator-list --> designator-list designator\n",yylineno); }
                ;
 
-designator: LEFT_SQUARE_BRACKET constant_expression RIGHT_SQUARE_BRACKET																{ printf("designator --> [ constant-expression ]\n"); }
-          | DOT IDENTIFIERS																											{ printf("designator --> . identifier\n"); }
+designator: LEFT_SQUARE_BRACKET constant_expression RIGHT_SQUARE_BRACKET																{ printf("Line no. %d: designator --> [ constant-expression ]\n",yylineno); }
+          | DOT IDENTIFIERS																											{ printf("Line no. %d: designator --> . identifier\n",yylineno); }
           ;
 
-statement: labeled_statement																										{ printf("statement --> labeled-statement\n"); }
-         | compound_statement																										{ printf("statement --> compound-statement\n"); }
-         | expression_statement																										{ printf("statement --> expression-statement\n"); }
-         | selection_statement																										{ printf("statement --> selection-statement\n"); }
-         | iteration_statement																										{ printf("statement --> iteration-statement\n"); }
-         | jump_statement																											{ printf("statement --> jump-statement\n"); }
+statement: labeled_statement																										{ printf("Line no. %d: statement --> labeled-statement\n",yylineno); }
+         | compound_statement																										{ printf("Line no. %d: statement --> compound-statement\n",yylineno); }
+         | expression_statement																										{ printf("Line no. %d: statement --> expression-statement\n",yylineno); }
+         | selection_statement																										{ printf("Line no. %d: statement --> selection-statement\n",yylineno); }
+         | iteration_statement																										{ printf("Line no. %d: statement --> iteration-statement\n",yylineno); }
+         | jump_statement																											{ printf("Line no. %d: statement --> jump-statement\n",yylineno); }
          ;
 
-labeled_statement: IDENTIFIERS COLON statement																						{ printf("labeled-statement --> identifier : statement\n"); }
-                 | CASE constant_expression COLON statement																			{ printf("labeled-statement --> case constant-expression : statement\n"); }
-                 | DEFAULT COLON statement																							{ printf("labeled-statement --> default : statement\n"); }
+labeled_statement: IDENTIFIERS COLON statement																						{ printf("Line no. %d: labeled-statement --> identifier : statement\n",yylineno); }
+                 | CASE constant_expression COLON statement																			{ printf("Line no. %d: labeled-statement --> case constant-expression : statement\n",yylineno); }
+                 | DEFAULT COLON statement																							{ printf("Line no. %d: labeled-statement --> default : statement\n",yylineno); }
                  ;
 
-compound_statement: LEFT_CURLY_BRACKET block_item_list_opt RIGHT_CURLY_BRACKET															{ printf("compound-statement --> { block-item-list-opt }\n"); }
+compound_statement: LEFT_CURLY_BRACKET block_item_list_opt RIGHT_CURLY_BRACKET															{ printf("Line no. %d: compound-statement --> { block-item-list-opt }\n",yylineno); }
                   ;
 
-block_item_list_opt: block_item_list																								{ printf("block-item-list-opt --> block-item-list\n"); }
-                   |																												{ printf("block-item-list-opt --> epsilon\n"); }
+block_item_list_opt: block_item_list																								{ printf("Line no. %d: block-item-list-opt --> block-item-list\n",yylineno); }
+                   |																												{ printf("Line no. %d: block-item-list-opt --> epsilon\n",yylineno); }
                    ;
 
-block_item_list: block_item																											{ printf("block-item-list --> block-item\n"); }
-               | block_item_list block_item																							{ printf("block-item-list --> block-item-list block-item\n"); }
+block_item_list: block_item																											{ printf("Line no. %d: block-item-list --> block-item\n",yylineno); }
+               | block_item_list block_item																							{ printf("Line no. %d: block-item-list --> block-item-list block-item\n",yylineno); }
                ;
 
-block_item: declaration																												{ printf("block-item --> declaration\n"); }
-          | statement																												{ printf("block-item --> statement\n"); }
+block_item: declaration																												{ printf("Line no. %d: block-item --> declaration\n",yylineno); }
+          | statement																												{ printf("Line no. %d: block-item --> statement\n",yylineno); }
           ;
 
-expression_statement: expression_opt SEMICOLON																						{ printf("expression-statement --> expression-opt ;\n"); }
+expression_statement: expression_opt SEMICOLON																						{ printf("Line no. %d: expression-statement --> expression-opt ;\n",yylineno); }
                     ;
 
-expression_opt: expression																											{ printf("expression-opt --> expression\n"); }
-              |																														{ printf("expression-opt --> epsilon\n"); }
+expression_opt: expression																											{ printf("Line no. %d: expression-opt --> expression\n",yylineno); }
+              |																														{ printf("Line no. %d: expression-opt --> epsilon\n",yylineno); }
               ;
 
-selection_statement: IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement														{ printf("selection-statement --> if ( expression ) statement\n"); }
-                   | IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement ELSE statement										{ printf("selection-statement --> if ( expression ) statement else statement\n"); }
-                   | SWITCH LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("selection-statement --> switch ( expression ) statement\n"); }
+selection_statement: IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement														{ printf("Line no. %d: selection-statement --> if ( expression ) statement\n",yylineno); }
+                   | IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement ELSE statement										{ printf("Line no. %d: selection-statement --> if ( expression ) statement else statement\n",yylineno); }
+                   | SWITCH LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("Line no. %d: selection-statement --> switch ( expression ) statement\n",yylineno); }
                    ;
 
-iteration_statement: WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("iteration-statement --> while ( expression ) statement\n"); }
-                   | DO statement WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS SEMICOLON										{ printf("iteration-statement --> do statement while ( expression ) ;\n"); }
-                   | FOR LEFT_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement							{ printf("iteration-statement --> for ( expression-opt ; expression-opt ; expression-opt ) statement\n"); }
-                   | FOR LEFT_PARENTHESIS  declaration expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement			{ printf("iteration-statement --> for ( declaration expression-opt ; expression-opt ) statement\n"); }
+iteration_statement: WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement													{ printf("Line no. %d: iteration-statement --> while ( expression ) statement\n",yylineno); }
+                   | DO statement WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS SEMICOLON										{ printf("Line no. %d: iteration-statement --> do statement while ( expression ) ;\n",yylineno); }
+                   | FOR LEFT_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement							{ printf("Line no. %d: iteration-statement --> for ( expression-opt ; expression-opt ; expression-opt ) statement\n",yylineno); }
+                   | FOR LEFT_PARENTHESIS  declaration expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement			{ printf("Line no. %d: iteration-statement --> for ( declaration expression-opt ; expression-opt ) statement\n",yylineno); }
                    ;
 
-jump_statement: GOTO IDENTIFIERS SEMICOLON																							{ printf("jump-statement --> goto identifier ;\n"); }
-              | CONTINUE SEMICOLON																									{ printf("jump-statement --> continue ;\n"); }
-              | BREAK SEMICOLON																										{ printf("jump-statement --> break ;\n"); }
-              | RETURN expression_opt SEMICOLON																						{ printf("jump-statement --> return expression-opt ;\n"); }
+jump_statement: GOTO IDENTIFIERS SEMICOLON																							{ printf("Line no. %d: jump-statement --> goto identifier ;\n",yylineno); }
+              | CONTINUE SEMICOLON																									{ printf("Line no. %d: jump-statement --> continue ;\n",yylineno); }
+              | BREAK SEMICOLON																										{ printf("Line no. %d: jump-statement --> break ;\n",yylineno); }
+              | RETURN expression_opt SEMICOLON																						{ printf("Line no. %d: jump-statement --> return expression-opt ;\n",yylineno); }
               ;
 
-translation_unit: external_declaration																								{ printf("translation-unit --> external-declaration\n"); }
-                | translation_unit external_declaration																				{ printf("translation-unit --> translation-unit external-declaration\n"); }
+translation_unit: external_declaration																								{ printf("Line no. %d: translation-unit --> external-declaration\n",yylineno); }
+                | translation_unit external_declaration																				{ printf("Line no. %d: translation-unit --> translation-unit external-declaration\n",yylineno); }
                 ;
 
-external_declaration: function_definition																							{ printf("external-declaration --> function-definition\n"); }
-                    | declaration																									{ printf("external-declaration --> declaration\n"); }
+external_declaration: function_definition																							{ printf("Line no. %d: external-declaration --> function-definition\n",yylineno); }
+                    | declaration																									{ printf("Line no. %d: external-declaration --> declaration\n",yylineno); }
                     ;
 
-function_definition: declaration_specifiers declarator declaration_list_opt compound_statement										{ printf("function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement\n"); }
+function_definition: declaration_specifiers declarator declaration_list_opt compound_statement										{ printf("Line no. %d: function-definition --> declaration-specifiers declarator declaration-list-opt compound-statement\n",yylineno); }
                    ;
 
-declaration_list_opt: declaration_list																								{ printf("declaration-list-opt --> declaration-list\n"); }
-                    |																												{ printf("declaration-list-opt --> epsilon\n"); }
+declaration_list_opt: declaration_list																								{ printf("Line no. %d: declaration-list-opt --> declaration-list\n",yylineno); }
+                    |																												{ printf("Line no. %d: declaration-list-opt --> epsilon\n",yylineno); }
                     ;
 
-declaration_list: declaration																										{ printf("declaration-list --> declaration\n"); }
-                | declaration_list declaration																						{ printf("declaration-list --> declaration-list declaration\n"); }
+declaration_list: declaration																										{ printf("Line no. %d: declaration-list --> declaration\n",yylineno); }
+                | declaration_list declaration																						{ printf("Line no. %d: declaration-list --> declaration-list declaration\n",yylineno); }
                 ;
 
 %%
