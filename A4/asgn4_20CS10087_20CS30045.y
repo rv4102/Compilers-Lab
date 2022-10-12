@@ -468,5 +468,5 @@ declaration_list: declaration																										{ printf("declaration-lis
 %%
 
 void yyerror(char *s) {
-    printf("Error occured at line no. %d: %s\n",yylineno, s);  
+    printf("Error occured!      line no.: %d       Error: %s      Unable to parse: %s\n",yylineno, s, yytext);  
 }

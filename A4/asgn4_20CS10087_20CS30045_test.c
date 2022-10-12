@@ -79,7 +79,6 @@ int main()
 
     // testing string literals
     char s[2] = "";
-    char str[] = "This is a test string\\\"\'\n";
 
     // testing punctuators
     int a = 1, b = 1;
