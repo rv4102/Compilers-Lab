@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <iomanip>
+#include <functional>
+#include <string>
+#include <string.h>
 using namespace std;
 
 class Symbol;
@@ -15,11 +19,7 @@ class Array;
 class Expression;
 class Statement;
 
-extern vector<Quad *> quadArray;                
-extern SymbolTable *currentSTable, *globalSTable; 
-extern Symbol *currentSymbol;                   
-extern SymbolType::typeEnum currentType;        
-extern int stCount, tempCount;          
+          
 
 extern int yyparse();
 
@@ -31,8 +31,8 @@ class SymbolType{
         SymbolType *arrayType;  
 
         SymbolType(typeEnum _type, SymbolType * _arrayType = NULL, int _width= 1); 
-        string TypetoString();
-        int SizeOfType();
+        string toString();
+        int getSize();
 };
 
 class SymbolTable{
@@ -41,7 +41,7 @@ class SymbolTable{
         map<string, Symbol> symbols; 
         SymbolTable *parent;         
 
-        SymbolTable(string = "NULL", SymbolTable * = NULL); 
+        SymbolTable(string _name= "NULL", SymbolTable *_parent = NULL); 
         Symbol *lookup(string);                             
         void update();                                      
         void print();                                       
@@ -53,7 +53,7 @@ class Symbol{
         int size, offset;         
         SymbolType *type;         
         SymbolTable *nestedTable; 
-        string Value;      
+        string initialValue;      
         bool isFunction;          
 
         Symbol(string _name, SymbolType::typeEnum _type = SymbolType::INT, string _value = ""); 
@@ -75,7 +75,7 @@ class Quad{
 class Array
 {
     public:
-        Symbol *loc; 
+        Symbol *temp; 
         enum typeEnum
         {
             OTHER,
@@ -97,8 +97,8 @@ class Expression
         } type;                                  
         list<int> trueList, falseList, nextList; 
 
-        void ConverttoInt();  
-        void ConverttoBool(); 
+        void toInt();  
+        void toBool(); 
 };
 
 class Statement
@@ -113,7 +113,7 @@ void emit(string _op, string _result, float _arg1, string _arg2 = "");
 
 void backpatch(list<int> _list, int add);       
 list<int> makeList(int i);              
-list<int> merge(list<int> &list1, list<int> &list2); 
+list<int> merge(list<int>, list<int>); 
 
 int nextInstruction();                              
 Symbol *gentemp(SymbolType::typeEnum, string = ""); 
@@ -122,9 +122,14 @@ void changeTable(SymbolTable *);                    // changes the current symbo
 bool typeCheck(Symbol *&s1, Symbol *&s2);       //same type symbols
 
 
-string ConverttoString(int i);   
-string ConverttoString(float f); 
-string ConverttoString(char c);  
+string toString(int i);   
+string toString(float f); 
+string toString(char c);
 
+extern vector<Quad *> quadArray;
+extern SymbolTable *currentTable, *globalTable;
+extern Symbol *currentSymbol;
+extern SymbolType::typeEnum currentType;
+extern int tableCount, temporaryCount;
 
 #endif

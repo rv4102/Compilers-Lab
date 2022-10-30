@@ -1,6 +1,8 @@
 %{
-    #include "y.tab.h"
+    #include <stdio.h>
+    #include <stdlib.h>
     #include "ass5_20CS10087_20CS30045_translator.h"
+    #include "y.tab.h"
 %}
 
 %option yylineno
@@ -36,7 +38,7 @@ WS                              [ \n\t]
 "auto"                          { return AUTO; }
 "break"                         { return BREAK; }
 "case"                          { return CASE; }
-"char"                          { return CHAR; }
+"char"                          { return CHAR_; }
 "const"                         { return CONST; }
 "continue"                      { return CONTINUE; }
 "default"                       { return DEFAULT; }
@@ -45,12 +47,12 @@ WS                              [ \n\t]
 "else"                          { return ELSE; }
 "enum"                          { return ENUM; }             
 "extern"                        { return EXTERN; }
-"float"                         { return FLOAT; }
+"float"                         { return FLOAT_; }
 "for"                           { return FOR; }
 "goto"                          { return GOTO; }
 "if"                            { return IF; }
 "inline"                        { return INLINE; }
-"int"                           { return INT; }
+"int"                           { return INT_; }
 "long"                          { return LONG; }
 "register"                      { return REGISTER; }
 "restrict"                      { return RESTRICT; }
@@ -64,18 +66,18 @@ WS                              [ \n\t]
 "typedef"                       { return TYPEDEF; }
 "union"                         { return UNION; }
 "unsigned"                      { return UNSIGNED; }
-"void"                          { return VOID; }
+"void"                          { return VOID_; }
 "volatile"                      { return VOLATILE; }
 "while"                         { return WHILE; }
-"_Bool"                         { return BOOL; }
+"_Bool"                         { return BOOL_; }
 "_Complex"                      { return COMPLEX; }
 "_Imaginary"                    { return IMAGINARY; }
 
-{IDENTIFIER}                               {return IDENTIFIER;}
-{INTEGER_CONSTANT}                          {return INTEGER_CONSTANT;}
-{FLOATING_CONSTANT}                         {return FLOATING_CONSTANT;}
-{CHARACTER_CONSTANT}                        {return CHARACTER_CONSTANT;}
-{STRING_LITERAL}                            {return STRING_LITERAL;}
+{IDENTIFIER}                                {yylval.symbol = currentTable -> lookup(yytext);return IDENTIFIER;}
+{INTEGER_CONSTANT}                          {yylval.intVal = atoi(yytext); return INTEGER_CONSTANT;}
+{FLOATING_CONSTANT}                         {yylval.floatVal = strdup(yytext); return FLOATING_CONSTANT;}
+{CHARACTER_CONSTANT}                        {yylval.charVal = strdup(yytext); return CHARACTER_CONSTANT;}
+{STRING_LITERAL}                            {yylval.stringVal = strdup(yytext); return STRING_LITERAL;}
 
 "["                             { return LEFT_SQUARE_BRACKET; }
 "]"                             { return RIGHT_SQUARE_BRACKET; }

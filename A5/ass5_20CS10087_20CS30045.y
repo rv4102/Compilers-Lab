@@ -32,7 +32,7 @@
     Symbol *symbol;
 }
 
-%token AUTO BREAK CASE CHAR CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT FOR GOTO IF INLINE INT LONG REGISTER RESTRICT RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE BOOL COMPLEX IMAGINARY
+%token AUTO BREAK CASE CHAR_ CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT_ FOR GOTO IF INLINE INT_ LONG REGISTER RESTRICT RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID_ VOLATILE WHILE BOOL_ COMPLEX IMAGINARY
 %token LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET LEFT_PARENTHESIS RIGHT_PARENTHESIS LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET 
 %token DOT ARROW INCREMENT DECREMENT BITWISE_AND MULTIPLY ADD SUBTRACT BITWISE_NOR NOT DIVIDE MODULO 
 %token LSHIFT RSHIFT LESS_THAN GREATER_THAN LESS_THAN_EQUAL GREATER_THAN_EQUAL EQUAL NOT_EQUAL BITWISE_XOR BITWISE_OR 
@@ -1036,12 +1036,12 @@ storage_class_specifier:
                         ;
 
 type_specifier:
-                VOID
+                VOID_
                     { 
                         yyinfo("type_specifier => void");
                         currentType = SymbolType::VOID;
                     }
-                | CHAR
+                | CHAR_
                     { 
                         yyinfo("type_specifier => char"); 
                         currentType = SymbolType::CHAR;
@@ -1050,7 +1050,7 @@ type_specifier:
                     {
                          yyinfo("type_specifier => short"); 
                     }
-                | INT
+                | INT_
                     { 
                         yyinfo("type_specifier => int"); 
                         currentType = SymbolType::INT;
@@ -1059,7 +1059,7 @@ type_specifier:
                     {
                          yyinfo("type_specifier => long"); 
                     }
-                | FLOAT
+                | FLOAT_
                     { 
                         yyinfo("type_specifier => float"); 
                         currentType = SymbolType::FLOAT;
@@ -1076,7 +1076,7 @@ type_specifier:
                     {
                          yyinfo("type_specifier => unsigned"); 
                     }
-                | BOOL
+                | BOOL_
                     {
                          yyinfo("type_specifier => _Bool"); 
                     }
