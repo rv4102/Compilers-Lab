@@ -19,3 +19,10 @@ y.tab.c y.tab.h: ass5_20CS10087_20CS30045.y ass5_20CS10087_20CS30045_translator.
 clean:
 	rm parser.out ass5_20CS10087_20CS30045_translator.o lex.yy.* y.tab.* y.output
 
+test: parser.out
+	./parser.out < ass5_20CS10087_20CS30045_test1.c > ass5_20CS10087_20CS30045_quads1.out
+	./parser.out < ass5_20CS10087_20CS30045_test2.c > ass5_20CS10087_20CS30045_quads2.out
+	./parser.out < ass5_20CS10087_20CS30045_test3.c > ass5_20CS10087_20CS30045_quads3.out
+	./parser.out < ass5_20CS10087_20CS30045_test4.c > ass5_20CS10087_20CS30045_quads4.out
+	./parser.out < ass5_20CS10087_20CS30045_test5.c > ass5_20CS10087_20CS30045_quads5.out
+	./parser.out < ass5_20CS10087_20CS30045_test6.c > ass5_20CS10087_20CS30045_quads6.out
