@@ -1,7 +1,7 @@
 %{
     #include "ass5_20CS10087_20CS30045_translator.h"
     extern int yylex();
-    extern int lineCount;
+    extern int yylineno;
     void yyerror(string);
     void yyinfo(string);
 %}
@@ -1845,11 +1845,11 @@ declaration_list:
 %%
 
 void yyerror(string s) {
-    printf("ERROR [Line %d] : %s\n", lineCount, s.c_str());
+    printf("ERROR [Line %d] : %s\n", yylineno, s.c_str());
 }
 
 void yyinfo(string s) {
     #ifdef _DEBUG
-        printf("INFO [Line %d] : %s\n", lineCount, s.c_str());
+        printf("INFO [Line %d] : %s\n", yylineno, s.c_str());
     #endif
 }
