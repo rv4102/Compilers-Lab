@@ -17,7 +17,7 @@ y.tab.c y.tab.h: ass5_20CS10087_20CS30045.y ass5_20CS10087_20CS30045_translator.
 	bison -dty --report=all ass5_20CS10087_20CS30045.y
 
 clean:
-	rm parser.out ass5_20CS10087_20CS30045_translator.o lex.yy.* y.tab.* y.output
+	rm -f ass5_20CS10087_20CS30045_translator.o lex.yy.* y.tab.* y.output *.out
 
 test: parser.out
 	./parser.out < ass5_20CS10087_20CS30045_test1.c > ass5_20CS10087_20CS30045_quads1.out
