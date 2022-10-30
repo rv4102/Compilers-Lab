@@ -11,7 +11,7 @@
 DIGIT                           [0-9]
 ID_NON_DIGIT                    [a-zA-Z_]
 NON_ZERO_DIGIT                  [1-9]
-IDENTIFIER                     {ID_NON_DIGIT}({DIGIT}|{ID_NON_DIGIT})*
+IDENTIFIER                      {ID_NON_DIGIT}({DIGIT}|{ID_NON_DIGIT})*
 ENUMERATION_CONSTANT            {IDENTIFIER}
 SIGN                            [+-]
 DIGIT_SEQUENCE                  {DIGIT}+

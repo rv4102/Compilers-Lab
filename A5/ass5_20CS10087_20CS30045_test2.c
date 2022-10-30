@@ -1,5 +1,6 @@
 int main(){
-    int a=9, b=10, c=5;
+    int a, b, c;
+    a=9, b=10, c=5;
     if(a <= b && b-a > c){
         c |= a;
         if(!a){
