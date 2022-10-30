@@ -9,8 +9,8 @@
 DIGIT                           [0-9]
 ID_NON_DIGIT                    [a-zA-Z_]
 NON_ZERO_DIGIT                  [1-9]
-IDENTIFIERS                     {ID_NON_DIGIT}({DIGIT}|{ID_NON_DIGIT})*
-ENUMERATION_CONSTANT            {IDENTIFIERS}
+IDENTIFIER                     {ID_NON_DIGIT}({DIGIT}|{ID_NON_DIGIT})*
+ENUMERATION_CONSTANT            {IDENTIFIER}
 SIGN                            [+-]
 DIGIT_SEQUENCE                  {DIGIT}+
 INTEGER_CONSTANT                {NON_ZERO_DIGIT}{DIGIT}*|[0]
@@ -71,7 +71,7 @@ WS                              [ \n\t]
 "_Complex"                      { return COMPLEX; }
 "_Imaginary"                    { return IMAGINARY; }
 
-{IDENTIFIERS}                               {return IDENTIFIERS;}
+{IDENTIFIER}                               {return IDENTIFIER;}
 {INTEGER_CONSTANT}                          {return INTEGER_CONSTANT;}
 {FLOATING_CONSTANT}                         {return FLOATING_CONSTANT;}
 {CHARACTER_CONSTANT}                        {return CHARACTER_CONSTANT;}

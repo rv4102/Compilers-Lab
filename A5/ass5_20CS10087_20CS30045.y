@@ -33,7 +33,7 @@
 }
 
 %token AUTO BREAK CASE CHAR CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM EXTERN FLOAT FOR GOTO IF INLINE INT LONG REGISTER RESTRICT RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH TYPEDEF UNION UNSIGNED VOID VOLATILE WHILE BOOL COMPLEX IMAGINARY
-%token LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET LEFT_PARENTHESES RIGHT_PARENTHESES LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET 
+%token LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET LEFT_PARENTHESIS RIGHT_PARENTHESIS LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET 
 %token DOT ARROW INCREMENT DECREMENT BITWISE_AND MULTIPLY ADD SUBTRACT BITWISE_NOR NOT DIVIDE MODULO 
 %token LSHIFT RSHIFT LESS_THAN GREATER_THAN LESS_THAN_EQUAL GREATER_THAN_EQUAL EQUAL NOT_EQUAL BITWISE_XOR BITWISE_OR 
 %token LOGICAL_AND LOGICAL_OR QUESTION_MARK COLON SEMICOLON ELLIPSIS 
@@ -163,7 +163,7 @@ primary_expression:
 		                    $$->symbol = gentemp(SymbolType::POINTER, $1);
 		                    $$->symbol->type->arrayType = new SymbolType(SymbolType::CHAR);
                         }
-                    | LEFT_PARENTHESES expression RIGHT_PARENTHESES
+                    | LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
                         { 
                             yyinfo("primary_expression => ( expression )"); 
                             $$ = $2;
@@ -200,7 +200,7 @@ postfix_expression:
                             }
 
                         }
-                    | postfix_expression LEFT_PARENTHESES argument_expression_list_opt RIGHT_PARENTHESES
+                    | postfix_expression LEFT_PARENTHESIS argument_expression_list_opt RIGHT_PARENTHESIS
                         { 
                             // function call, number of parameters stored in argument_expression_list_opt
                             yyinfo("postfix_expression => postfix_expression ( argument_expression_list_opt )"); 
@@ -234,11 +234,11 @@ postfix_expression:
                             emit("=", $$->symbol->name, $1->symbol->name);
                             emit("-", $1->symbol->name, $1->symbol->name, toString(1));
                         }
-                    | LEFT_PARENTHESES type_name RIGHT_PARENTHESES LEFT_CURLY_BRACKET initialiser_list RIGHT_CURLY_BRACKET
+                    | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initialiser_list RIGHT_CURLY_BRACKET
                         { 
                             yyinfo("postfix_expression => ( type_name ) { initialiser_list }"); 
                         }
-                    | LEFT_PARENTHESES type_name RIGHT_PARENTHESES LEFT_CURLY_BRACKET initialiser_list COMMA RIGHT_CURLY_BRACKET
+                    | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS LEFT_CURLY_BRACKET initialiser_list COMMA RIGHT_CURLY_BRACKET
                         { 
                             yyinfo("postfix_expression => ( type_name ) { initialiser_list , }"); 
                         }
@@ -328,7 +328,7 @@ unary_expression:
                         { 
                             yyinfo("unary_expression => sizeof unary_expression"); 
                         }
-                    | SIZEOF LEFT_PARENTHESES type_name RIGHT_PARENTHESES
+                    | SIZEOF LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS
                         { 
                             yyinfo("unary_expression => sizeof ( type_name )"); 
                         }
@@ -377,7 +377,7 @@ cast_expression:
                         yyinfo("cast_expression => unary_expression"); 
                         $$ = $1;
                     }
-                | LEFT_PARENTHESES type_name RIGHT_PARENTHESES cast_expression /* can be ignored */
+                | LEFT_PARENTHESIS type_name RIGHT_PARENTHESIS cast_expression /* can be ignored */
                     { 
                         yyinfo("cast_expression => ( type_name ) cast_expression"); 
                         $$ = new Array();
@@ -1227,7 +1227,7 @@ direct_declarator:
                             $$ = $1->update(new SymbolType(currentType)); // update type to the last type seen
                             currentSymbol = $$;
                         }
-                    | LEFT_PARENTHESES declarator RIGHT_PARENTHESES
+                    | LEFT_PARENTHESIS declarator RIGHT_PARENTHESIS
                         { 
                             yyinfo("direct_declarator => ( declarator )"); 
                             $$ = $2;
@@ -1297,7 +1297,7 @@ direct_declarator:
                         { 
                             yyinfo("direct_declarator => direct_declarator [ * ]"); 
                         }
-                    | direct_declarator LEFT_PARENTHESES change_scope parameter_type_list RIGHT_PARENTHESES
+                    | direct_declarator LEFT_PARENTHESIS change_scope parameter_type_list RIGHT_PARENTHESIS
                         { 
                             yyinfo("direct_declarator => direct_declarator ( parameter_type_list )"); 
                             // function declaration
@@ -1312,11 +1312,11 @@ direct_declarator:
                             changeTable(globalTable);
                             currentSymbol = $$;
                         }
-                    | direct_declarator LEFT_PARENTHESES identifier_list RIGHT_PARENTHESES
+                    | direct_declarator LEFT_PARENTHESIS identifier_list RIGHT_PARENTHESIS
                         { 
                             yyinfo("direct_declarator => direct_declarator ( identifier_list )"); 
                         }
-                    | direct_declarator LEFT_PARENTHESES change_scope RIGHT_PARENTHESES
+                    | direct_declarator LEFT_PARENTHESIS change_scope RIGHT_PARENTHESIS
                         { 
                             yyinfo("direct_declarator => direct_declarator ( )"); 
                             // same as the previous rule
@@ -1676,7 +1676,7 @@ S.nextlist = merge(merge(S1.nextlist, N.nextlist), S2 .nextlist)
 */
 
 selection_statement:
-                    IF LEFT_PARENTHESES expression RIGHT_PARENTHESES M statement N %prec THEN
+                    IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS M statement N %prec THEN
                         { 
                             yyinfo("selection_statement => if ( expression ) statement"); 
                             $$ = new Statement();
@@ -1684,7 +1684,7 @@ selection_statement:
                             backpatch($3->trueList, $5); // if true go to M
                             $$->nextList = merge($3->falseList, merge($6->nextList, $7->nextList)); // exits
                         }
-                    | IF LEFT_PARENTHESES expression RIGHT_PARENTHESES M statement N ELSE M statement
+                    | IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS M statement N ELSE M statement
                         { 
                             yyinfo("selection_statement => if ( expression ) statement else statement"); 
                             $$ = new Statement();
@@ -1693,7 +1693,7 @@ selection_statement:
                             backpatch($3->falseList, $9); // if false go to else
                             $$->nextList = merge($10->nextList, merge($6->nextList, $7->nextList)); // exits
                         }
-                    | SWITCH LEFT_PARENTHESES expression RIGHT_PARENTHESES statement
+                    | SWITCH LEFT_PARENTHESIS expression RIGHT_PARENTHESIS statement
                         { 
                             yyinfo("selection_statement => switch ( expression ) statement"); 
                         }
@@ -1724,7 +1724,7 @@ S.nextlist = B.falselist;
 */
 
 iteration_statement:
-                    WHILE M LEFT_PARENTHESES expression RIGHT_PARENTHESES M statement
+                    WHILE M LEFT_PARENTHESIS expression RIGHT_PARENTHESIS M statement
                         { 
                             yyinfo("iteration_statement => while ( expression ) statement"); 
                             $$ = new Statement();
@@ -1734,7 +1734,7 @@ iteration_statement:
                             $$->nextList = $4->falseList; // exit if false
                             emit("goto", toString($2));
                         }
-                    | DO M statement M WHILE LEFT_PARENTHESES expression RIGHT_PARENTHESES SEMICOLON
+                    | DO M statement M WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS SEMICOLON
                         { 
                             yyinfo("iteration_statement => do statement while ( expression ) ;"); 
                             $$ = new Statement();
@@ -1743,7 +1743,7 @@ iteration_statement:
                             backpatch($3->nextList, $4); // after statement is executed go to M2
                             $$->nextList = $7->falseList; // exit if false
                         }
-                    | FOR LEFT_PARENTHESES expression_opt SEMICOLON M expression_opt SEMICOLON M expression_opt N RIGHT_PARENTHESES M statement
+                    | FOR LEFT_PARENTHESIS expression_opt SEMICOLON M expression_opt SEMICOLON M expression_opt N RIGHT_PARENTHESIS M statement
                         { 
                             yyinfo("iteration_statement => for ( expression_opt ; expression_opt ; expression_opt ) statement"); 
                             $$ = new Statement();
@@ -1754,7 +1754,7 @@ iteration_statement:
                             emit("goto", toString($8));
                             $$->nextList = $6->falseList; // exit if false
                         }
-                    | FOR LEFT_PARENTHESES declaration expression_opt SEMICOLON expression_opt RIGHT_PARENTHESES statement
+                    | FOR LEFT_PARENTHESIS declaration expression_opt SEMICOLON expression_opt RIGHT_PARENTHESIS statement
                         { 
                             yyinfo("iteration_statement => for ( declaration expression_opt ; expression_opt ) statement"); 
                         }

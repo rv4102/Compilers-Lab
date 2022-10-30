@@ -1,5 +1,5 @@
 #ifndef TRANSLATOR_H
-#define TRANSLAOR_H
+#define TRANSLATOR_H
 
 #include <iostream>
 #include <vector>
