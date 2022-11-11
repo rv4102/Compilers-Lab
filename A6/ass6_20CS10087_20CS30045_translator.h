@@ -1,147 +1,182 @@
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef _TRANSLATOR_H
+#define _TRANSLATOR_H
 
 #include <iostream>
-#include <vector>
-#include <map>
-#include <list>
-#include <iomanip>
-#include <functional>
-#include <string>
-#include <string.h>
-#include <stack>
 #include <fstream>
+#include <string>
+#include <map>
+#include <vector>
+#include <list>
+#include <functional>
+#include <iomanip>
+#include <stack>
+#include <string.h>
 using namespace std;
 
-class Symbol;
 class SymbolType;
 class SymbolTable;
+class Symbol;
 class Label;
 class Quad;
-class Array;
 class Expression;
+class Array;
 class Statement;
-class ActivationRecord;    
+class ActivationRecord;
 
-class ActivationRecord {
-    public:
-        map<string, int> displacement;
-        int totalDisplacement;
-        ActivationRecord();
-};
-
-class SymbolType{
-    public:
-        enum typeEnum {VOID, CHAR, INT, FLOAT, POINTER, FUNCTION, ARRAY, BLOCK} type;
-        int width;   
-        SymbolType *arrayType;  
-
-        SymbolType(typeEnum _type, SymbolType * _arrayType = NULL, int _width= 1); 
-        string toString();
-        int getSize();
-};
-
-class SymbolTable{
-    public:
-        string name;
-        map<string, Symbol> symbols;
-        SymbolTable *parent;
-        ActivationRecord *activationRecord;
-        vector<string> parameters;
-        
-        SymbolTable(string = "NULL", SymbolTable * = NULL); // constructor
-        Symbol *lookup(string); // returns the symbol with the given name, adds new entry if not found
-        void print();
-        void update();
-};
-
-class Symbol{
-    public:
-        string name;              
-        int size, offset;         
-        SymbolType *type;         
-        SymbolTable *nestedTable; 
-        string initialValue;      
-        enum Category {LOCAL, GLOBAL, PARAMETER, TEMPORARY, FUNCTION} category;         
-
-        Symbol(string _name, SymbolType::typeEnum _type = SymbolType::INT, string _value = ""); 
-        Symbol *update(SymbolType * _type);                                        
-        Symbol *convert(SymbolType::typeEnum _type);                               
-};
-
-class Quad{
-
-    public:
-        string op, arg1, arg2, result; 
-
-        Quad(string _result, string _arg1, string _op = "=", string _arg2 = ""); 
-        Quad(string _result, int _arg1, string _op = "=", string _arg2 = "");    
-        Quad(string _result, float _arg1, string _op = "=", string _arg2 = "");
-        void print();                                    
-};
-
-class Array
+// AR class, used to store important information such as displacements of symbols, total displacement from base pointer,
+class ActivationRecord
 {
-    public:
-        Symbol *temp; 
-        enum typeEnum
-        {
-            OTHER,
-            POINTER,
-            ARRAY
-        } type;                  
-        Symbol *symbol;           
-        SymbolType *subArrayType; 
+public:
+    map<string, int> displacement;
+    int totalDisplacement;
+
+    ActivationRecord();
 };
 
+// Symbol type class ( type safe representation for the type of a symbol )
+class SymbolType
+{
+public:
+    enum typeEnum
+    {
+        VOID,
+        CHAR,
+        INT,
+        FLOAT,
+        POINTER,
+        FUNCTION,
+        ARRAY,
+        BLOCK
+    } type;                // type of the symbol, scoped enum for safe comparisons
+    int width;             // width of the symbol
+    SymbolType *arrayType; // type of the array elements
+
+    SymbolType(typeEnum, SymbolType * = NULL, int = 1); // constructor
+    int getSize();                                      // returns the size(width) of the symbol
+    string toString();                                  // returns the string representation of the type
+};
+
+// Symbol table class
+class SymbolTable
+{
+public:
+    string name;                        // name of the symbol table
+    map<string, Symbol> symbols;        // list of all symbols in this table, mapped by their names for fast access
+    SymbolTable *parent;                // parent symbol table of this symbol table
+    ActivationRecord *activationRecord; // activation record of this symbol table
+    vector<string> parameters;          // list of parameters of the function, if any, in order
+
+    SymbolTable(string = "NULL", SymbolTable * = NULL); // constructor
+    Symbol *lookup(string);                             // returns the symbol with the given name, adds new entry if not found
+    void print();                                       // prints the symbol table
+    void update();                                      // updates the symbol table as well as creates the activation record
+};
+
+// Symbol class ( represents a single symbol in the symbol table )
+class Symbol
+{
+public:
+    string name;              // name of the symbol
+    int size, offset;         // size and offset of the symbol
+    SymbolType *type;         // type of the symbol
+    SymbolTable *nestedTable; // pointer to the symbol table if it is a nested entry
+    string initialValue;      // initial value of the symbol
+    enum Category
+    {
+        LOCAL,
+        GLOBAL,
+        PARAMETER,
+        TEMPORARY,
+        FUNCTION
+    } category;
+
+    Symbol(string, SymbolType::typeEnum = SymbolType::INT, string = ""); // constructor
+    Symbol *update(SymbolType *);                                        // updates the symbol with the given type
+    Symbol *convert(SymbolType::typeEnum);                               // converts the symbol to the given type
+};
+
+// Quad class ( represents a 3-address quad )
+class Quad
+{
+public:
+    string op, arg1, arg2, result; // parameters of the quad
+
+    Quad(string, string, string = "=", string = ""); // constructor
+    Quad(string, int, string = "=", string = "");    // constructor
+    void print();                                    // prints the quad
+};
+
+// Expression attributes
 class Expression
 {
-    public:
-        Symbol *symbol;
-        enum typeEnum
-        {
-            NONBOOLEAN,
-            BOOLEAN
-        } type;                                  
-        list<int> trueList, falseList, nextList; 
+public:
+    Symbol *symbol; // symbol of the expression
+    enum typeEnum
+    {
+        NONBOOLEAN,
+        BOOLEAN
+    } type;                                  // type of the expression scoped enum
+    list<int> trueList, falseList, nextList; // lists of quad numbers for next, true and false jumps
 
-        void toInt();  
-        void toBool(); 
+    void toInt();  // converts the expression to an integer
+    void toBool(); // converts the expression to a boolean
 };
 
+// Array attributes
+class Array
+{
+public:
+    Symbol *temp; // temporary used for computing the offset for the array reference
+    enum typeEnum
+    {
+        OTHER,
+        POINTER,
+        ARRAY
+    } type;                   // Pointers, arrays and normal expressions are all stored using array attributes initially
+    Symbol *symbol;           // pointer to the symbol table entry
+    SymbolType *subArrayType; // type of the sub-array generated by A
+};
+
+// Statement attributes
 class Statement
 {
-    public:
-        list<int> nextList; 
+public:
+    list<int> nextList; // List of quads having dangling exits for this statement
 };
 
-void emit(string _op, string _result, string _arg1 = "", string _arg2 = ""); 
-void emit(string _op, string _result, int _arg1, string _arg2 = "");         
-void emit(string _op, string _result, float _arg1, string _arg2 = "");         
+// Emit functions for generating quads
+void emit(string, string, string = "", string = ""); // emits a quad with the given parameters
+void emit(string, string, int, string = "");         // emits a quad with the given parameters
 
-void backpatch(list<int> _list, int add);
-void finalBackpatch();    
-list<int> makeList(int i);              
-list<int> merge(list<int>, list<int>); 
+// Backpatching functions
+void backpatch(list<int>, int); // backpatches the list of quads with the given address
+void finalBackpatch();
+list<int> makeList(int);               // makes a list with the given number
+list<int> merge(list<int>, list<int>); // merges the two lists
 
-int nextInstruction();                              
-Symbol *gentemp(SymbolType::typeEnum, string = ""); 
+// Other helper functions
+
+int nextInstruction();                              // returns the next instruction number
+Symbol *gentemp(SymbolType::typeEnum, string = ""); // generates a new temporary symbol
 void changeTable(SymbolTable *);                    // changes the current symbol table to the given one
 
-bool typeCheck(Symbol *&s1, Symbol *&s2);       //same type symbols
+// Type checking and conversions
+bool typeCheck(Symbol *&, Symbol *&); // checks if the two symbols have the same type
 
+// Utility functions
+string toString(int);   // returns the string representation of the given integer
+string toString(float); // returns the string representation of the given float
+string toString(char);  // returns the string representation of the given character
 
-string toString(int i);   
-string toString(float f); 
-string toString(char c);
-
-extern vector<Quad *> quadArray;
-extern SymbolTable *currentTable, *globalTable;
-extern Symbol *currentSymbol;
-extern SymbolType::typeEnum currentType;
-extern int tableCount, temporaryCount;
+// Global variables
+extern vector<Quad *> quadArray;                // array of quads
+extern SymbolTable *currentTable, *globalTable; // current and global symbol tables
+extern Symbol *currentSymbol;                   // current symbol
+extern SymbolType::typeEnum currentType;        // current type
+extern int tableCount, temporaryCount;          // counters for symbol table and temporary symbols
 extern vector<string> stringLiterals;
 extern FILE *yyin;
+
 extern int yyparse();
 
 #endif

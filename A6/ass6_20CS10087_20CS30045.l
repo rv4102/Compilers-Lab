@@ -3,56 +3,60 @@
     #include <stdlib.h>
     #include "ass6_20CS10087_20CS30045_translator.h"
     #include "y.tab.h"
+    int lineCount = 1;
 %}
 
-%option yylineno
 %option noyywrap
 
-DIGIT                           [0-9]
-ID_NON_DIGIT                    [a-zA-Z_]
-NON_ZERO_DIGIT                  [1-9]
-IDENTIFIER                      {ID_NON_DIGIT}({DIGIT}|{ID_NON_DIGIT})*
-ENUMERATION_CONSTANT            {IDENTIFIER}
-SIGN                            [+-]
-DIGIT_SEQUENCE                  {DIGIT}+
-INTEGER_CONSTANT                {NON_ZERO_DIGIT}{DIGIT}*|[0]
-EXPONENT_PART                   [eE]{SIGN}?{DIGIT_SEQUENCE}      
-FRACTIONAL_CONSTANT             ({DIGIT_SEQUENCE}?\.{DIGIT_SEQUENCE})|({DIGIT_SEQUENCE}\.)
-FLOATING_CONSTANT               ({FRACTIONAL_CONSTANT}({EXPONENT_PART}?))|({DIGIT_SEQUENCE}{EXPONENT_PART})
-ESCAPE_SEQUENCE                 "\\'"|"\\""|"\\?"|"\\\"|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"
-C_CHAR                          [^\'\n\\]|{ESCAPE_SEQUENCE}
-C_CHAR_SEQUENCE                 {C_CHAR}+
-CHARACTER_CONSTANT              \'{C_CHAR_SEQUENCE}\'
-S_CHAR                          [^\"\n\\]|{ESCAPE_SEQUENCE}
-S_CHAR_SEQUENCE                 {S_CHAR}+
-STRING_LITERAL                  \"{S_CHAR_SEQUENCE}?\"
-SINGLE_COMMENT_STARTED          "//"
-MULTILINE_STARTED               "/*"
-MULTILINE_END                   "*/"
-WS                              [ \n\t]
-%x SINGLE_LINE_COMMENT
-%x MULTIPLE_LINE_COMMENT
+%x MULTI_LINE_COMMENT_BODY
+%x SINGLE_LINE_COMMENT_BODY
+
+ESCAPE_SEQUENCE         "\\\'"|"\\\""|"\\?"|"\\\\"|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"|"\\0"
+
+IDENTIFIER              [A-Za-z_][A-Za-z0-9_]*
+
+DIGIT                   [0-9]
+DIGIT_SEQUENCE          {DIGIT}+
+NONZERO_DIGIT           [1-9]
+INTEGER_CONSTANT        {NONZERO_DIGIT}{DIGIT}*|"0"
+
+EXPONENT_PART           [eE]([+-]?){DIGIT_SEQUENCE}
+FRACTIONAL_CONSTANT     {DIGIT_SEQUENCE}?\.{DIGIT_SEQUENCE}|{DIGIT_SEQUENCE}\.
+FLOATING_CONSTANT       {FRACTIONAL_CONSTANT}({EXPONENT_PART}?)|{DIGIT_SEQUENCE}{EXPONENT_PART}
+
+ENUMERATION_CONSTANT    {IDENTIFIER}
+
+C_CHAR                  [^\'\n\\]|{ESCAPE_SEQUENCE}
+C_CHAR_SEQUENCE         {C_CHAR}+
+CHARACTER_CONSTANT      \'{C_CHAR_SEQUENCE}\'
+
+S_CHAR                  [^\"\n\\]|{ESCAPE_SEQUENCE}
+S_CHAR_SEQUENCE         {S_CHAR}+
+STRING_LITERAL          \"({S_CHAR_SEQUENCE}?)\"
+
+WHITESPACE              [ \t]
+NEWLINE                 \n
 
 %%
 
 "auto"                          { return AUTO; }
 "break"                         { return BREAK; }
 "case"                          { return CASE; }
-"char"                          { return CHAR_; }
+"char"                          { return CHARTYPE; }
 "const"                         { return CONST; }
 "continue"                      { return CONTINUE; }
 "default"                       { return DEFAULT; }
 "do"                            { return DO; }
 "double"                        { return DOUBLE; }
 "else"                          { return ELSE; }
-"enum"                          { return ENUM; }             
+"enum"                          { return ENUM; }
 "extern"                        { return EXTERN; }
-"float"                         { return FLOAT_; }
+"float"                         { return FLOATTYPE; }
 "for"                           { return FOR; }
 "goto"                          { return GOTO; }
 "if"                            { return IF; }
 "inline"                        { return INLINE; }
-"int"                           { return INT_; }
+"int"                           { return INTTYPE; }
 "long"                          { return LONG; }
 "register"                      { return REGISTER; }
 "restrict"                      { return RESTRICT; }
@@ -66,74 +70,78 @@ WS                              [ \n\t]
 "typedef"                       { return TYPEDEF; }
 "union"                         { return UNION; }
 "unsigned"                      { return UNSIGNED; }
-"void"                          { return VOID_; }
+"void"                          { return VOIDTYPE; }
 "volatile"                      { return VOLATILE; }
 "while"                         { return WHILE; }
-"_Bool"                         { return BOOL_; }
-"_Complex"                      { return COMPLEX; }
-"_Imaginary"                    { return IMAGINARY; }
+"_Bool"                         { return _BOOL; }
+"_Complex"                      { return _COMPLEX; }
+"_Imaginary"                    { return _IMAGINARY; }
 
-{IDENTIFIER}                                {yylval.symbol = currentTable -> lookup(yytext);return IDENTIFIER;}
-{INTEGER_CONSTANT}                          {yylval.intVal = atoi(yytext); return INTEGER_CONSTANT;}
-{FLOATING_CONSTANT}                         {yylval.floatVal = strdup(yytext); return FLOATING_CONSTANT;}
-{CHARACTER_CONSTANT}                        {yylval.charVal = strdup(yytext); return CHARACTER_CONSTANT;}
-{STRING_LITERAL}                            {yylval.stringVal = strdup(yytext); return STRING_LITERAL;}
+{IDENTIFIER}                    { yylval.symbol = currentTable->lookup(yytext);; return IDENTIFIER; }
+{INTEGER_CONSTANT}              { yylval.intVal = atoi(yytext); return INTEGER_CONSTANT; }
+{FLOATING_CONSTANT}             { yylval.floatVal = strdup(yytext); return FLOATING_CONSTANT; }
+{CHARACTER_CONSTANT}            { yylval.charVal = strdup(yytext); return CHARACTER_CONSTANT; }
+{STRING_LITERAL}                { yylval.stringVal = strdup(yytext); return STRING_LITERAL; }
 
 "["                             { return LEFT_SQUARE_BRACKET; }
+"++"                            { return INCREMENT; }
+"/"                             { return SLASH; }
+"?"                             { return QUESTION_MARK; }
+"="                             { return ASSIGNMENT; }
+","                             { return COMMA; }
 "]"                             { return RIGHT_SQUARE_BRACKET; }
-"("                             { return LEFT_PARENTHESIS; }
-")"                             { return RIGHT_PARENTHESIS; }
+"("                             { return LEFT_PARENTHESES; }
 "{"                             { return LEFT_CURLY_BRACKET; }
 "}"                             { return RIGHT_CURLY_BRACKET; }
 "."                             { return DOT; }
 "->"                            { return ARROW; }
-"++"                            { return INCREMENT; }
-"--"                            { return DECREMENT; }
-"&"                             { return BITWISE_AND; }
-"*"                             { return MULTIPLY; }
-"+"                             { return ADD; }
-"-"                             { return SUBTRACT; }
-"~"                             { return BITWISE_NOR; }
-"!"                             { return NOT; }
-"/"                             { return DIVIDE; }
+"*"                             { return ASTERISK; }
+"+"                             { return PLUS; }
+"-"                             { return MINUS; }
+"~"                             { return TILDE; }
+"!"                             { return EXCLAMATION; }
 "%"                             { return MODULO; }
-"<<"                            { return LSHIFT; }
-">>"                            { return RSHIFT; }
+"<<"                            { return LEFT_SHIFT; }
+">>"                            { return RIGHT_SHIFT; }
 "<"                             { return LESS_THAN; }
 ">"                             { return GREATER_THAN; }
-"<="                            { return LESS_THAN_EQUAL; }
-">="                            { return GREATER_THAN_EQUAL; }
-"=="                            { return EQUAL; }
-"!="                            { return NOT_EQUAL; }
+"<="                            { return LESS_EQUAL_THAN; }
+">="                            { return GREATER_EQUAL_THAN; }
+":"                             { return COLON; }
+";"                             { return SEMI_COLON; }
+"..."                           { return ELLIPSIS; }
+"*="                            { return ASTERISK_ASSIGNMENT; }
+"/="                            { return SLASH_ASSIGNMENT; }
+"%="                            { return MODULO_ASSIGNMENT; }
+"+="                            { return PLUS_ASSIGNMENT; }
+"-="                            { return MINUS_ASSIGNMENT; }
+"<<="                           { return LEFT_SHIFT_ASSIGNMENT; }
+"#"                             { return HASH; }
+"--"                            { return DECREMENT; }
+")"                             { return RIGHT_PARENTHESES; }
+"&"                             { return BITWISE_AND; }
+"=="                            { return EQUALS; }
 "^"                             { return BITWISE_XOR; }
 "|"                             { return BITWISE_OR; }
 "&&"                            { return LOGICAL_AND; }
 "||"                            { return LOGICAL_OR; }
-"?"                             { return QUESTION_MARK; }
-":"                             { return COLON; }
-";"                             { return SEMICOLON; }
-"..."                           { return ELLIPSIS; }
-"="                             { return ASSIGN; }
-"*="                            { return MULTIPLY_ASSIGN; }
-"/="                            { return DIVIDE_ASSIGN; }
-"%="                            { return MODULO_ASSIGN; }
-"+="                            { return ADD_ASSIGN; }
-"-="                            { return SUBTRACT_ASSIGN; }
-"<<="                           { return LSHIFT_ASSIGN; }
-">>="                           { return RSHIFT_ASSIGN; }
-"&="                            { return AND_ASSIGN; }
-"^="                            { return XOR_ASSIGN; }
-"|="                            { return OR_ASSIGN; }
-","                             { return COMMA; }
-"#"                             { return HASH; }
+">>="                           { return RIGHT_SHIFT_ASSIGNMENT; }
+"!="                            { return NOT_EQUALS; }
+"&="                            { return BITWISE_AND_ASSIGNMENT; }
+"|="                            { return BITWISE_OR_ASSIGNMENT; }
+"^="                            { return BITWISE_XOR_ASSIGNMENT; }
 
-{SINGLE_COMMENT_STARTED}                    {BEGIN(SINGLE_LINE_COMMENT);}
-<SINGLE_LINE_COMMENT>.                      {}
-<SINGLE_LINE_COMMENT>"\n"                   {BEGIN(INITIAL); }
-{MULTILINE_STARTED}                         {BEGIN(MULTIPLE_LINE_COMMENT);}
-<MULTIPLE_LINE_COMMENT>.                    {}
-<MULTIPLE_LINE_COMMENT>"\n"                 {}
-<MULTIPLE_LINE_COMMENT>{MULTILINE_END}      {BEGIN(INITIAL); }
-{WS}                                        {}
+"/*"                            { BEGIN(MULTI_LINE_COMMENT_BODY); }
+<MULTI_LINE_COMMENT_BODY>"*/"   { BEGIN(INITIAL); }
+<MULTI_LINE_COMMENT_BODY>.      { }
+<MULTI_LINE_COMMENT_BODY>"\n"   { lineCount++; /* printf("\n-------------------- Parsing Line No. %d  --------------------\n\n", lineCount); */ }
+
+"//"                            { BEGIN(SINGLE_LINE_COMMENT_BODY); }
+<SINGLE_LINE_COMMENT_BODY>"\n"  { BEGIN(INITIAL); /* lineCount++; printf("\n-------------------- Parsing Line No. %d  --------------------\n\n", lineCount); */ }
+<SINGLE_LINE_COMMENT_BODY>.     { }
+
+{WHITESPACE}                    { }
+{NEWLINE}                       { lineCount++; /* printf("\n-------------------- Parsing Line No. %d  --------------------\n\n", lineCount); */ }
+.                               { printf("ERROR [Line %d] : Invalid token %s\n", lineCount, yytext); return INVALID_TOKEN; }
 
 %%
