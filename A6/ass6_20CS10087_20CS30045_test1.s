@@ -1,6 +1,6 @@
 	.file	"ass6_20CS10087_20CS30045_test1.c"
 
-#	Allocation of function variables and temporaries on the stack:
+#	function variables and temp are allocated on the stack:
 
 #	main
 #	c: -1
