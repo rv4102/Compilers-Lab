@@ -5,13 +5,10 @@ int printInt(int n);
 void fillFib(int *fib, int n)
 {
     int i;
-    for (i = 0; i < n; i++)
+    fib[0] = 0;
+    for (i = 1; i <= n; i++)
     {
-        if (i == 0)
-        {
-            fib[i] = 0;
-        }
-        else if (i == 1)
+        if (i == 1)
         {
             fib[i] = 1;
         }
@@ -24,12 +21,12 @@ void fillFib(int *fib, int n)
 
 int main()
 {
-    printStr("\n#### TEST 2 (1-D Arrays) ####");
-    int fib[15];
-    fillFib(fib, 15);
+    printStr("\n********* TEST 2 *********");
+    int fib[21];
+    fillFib(fib, 20);
     int i;
     printStr("\nFibonacci Series: ");
-    for (i = 0; i < 15; i++)
+    for (i = 1; i <= 20; i++)
     {
         printInt(fib[i]);
         printStr(" ");

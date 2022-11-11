@@ -2,22 +2,22 @@ int printStr(char *s);
 int readInt(int *eP);
 int printInt(int n);
 
-int max(int num1, int num2)
+int max(int n1, int n2)
 {
-    if (num1 > num2)
-        return num1;
+    if (n1 > n2)
+        return n1;
     else
-        return num2;
+        return n2;
 }
 
 int main()
 {
-    printStr("\n#### TEST 5 (Loops) ####\n");
+    printStr("\n********* TEST 5 *********\n");
 
-    printStr("\nPattern printing using FOR loop:");
+    printStr("\nPattern printing using FOR loop: ");
     printStr("\n\n");
 
-    int n = 9;
+    int n = 16;
     int i, j;
     for (i = 1; i <= 2 * n - 1; i++)
     {
@@ -34,24 +34,23 @@ int main()
     }
     printStr("\n");
 
-    int pow2 = 1;
-    printStr("\nPowers of 2 using WHILE loop: ");
-    while (pow2 <= 1024)
+    int pow3 = 1;
+    printStr("\nPowers of 3 using *WHILE* loop: ");
+    while (pow3 <= 729)
     {
-        printInt(pow2);
+        printInt(pow3);
         printStr(" ");
-        pow2 = pow2 * 2;
+        pow3 = pow3 * 3;
     }
     printStr("\n\n");
 
     i = 0;
     int iters, ep;
-    printStr("\nTesting DO-WHILE loop:");
-    do
-    {
+    printStr("\nTesting DO-WHILE loop: ");
+    do{
         if (i == 0)
         {
-            printStr("\nEntered do-while loop. Enter number of times you wish to run the loop after this: ");
+            printStr("\n We are in the do while loop. Please enter how many times it should execute: ");
             iters = readInt(&ep);
             if (ep != 0)
             {
@@ -65,7 +64,7 @@ int main()
             printInt(i);
             printStr("\n");
         }
-    } while (i++ < iters);
+    }while (i++ < iters);
 
     printStr("\n\n");
     return 0;

@@ -2,43 +2,43 @@ int printStr(char *s);
 int readInt(int *eP);
 int printInt(int n);
 
-void printNums(int curr, int till)
+void printNums(int curr, int limit)
 {
-    if (curr > till)
+    if (curr > limit)
     {
         return;
     }
     printInt(curr);
-    if (curr == till)
+    if (curr == limit)
     {
         printStr("\n");
     }
     else
     {
         printStr(" ");
-        printNums(curr + 1, till);
+        printNums(curr + 1, limit);
     }
 }
 
-int fibNum(int n)
+int fibNum(int x)
 {
-    if (n == 0)
+    if (x == 0)
     {
         return 0;
     }
-    else if (n == 1)
+    else if (x == 1)
     {
         return 1;
     }
     else
     {
-        return fibNum(n - 1) + fibNum(n - 2);
+        return fibNum(x - 1) + fibNum(x - 2);
     }
 }
 
 int main()
 {
-    printStr("\n#### TEST 6 (Recursive function calls) ####");
+    printStr("\n********* TEST 6 *********");
     int start, end, ep;
     printStr("\nEnter start: ");
     start = readInt(&ep);
@@ -66,17 +66,17 @@ int main()
     printStr(" are: ");
     printNums(start, end);
 
-    printStr("\n\nEnter value of n (<40) to find the nth fibonacci number: ");
-    int n;
-    n = readInt(&ep);
+    printStr("\n\nEnter value of x (<40) to find the nth fibonacci number: ");
+    int x;
+    x = readInt(&ep);
     if (ep != 0)
     {
-        printStr("Invalid n\n\n");
+        printStr("Invalid x\n\n");
         return 0;
     }
-    else if (n >= 40)
+    else if (x >= 40)
     {
-        printStr("n should be less than 40\n\n");
+        printStr("x should be less than 40\n\n");
         return 0;
     }
     else

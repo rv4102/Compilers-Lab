@@ -24,19 +24,19 @@ char *testCharPtr(char *cPtr)
 
 void testVoid()
 {
-    printStr("\nHello World, I am a void function. I don't return anything.");
+    printStr("\n This function is void and empty like the Bootes void.");
     return;
 }
 
 int main()
 {
-    printStr("\n#### TEST 3 (Function calls and returns) ####");
-    int n = 10;
-    int *nPtr = &n;
+    printStr("\n********* TEST 3 *********");
+    int x = 20;
+    int *nPtr = &x;
 
     printStr("\nTesting integer value return: ");
-    int retInt = testInt(n);
-    if (retInt == n)
+    int retInt = testInt(x);
+    if (retInt == x)
     {
         printStr("Passed");
     }
@@ -56,7 +56,7 @@ int main()
         printStr("Failed");
     }
 
-    char c = 'm';
+    char c = 'x';
     char *cPtr = &c;
 
     printStr("\nTesting character value return: ");
@@ -81,7 +81,7 @@ int main()
         printStr("Failed");
     }
 
-    char *str = "Hello World, I am a string.";
+    char *str = "We are prepared for the Compilers end-sem. But fir bhi makha ke hi aayenge :,) .";
     printStr("\nTesting string return: ");
     char *retStr = testCharPtr(str);
     if (retStr == str)
