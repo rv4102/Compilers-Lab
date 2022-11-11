@@ -7,13 +7,20 @@
 %}
 
 /*
-    intVal, floatVal, charVal, stringVal for storing constants entered by user in code
-    idetifierVal for storing name of identifier
-    unaryOperator for storing the unary operator encountered
-    instructionNumber for backpatching
-    parameterCount for storing number of parameters passed to function
-    symbolType to store most recent type encountered
-    expression, statement and array types and symbols with their usual meanings as discussed in class
+    intVal : to store the integer value
+    floatVal: to store the float value
+    charVal: store the char value
+    stringVal: to store the string value
+    idetifierVal: store name of identifier
+    unaryOperator: storing the unary operator
+    instructionNumber: to store the instruction number
+    parameterCount: to store the number of parameters passed to function
+    symbolType: to store most recent type encountered
+    expression: to store expression value
+    statement: to store the statement value 
+    array: store the array
+    symbolType: to store the symbol type
+    symbol: to store the symbol
 */
 
 %union {
@@ -70,10 +77,6 @@
 %token _COMPLEX
 %token _IMAGINARY
 
-/*
-IDENTIFIER points to its entry in the symbol table
-The remaining are constants from the code
-*/
 
 %token<symbol> IDENTIFIER
 %token<intVal> INTEGER_CONSTANT
@@ -134,16 +137,16 @@ The remaining are constants from the code
 %start translation_unit
 %right THEN ELSE
 
-// Store unary operator as character
+ 
 %type<unaryOperator> 
     unary_operator
 
-// Store parameter count as integer
+ 
 %type<parameterCount> 
     argument_expression_list 
     argument_expression_list_opt
 
-// Expressions
+ 
 %type<expression>
 	expression
 	primary_expression 
@@ -162,13 +165,13 @@ The remaining are constants from the code
 	expression_statement
     expression_opt
 
-// Arrays
+ 
 %type<array> 
     postfix_expression
 	unary_expression
 	cast_expression
 
-// Statements
+ 
 %type <statement>  
     statement
 	compound_statement
@@ -181,36 +184,38 @@ The remaining are constants from the code
 	block_item_list_opt
     N
 
-// symbol type
+ 
 %type<symbolType> 
     pointer
 
-// Symbol
+ 
 %type<symbol> 
     initialiser
     direct_declarator 
     init_declarator 
     declarator
 
-// Instruction number for backpatching
+ 
 %type <instructionNumber> 
     M
 
 %%
 
-/* Expressions */
 
 /*
-For constants we simply create a temporary with that initial value and create a new expression 
-with the symbol pointing to the newly generated temporary, for identifiers it points to the
-identifier which in itself is a symbol
+In case of constants, the constant value is stored temporarily, initialized with the initial value.
+Then, we created a new expression with the symbol pointing to this generated temporary.
+*/
+
+/*
+In case of identifiers, the identifier is a symbol and it points to itself
 */
 
 primary_expression: 
                     IDENTIFIER 
                         { 
                             yyinfo("primary_expression => IDENTIFIER");
-                            $$ = new Expression(); // create new non boolean expression and symbol is the identifier
+                            $$ = new Expression();  
                             $$->symbol = $1;
                             $$->type = Expression::NONBOOLEAN; 
                         }
@@ -254,7 +259,7 @@ primary_expression:
 postfix_expression:
                     primary_expression
                         { 
-                            // create new array with the same symbol as the primary expression
+                             
                             yyinfo("postfix_expression => primary_expression"); 
                             $$ = new Array();
                             $$->symbol = $1->symbol;
@@ -263,16 +268,16 @@ postfix_expression:
                         }
                     | postfix_expression LEFT_SQUARE_BRACKET expression RIGHT_SQUARE_BRACKET
                         { 
-                            // this is an array expression, create a new array
+                             
                             yyinfo("postfix_expression => postfix_expression [ expression ]"); 
                             $$ = new Array();
-                            $$->symbol = $1->symbol;    // same symbol as before
-                            $$->subArrayType = $1->subArrayType->arrayType; // as we are indexing we go one level deeper
-                            $$->temp = gentemp(SymbolType::INT); // temporary to compute location
-                            $$->type = Array::ARRAY;    // type will be array
+                            $$->symbol = $1->symbol;     
+                            $$->subArrayType = $1->subArrayType->arrayType;  
+                            $$->temp = gentemp(SymbolType::INT);  
+                            $$->type = Array::ARRAY;     
 
                             if($1->type == Array::ARRAY) {
-                                // postfix_expression is already array so multiply size of subarray with expression and add
+                                 
                                 Symbol *sym = gentemp(SymbolType::INT);
                                 emit("*", sym->name, $3->symbol->name, toString($$->subArrayType->getSize()));
                                 emit("+", $$->temp->name, $1->temp->name, sym->name);
@@ -283,7 +288,7 @@ postfix_expression:
                         }
                     | postfix_expression LEFT_PARENTHESES argument_expression_list_opt RIGHT_PARENTHESES
                         { 
-                            // function call, number of parameters stored in argument_expression_list_opt
+                             
                             yyinfo("postfix_expression => postfix_expression ( argument_expression_list_opt )"); 
                             $$ = new Array();
                             $$->symbol = gentemp($1->symbol->type->type);
@@ -300,7 +305,7 @@ postfix_expression:
                         }
                     | postfix_expression INCREMENT
                         { 
-                            // post increment, first generate temporary with old value, then add 1
+                             
                             yyinfo("postfix_expression => postfix_expression ++");
                             $$ = new Array();
                             $$->symbol = gentemp($1->symbol->type->type);
@@ -309,7 +314,7 @@ postfix_expression:
                         }
                     | postfix_expression DECREMENT
                         { 
-                            // post decrement, first generate temporary with old value, then subtract 1
+                             
                             yyinfo("postfix_expression => postfix_expression --"); 
                             $$ = new Array();
                             $$->symbol = gentemp($1->symbol->type->type);
@@ -327,7 +332,7 @@ postfix_expression:
                     ;
 
 
-// simply equate number of parameters
+ 
 argument_expression_list_opt:
                                 argument_expression_list
                                     { 
@@ -336,7 +341,7 @@ argument_expression_list_opt:
                                     }
                                 | 
                                     { 
-                                        // empty so 0 params
+                                         
                                         yyinfo("argument_expression_list_opt => epsilon");
                                         $$ = 0;
                                     }
@@ -345,14 +350,14 @@ argument_expression_list_opt:
 argument_expression_list:
                             assignment_expression
                                 { 
-                                    // first param, initialise param count to 1
+                                     
                                     yyinfo("argument_expression_list => assignment_expression"); 
                                     emit("param", $1->symbol->name);
                                     $$ = 1;
                                 }
                             | argument_expression_list COMMA assignment_expression
                                 { 
-                                    // one new param, add 1 to param count
+                                     
                                     yyinfo("argument_expression_list => argument_expression_list , assignment_expression");
                                     emit("param", $3->symbol->name);
                                     $$ = $1 + 1; 
@@ -367,14 +372,14 @@ unary_expression:
                         }
                     | INCREMENT unary_expression
                         { 
-                            // pre increment, no new temporary simply add 1
+                             
                             yyinfo("unary_expression => ++ unary_expression"); 
                             $$ = $2;
                             emit("+", $2->symbol->name, $2->symbol->name, toString(1));
                         }
                     | DECREMENT unary_expression
                         { 
-                            // pre decrement, no new temporary simply subtract 1
+                             
                             yyinfo("unary_expression => -- unary_expression"); 
                             $$ = $2;
                             emit("-", $2->symbol->name, $2->symbol->name, toString(1));
@@ -383,14 +388,14 @@ unary_expression:
                         { 
                             yyinfo("unary_expression => unary_operator cast_expression");
                             if(strcmp($1, "&") == 0) {
-                                // addressing, this generates a pointer, the subArray type will thus be the symbol type of the cast_expression
+                                 
                                 $$ = new Array();
                                 $$->symbol = gentemp(SymbolType::POINTER);
                                 $$->symbol->type->arrayType = $2->symbol->type;
                                 emit("=&", $$->symbol->name, $2->symbol->name);
                             } else if(strcmp($1, "*") == 0) {
-                                // dereferncing, this generates a pointer, a new temporary generated with type as the subarray type of the cast_expression
-                                // the subArray type will thus be one level deeper that of the cast_expression
+                                 
+                                 
                                 $$ = new Array();
                                 $$->symbol = $2->symbol;
                                 $$->temp = gentemp($2->temp->type->arrayType->type);
@@ -399,8 +404,8 @@ unary_expression:
                                 emit("=*", $$->temp->name, $2->temp->name);
                             } else if(strcmp($1, "+") == 0) {
                                 $$ = $2;
-                            } else { // for -, ~ and !
-                                // simply apply the operator on cast_expression
+                            } else {  
+                                 
                                 $$ = new Array();
                                 $$->symbol = gentemp($2->symbol->type->type);
                                 emit($1, $$->symbol->name, $2->symbol->name);
@@ -468,13 +473,10 @@ cast_expression:
                 ;
 
 /*
-This is a very crucial step in the translation, here an array goes to a expression
-As a first step we extract the base type of the array, then if the type is array we obtain the value by indexing
-by using the symbol name, the temporary used to calculate the location and assign it to the newly generated temporary
-If it is a pointer or normal array then simply equate the symbol
-Once this is done we apply the necessary operation that is *,/ or % after proper type checking
-Below this for additive and shift expressions simply follow the same procedure, check types, generate temporary and store the result of
-the operation in the newly generated temporary
+First, we extract the base type of the array. If type is base array, then we extract the value using the indexing through symbol name.
+temporary is used to calculate the location of the array
+Finally, we assign it to the newly generated temporary
+Then, we can perform the type checking and if it is valid, then we can perform the necessary operations.
 */
 
 multiplicative_expression:
@@ -626,10 +628,8 @@ shift_expression:
                     ;
 
 /*
-For the next set of translations, boolean expression is made, 
-appropriate operation is applied,
-here the trueList and falseList are also made which will be later used 
-and backpatched with appropriate destinations
+For additive expressions, similar procedure is followed. 
+Then type checking is performed and then appropriate temporaries are created and stored in the new temporaries
 */
 
 relational_expression:
@@ -737,12 +737,10 @@ equality_expression:
                     ;
 
 /*
-For the next set of translations, non boolean expression is made, 
-type conversion is done, expression now represents INT type
-here the trueList and falseList are now invalid,
-a new temporary is generated,
-appropriate operations are applied and result is stored in the newly
-generated temporary
+Non boolean expressions
+type conversion is performed into INT type
+as the truelist and falaselist are not valid, new temporaries are created
+Afterwards, operations can be performed
 */
 
 AND_expression:
@@ -798,13 +796,14 @@ inclusive_OR_expression:
                                 emit("|", $$->symbol->name, $1->symbol->name, $3->symbol->name);
                             }
                         ;
-
 /*
-Marker rule
-M -> stores the next instruction, the location of the quad generated at M, used for backpatching later
-Fall through guard rule
-N -> nextlist, list of indices of dangling exits at N
+Marker rule: 
+M will store the location of the quad at M. 
+This value will be used for backpatching later.
+Gaurd rule:
+N will represent the nextList, i.e, list of indices of dangling exits 
 */
+
 
 M:  
         {
@@ -823,17 +822,20 @@ N:
 	;
 
 /*
-The backpatching and merge being done for the next three translations is as discussed in the class
-A conversion into BOOL is made and appropriate backpatching is carried out
-For logical and
+
+These actions are discussed in class and are as follows:
+
+ logical and
 backpatch(B 1 .truelist, M.instr );
 B.truelist = B 2 .truelist;
 B.falselist = merge(B 1 .falselist, B 2 .falselist);
-For logical or
+
+ logical or
 backpatch(B 1 .falselist, M.instr );
 B.truelist = merge(B 1 .truelist, B 2 .truelist);
 B.falselist = B 2 .falselist;
-For ? :
+
+ ? :
 E .loc = gentemp();
 E .type = E 2 .type; // Assume E 2 .type = E 3 .type
 emit(E .loc ’=’ E 3 .loc); // Control gets here by fall-through
@@ -848,6 +850,7 @@ convInt2Bool(E 1 );
 backpatch(E 1 .truelist, M 1 .instr );
 backpatch(E 1 .falselist, M 2 .instr );
 backpatch(l, nextinstr );
+
 */
 
 logical_AND_expression:
@@ -923,15 +926,15 @@ assignment_expression:
                             { 
                                 yyinfo("assignment_expression => unary_expression assignment_operator assignment_expression"); 
                                 if($1->type == Array::ARRAY) {
-                                    // assignment to array
+                                     
                                     $3->symbol = $3->symbol->convert($1->subArrayType->type);
                                     emit("[]=", $1->symbol->name, $1->temp->name, $3->symbol->name);
                                 } else if($1->type == Array::POINTER) {
-                                    // assignment to pointer
+                                     
                                     $3->symbol = $3->symbol->convert($1->temp->type->type);
                                     emit("*=", $1->temp->name, $3->symbol->name);
                                 } else {
-                                    // assignment to other
+                                     
                                     $3->symbol = $3->symbol->convert($1->symbol->type->type);
 			                        emit("=", $1->symbol->name, $3->symbol->name);
                                 }
@@ -1075,10 +1078,10 @@ init_declarator:
                 | declarator ASSIGNMENT initialiser
                     { 
                         yyinfo("init_declarator => declarator = initialiser");
-                        // if there is some initial value assign it 
+                         
                         if($3->initialValue != "") 
                             $1->initialValue = $3->initialValue;
-                        // = assignment
+                         
 		                emit("=", $1->name, $3->name);
                     }
                 ;
@@ -1277,7 +1280,7 @@ direct_declarator:
                     IDENTIFIER 
                         { 
                             yyinfo("direct_declarator => IDENTIFIER"); 
-                            $$ = $1->update(new SymbolType(currentType)); // update type to the last type seen
+                            $$ = $1->update(new SymbolType(currentType));  
                             currentSymbol = $$;
                         }
                     | LEFT_PARENTHESES declarator RIGHT_PARENTHESES
@@ -1297,36 +1300,36 @@ direct_declarator:
                         { 
                             yyinfo("direct_declarator => direct_declarator [ assignment_expression ]"); 
                             SymbolType *it1 = $1->type, *it2 = NULL;
-                            while(it1->type == SymbolType::ARRAY) { // go to the base level of a nested type
+                            while(it1->type == SymbolType::ARRAY) {  
                                 it2 = it1;
                                 it1 = it1->arrayType;
                             }
-                            if(it2 != NULL) { // nested array case
-                                // another level of nesting with base as it1 and width the value of assignment_expression
+                            if(it2 != NULL) {  
+                                 
                                 it2->arrayType =  new SymbolType(SymbolType::ARRAY, it1, atoi($3->symbol->initialValue.c_str()));	
                                 $$ = $1->update($1->type);
                             }
-                            else { // fresh array
-                                // create a new array with base as type of direct_declarator and width the value of assignment_expression
+                            else {  
+                                 
                                 $$ = $1->update(new SymbolType(SymbolType::ARRAY, $1->type, atoi($3->symbol->initialValue.c_str())));
                             }
                         }
                     | direct_declarator LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET
                         { 
                             yyinfo("direct_declarator => direct_declarator [ ]"); 
-                            // same as the previous rule, just we dont know the size so put it as 0
+                             
                             SymbolType *it1 = $1->type, *it2 = NULL;
-                            while(it1->type == SymbolType::ARRAY) { // go to the base level of a nested type
+                            while(it1->type == SymbolType::ARRAY) {  
                                 it2 = it1;
                                 it1 = it1->arrayType;
                             }
-                            if(it2 != NULL) { // nested array case
-                                // another level of nesting with base as it1 and width the value of assignment_expression
+                            if(it2 != NULL) {  
+                                 
                                 it2->arrayType =  new SymbolType(SymbolType::ARRAY, it1, 0);	
                                 $$ = $1->update($1->type);
                             }
-                            else { // fresh array
-                                // create a new array with base as type of direct_declarator and width the value of assignment_expression
+                            else {  
+                                 
                                 $$ = $1->update(new SymbolType(SymbolType::ARRAY, $1->type, 0));
                             }
                         }
@@ -1353,13 +1356,13 @@ direct_declarator:
                     | direct_declarator LEFT_PARENTHESES change_scope parameter_type_list RIGHT_PARENTHESES
                         { 
                             yyinfo("direct_declarator => direct_declarator ( parameter_type_list )"); 
-                            // function declaration
+                             
                             currentTable->name = $1->name;
                             if($1->type->type != SymbolType::VOID) {
-                                // set type of return value
+                                 
                                 currentTable->lookup("return")->update($1->type);
                             }
-                            // move back to the global table and set the nested table for the function
+                             
                             $1->nestedTable = currentTable;
                             $1->category = Symbol::FUNCTION;
                             currentTable->parent = globalTable;
@@ -1373,13 +1376,13 @@ direct_declarator:
                     | direct_declarator LEFT_PARENTHESES change_scope RIGHT_PARENTHESES
                         { 
                             yyinfo("direct_declarator => direct_declarator ( )"); 
-                            // same as the previous rule
+                             
                             currentTable->name = $1->name;
                             if($1->type->type != SymbolType::VOID) {
-                                // set type of return value
+                                 
                                 currentTable->lookup("return")->update($1->type);
                             }
-                            // move back to the global table and set the nested table for the function
+                             
                             $1->nestedTable = currentTable;
                             $1->category = Symbol::FUNCTION;
                             currentTable->parent = globalTable;
@@ -1430,13 +1433,13 @@ pointer:
         ASTERISK type_qualifier_list_opt
             { 
                 yyinfo("pointer => * type_qualifier_list_opt"); 
-                // fresh pointer
+                 
                 $$ = new SymbolType(SymbolType::POINTER);
             }
         | ASTERISK type_qualifier_list_opt pointer
             { 
                 yyinfo("pointer => * type_qualifier_list_opt pointer"); 
-                // nested pointer
+                 
                 $$ = new SymbolType(SymbolType::POINTER, $3);
             }
         ;
@@ -1623,15 +1626,15 @@ labeled_statement:
                     ;
 
 /*
-Used to change the symbol table when a new block is encountered
-Helps create a hierarchy of symbol tables
+Changing the symbol table on encountering new block
+This will create nested symbol tables
 */
 
 /* change_block: 
                     {
                         string name = currentTable->name + "_" + toString(tableCount);
                         tableCount++;
-                        Symbol *s = currentTable->lookup(name); // create new entry in symbol table
+                        Symbol *s = currentTable->lookup(name);  
                         s->nestedTable = new SymbolTable(name, currentTable);
                         s->type = new SymbolType(SymbolType::BLOCK);
                         currentSymbol = s;
@@ -1669,7 +1672,7 @@ block_item_list:
                     { 
                         yyinfo("block_item_list => block_item_list block_item"); 
                         $$ = $3;
-                        // after completion of block_item_list(1) we move to block_item(3)
+                         
                         backpatch($1->nextList,$2);
                     }
                 ;
@@ -1709,16 +1712,20 @@ expression_opt:
                 ;
 
 /*
+
 IF ELSE
--> the %prec THEN is to remove conflicts during translation
-Markers M and guard N have been added as discussed in the class
+
+-> the %prec THEN : to remove ambiguity
+
 S -> if (B) M S1 N
 backpatch(B.truelist, M.instr )
 S.nextlist = merge(B.falselist, merge(S1.nextlist, N.nextlist))
+
 S -> if (B) M 1 S 1 N else M 2 S 2
 backpatch(B.truelist, M1.instr )
 backpatch(B.falselist, M2.instr )
 S.nextlist = merge(merge(S1.nextlist, N.nextlist), S2 .nextlist)
+
 */
 
 selection_statement:
@@ -1727,41 +1734,45 @@ selection_statement:
                             yyinfo("selection_statement => if ( expression ) statement"); 
                             $$ = new Statement();
                             $3->toBool();
-                            backpatch($3->trueList, $5); // if true go to M
-                            $$->nextList = merge($3->falseList, merge($6->nextList, $7->nextList)); // exits
+                            backpatch($3->trueList, $5);  
+                            $$->nextList = merge($3->falseList, merge($6->nextList, $7->nextList));  
                         }
                     | IF LEFT_PARENTHESES expression RIGHT_PARENTHESES M statement N ELSE M statement
                         { 
                             yyinfo("selection_statement => if ( expression ) statement else statement"); 
                             $$ = new Statement();
                             $3->toBool();
-                            backpatch($3->trueList, $5); // if true go to M
-                            backpatch($3->falseList, $9); // if false go to else
-                            $$->nextList = merge($10->nextList, merge($6->nextList, $7->nextList)); // exits
+                            backpatch($3->trueList, $5);  
+                            backpatch($3->falseList, $9);  
+                            $$->nextList = merge($10->nextList, merge($6->nextList, $7->nextList));  
                         }
                     | SWITCH LEFT_PARENTHESES expression RIGHT_PARENTHESES statement
                         { 
                             yyinfo("selection_statement => switch ( expression ) statement"); 
                         }
                     ;
-
 /*
+
 LOOPS
+
 while M1 (B) M2 S1
 backpatch(S1.nextlist, M1.instr );
 backpatch(B.truelist, M2.instr );
 S.nextlist = B.falselist;
 emit(”goto”, M1.instr );
+
 do M1 S1 M2 while ( B );
 backpatch(B.truelist, M1.instr );
 backpatch(S1 .nextlist, M2.instr );
 S.nextlist = B.falselist;
+
 for ( E1 ; M1 B ; M2 E2 N ) M3 S1
 backpatch(B.truelist, M3.instr );
 backpatch(N.nextlist, M1.instr );
 backpatch(S1.nextlist, M2.instr );
 emit(”goto” M2.instr );
 S.nextlist = B.falselist;
+
 */
 
 iteration_statement:
@@ -1770,9 +1781,9 @@ iteration_statement:
                             yyinfo("iteration_statement => while ( expression ) statement"); 
                             $$ = new Statement();
                             $4->toBool();
-                            backpatch($7->nextList, $2); // after statement go back to M1
-                            backpatch($4->trueList, $6); // if true go to M2
-                            $$->nextList = $4->falseList; // exit if false
+                            backpatch($7->nextList, $2);  
+                            backpatch($4->trueList, $6);  
+                            $$->nextList = $4->falseList;  
                             emit("goto", toString($2));
                         }
                     | DO M statement M WHILE LEFT_PARENTHESES expression RIGHT_PARENTHESES SEMI_COLON
@@ -1780,20 +1791,20 @@ iteration_statement:
                             yyinfo("iteration_statement => do statement while ( expression ) ;"); 
                             $$ = new Statement();
                             $7->toBool();
-                            backpatch($7->trueList, $2); // if true go back to M1
-                            backpatch($3->nextList, $4); // after statement is executed go to M2
-                            $$->nextList = $7->falseList; // exit if false
+                            backpatch($7->trueList, $2);  
+                            backpatch($3->nextList, $4);  
+                            $$->nextList = $7->falseList;  
                         }
                     | FOR LEFT_PARENTHESES expression_opt SEMI_COLON M expression_opt SEMI_COLON M expression_opt N RIGHT_PARENTHESES M statement
                         { 
                             yyinfo("iteration_statement => for ( expression_opt ; expression_opt ; expression_opt ) statement"); 
                             $$ = new Statement();
                             $6->toBool();
-                            backpatch($6->trueList, $12); // if true go to M3 (loop body)
-                            backpatch($10->nextList, $5); // after N go to M1 (condition check)
-                            backpatch($13->nextList, $8); // after S1 (loop body) go to M2 (increment/decrement/any other operation)
+                            backpatch($6->trueList, $12);  
+                            backpatch($10->nextList, $5);  
+                            backpatch($13->nextList, $8);  
                             emit("goto", toString($8));
-                            $$->nextList = $6->falseList; // exit if false
+                            $$->nextList = $6->falseList;  
                         }
                     | FOR LEFT_PARENTHESES declaration expression_opt SEMI_COLON expression_opt RIGHT_PARENTHESES statement
                         { 
@@ -1819,7 +1830,7 @@ jump_statement:
                         yyinfo("jump_statement => return expression_opt ;"); 
                         $$ = new Statement();
                         if($2->symbol != NULL) {
-                            emit("return", $2->symbol->name); // emit the current symbol name at return if it exists otherwise empty
+                            emit("return", $2->symbol->name);  
                         } else {
                             emit("return", "");
                         }
@@ -1850,15 +1861,15 @@ external_declaration:
                             }
                         ;
 
-function_definition: // to prevent block change here which is there in the compound statement grammar rule
-                     // this rule is slightly modified by expanding the original compound statement rule over here
+function_definition:  
+                      
                     declaration_specifiers declarator declaration_list_opt change_scope LEFT_CURLY_BRACKET block_item_list_opt RIGHT_CURLY_BRACKET
                         { 
                             yyinfo("function_definition => declaration_specifiers declarator declaration_list_opt compound_statement"); 
                             tableCount = 0;
                             emit("labelend", $2->name);
                             if($2->type->type != SymbolType::VOID) {
-                                // set type of return value
+                                 
                                 currentTable->lookup("return")->update($2->type);
                             }
                             changeTable(globalTable);

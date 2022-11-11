@@ -26,11 +26,11 @@ class ActivationRecord;
 // Activation Record class that stores displacement of variables and total displacement from base address
 class ActivationRecord
 {
-    public:
-        map<string, int> displacement;
-        int totalDisplacement;
+public:
+    map<string, int> displacement;
+    int totalDisplacement;
 
-        ActivationRecord();
+    ActivationRecord();
 };
 
 class SymbolType
@@ -46,7 +46,7 @@ public:
         FUNCTION,
         ARRAY,
         BLOCK
-    } type;                // type of the symbol, scoped enum for safe comparisons
+    } type; // type of the symbol, scoped enum for safe comparisons
     int width;
     SymbolType *arrayType;
 
@@ -58,7 +58,7 @@ public:
 class SymbolTable
 {
 public:
-    string name;                        
+    string name;
     map<string, Symbol> symbols;
     SymbolTable *parent;
     ActivationRecord *activationRecord;
@@ -95,7 +95,7 @@ public:
 class Quad
 {
 public:
-    string op, arg1, arg2, result;                   // parameters of the quad
+    string op, arg1, arg2, result; // parameters of the quad
 
     Quad(string, string, string = "=", string = "");
     Quad(string, int, string = "=", string = "");

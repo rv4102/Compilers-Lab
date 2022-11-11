@@ -2,105 +2,84 @@ int printStr(char *s);
 int readInt(int *eP);
 int printInt(int n);
 
-int testInt(int num)
+void testIncDec(int n)
 {
-    return num;
-}
-
-int *testIntPtr(int *numPtr)
-{
-    return numPtr;
-}
-
-char testChar(char c)
-{
-    return c;
-}
-
-char *testCharPtr(char *cPtr)
-{
-    return cPtr;
-}
-
-void testVoid()
-{
-    printStr("\nHello World, I am a void function. I don't return anything.");
-    return;
+    printStr("Value passed to function = ");
+    printInt(n);
 }
 
 int main()
 {
-    printStr("\n#### TEST 3 (Function calls and returns) ####");
-    int n = 10;
-    int *nPtr = &n;
+    printStr("\n#### TEST 1 (Arithmetic operators) ####");
+    int n1, n2, n3, n4;
+    n1 = 30;
+    n2 = 16;
+    n3 = 7;
+    n4 = -22;
 
-    printStr("\nTesting integer value return: ");
-    int retInt = testInt(n);
-    if (retInt == n)
-    {
-        printStr("Passed");
-    }
-    else
-    {
-        printStr("Failed");
-    }
+    printStr("\nn1 = ");
+    printInt(n1);
+    printStr("\nn2 = ");
+    printInt(n2);
+    printStr("\nn3 = ");
+    printInt(n3);
+    printStr("\nn4 = ");
+    printInt(n4);
 
-    printStr("\nTesting integer pointer return: ");
-    int *retIntPtr = testIntPtr(nPtr);
-    if (retIntPtr == nPtr)
-    {
-        printStr("Passed");
-    }
-    else
-    {
-        printStr("Failed");
-    }
+    int n5 = n1 + n2;
+    int n6 = n1 - n2;
+    int n7 = n1 * n2;
+    int n8 = n1 / n2;
+    int n9 = n1 % n2;
 
-    char c = 'm';
-    char *cPtr = &c;
+    printStr("\nn1 + n2 = ");
+    printInt(n5);
+    printStr("\nn1 - n2 = ");
+    printInt(n6);
+    printStr("\nn1 * n2 = ");
+    printInt(n7);
+    printStr("\nn1 / n2 = ");
+    printInt(n8);
+    printStr("\nn1 % n2 = ");
+    printInt(n9);
 
-    printStr("\nTesting character value return: ");
-    char retChar = testChar(c);
-    if (retChar == c)
-    {
-        printStr("Passed");
-    }
-    else
-    {
-        printStr("Failed");
-    }
+    int n10 = -n1 + n2 - n3 + n4 + 10;
+    int n11 = n1 * n2 / n3 + n4 - 10;
+    int n12 = n1 + n2 * n3 / n4 - 0;
+    int n13 = (n1 + n2) * (-n3 / n4) - 15;
+    printStr("\n-n1 + n2 - n3 + n4 + 10 = ");
+    printInt(n10);
+    printStr("\nn1 * n2 / n3 + n4 - 10 = ");
+    printInt(n11);
+    printStr("\nn1 + n2 * n3 / n4 - 0 = ");
+    printInt(n12);
+    printStr("\n(n1 + n2) * (n3 / n4) - 15 = ");
+    printInt(n13);
+    printStr("\n-n3 = ");
+    printInt(-n3);
+    printStr("\n-n4 = ");
+    printInt(-n4);
 
-    printStr("\nTesting character pointer return: ");
-    char *retCharPtr = testCharPtr(cPtr);
-    if (retCharPtr == cPtr)
-    {
-        printStr("Passed");
-    }
-    else
-    {
-        printStr("Failed");
-    }
+    printStr("\nTest pre increment: ");
+    testIncDec(++n1);
+    printStr(", Value after call = ");
+    printInt(n1);
 
-    char *str = "Hello World, I am a string.";
-    printStr("\nTesting string return: ");
-    char *retStr = testCharPtr(str);
-    if (retStr == str)
-    {
-        printStr("Passed");
-    }
-    else
-    {
-        printStr("Failed");
-    }
-    printStr(" [ Passed string: ");
-    printStr(str);
-    printStr(" ], ");
-    printStr("[ Returned string: ");
-    printStr(retStr);
-    printStr(" ]");
+    printStr("\nTest post increment: ");
+    testIncDec(n1++);
+    printStr(", Value after call = ");
+    printInt(n1);
 
-    printStr("\nTesting void return: ");
-    testVoid();
+    printStr("\nTest pre decrement: ");
+    testIncDec(--n1);
+    printStr(", Value after call = ");
+    printInt(n1);
+
+    printStr("\nTest post decrement: ");
+    testIncDec(n1--);
+    printStr(", Value after call = ");
+    printInt(n1);
+
     printStr("\n\n");
     return 0;
 }
