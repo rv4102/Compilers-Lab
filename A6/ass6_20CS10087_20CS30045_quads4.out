@@ -13,11 +13,11 @@ printStr            int                                     function            
 ptrG1               ptr(int)                                global                                  22                  8                   NULL                
 ptrG2               ptr(int)                                global                                  30                  8                   NULL                
 readInt             int                                     function                                38                  4                   readInt             
-strG1               ptr(char)                               global              "Hello World, I am a global string."42                  8                   NULL                
+strG1               ptr(char)                               global              "a GLOBAL STRING I am"42                  8                   NULL                
 strG2               ptr(char)                               global                                  50                  8                   NULL                
 t0                  int                                     temporary           20                  58                  4                   NULL                
 t1                  char                                    temporary           'b'                 62                  1                   NULL                
-t2                  ptr(char)                               temporary           "Hello World, I am a global string."63                  8                   NULL                
+t2                  ptr(char)                               temporary           "a GLOBAL STRING I am"63                  8                   NULL                
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -33,7 +33,7 @@ numL2               int                                     local               
 ptrL1               ptr(int)                                local                                   10                  8                   NULL                
 ptrL2               ptr(int)                                local                                   18                  8                   NULL                
 return              int                                     local                                   26                  4                   NULL                
-strL1               ptr(char)                               local               "Hello World, I am a local string."30                  8                   NULL                
+strL1               ptr(char)                               local               "a LOCAL STRING I am"30                  8                   NULL                
 strL2               ptr(char)                               local                                   38                  8                   NULL                
 t10                 int                                     temporary                               46                  4                   NULL                
 t100                int                                     temporary           0                   50                  4                   NULL                
@@ -56,7 +56,7 @@ t26                 ptr(char)                               temporary           
 t27                 int                                     temporary                               146                 4                   NULL                
 t28                 int                                     temporary                               150                 4                   NULL                
 t29                 ptr(char)                               temporary           ", charG1 (ascii value) = "154                 8                   NULL                
-t3                  ptr(char)                               temporary           "\n#### TEST 4 (Global variables, pointers and addresses) ####"162                 8                   NULL                
+t3                  ptr(char)                               temporary           "\n********* TEST 4 ************"162                 8                   NULL                
 t30                 int                                     temporary                               170                 4                   NULL                
 t31                 int                                     temporary                               174                 4                   NULL                
 t32                 ptr(char)                               temporary           ", ptrG1 (adress, truncated to first 32 bits only) = "178                 8                   NULL                
@@ -68,7 +68,7 @@ t37                 int                                     temporary           
 t38                 ptr(char)                               temporary           "\n"                210                 8                   NULL                
 t39                 int                                     temporary                               218                 4                   NULL                
 t4                  int                                     temporary                               222                 4                   NULL                
-t40                 ptr(char)                               temporary           "\nAssigning locals to globals: "226                 8                   NULL                
+t40                 ptr(char)                               temporary           "\nLocals to globals: "226                 8                   NULL                
 t41                 int                                     temporary                               234                 4                   NULL                
 t42                 ptr(char)                               temporary           "\nnumG2 = "        238                 8                   NULL                
 t43                 int                                     temporary                               246                 4                   NULL                
@@ -83,9 +83,9 @@ t50                 int                                     temporary           
 t51                 ptr(char)                               temporary           ", strG2 = "        290                 8                   NULL                
 t52                 int                                     temporary                               298                 4                   NULL                
 t53                 int                                     temporary                               302                 4                   NULL                
-t54                 ptr(char)                               temporary           "\nSUCCESS: Local variables assigned to global variables."306                 8                   NULL                
+t54                 ptr(char)                               temporary           "\nSUCCESSFUL"      306                 8                   NULL                
 t55                 int                                     temporary                               314                 4                   NULL                
-t56                 ptr(char)                               temporary           "\nFAILURE: Local variables not assigned to global variables."318                 8                   NULL                
+t56                 ptr(char)                               temporary           "\nFAILED"          318                 8                   NULL                
 t57                 int                                     temporary                               326                 4                   NULL                
 t58                 ptr(char)                               temporary           "\n"                330                 8                   NULL                
 t59                 int                                     temporary                               338                 4                   NULL                
@@ -105,13 +105,13 @@ t70                 int                                     temporary           
 t71                 ptr(char)                               temporary           ", strL2 = "        411                 8                   NULL                
 t72                 int                                     temporary                               419                 4                   NULL                
 t73                 int                                     temporary                               423                 4                   NULL                
-t74                 ptr(char)                               temporary           "\nSUCCESS: Global variables assigned to local variables."427                 8                   NULL                
+t74                 ptr(char)                               temporary           "\nSUCCESSFUL"      427                 8                   NULL                
 t75                 int                                     temporary                               435                 4                   NULL                
-t76                 ptr(char)                               temporary           "\nFAILURE: Global variables not assigned to local variables."439                 8                   NULL                
+t76                 ptr(char)                               temporary           "\nFAILED"          439                 8                   NULL                
 t77                 int                                     temporary                               447                 4                   NULL                
 t78                 ptr(char)                               temporary           "\n"                451                 8                   NULL                
 t79                 int                                     temporary                               459                 4                   NULL                
-t8                  ptr(char)                               temporary           "Hello World, I am a local string."463                 8                   NULL                
+t8                  ptr(char)                               temporary           "a LOCAL STRING I am"463                 8                   NULL                
 t80                 ptr(char)                               temporary           "\nAssigning globals to globals: "471                 8                   NULL                
 t81                 int                                     temporary                               479                 4                   NULL                
 t82                 ptr(char)                               temporary           "\nnumG2 = "        483                 8                   NULL                
@@ -127,9 +127,9 @@ t90                 int                                     temporary           
 t91                 ptr(char)                               temporary           ", strG2 = "        539                 8                   NULL                
 t92                 int                                     temporary                               547                 4                   NULL                
 t93                 int                                     temporary                               551                 4                   NULL                
-t94                 ptr(char)                               temporary           "\nSUCCESS: Global variables assigned to global variables."555                 8                   NULL                
+t94                 ptr(char)                               temporary           "\nSUCCESSFUL"      555                 8                   NULL                
 t95                 int                                     temporary                               563                 4                   NULL                
-t96                 ptr(char)                               temporary           "\nFAILURE: Global variables not assigned to global variables."567                 8                   NULL                
+t96                 ptr(char)                               temporary           "\nFAILED"          567                 8                   NULL                
 t97                 int                                     temporary                               575                 4                   NULL                
 t98                 ptr(char)                               temporary           "\n\n"              579                 8                   NULL                
 t99                 int                                     temporary                               587                 4                   NULL                
@@ -170,10 +170,10 @@ return              int                                     local               
 2   : 	numG1 = t0
 3   : 	t1 = 'b'
 4   : 	charG1 = t1
-5   : 	t2 = "Hello World, I am a global string."
+5   : 	t2 = "a GLOBAL STRING I am"
 6   : 	strG1 = t2
 7   : Function start: main
-8   : 	t3 = "\n#### TEST 4 (Global variables, pointers and addresses) ####"
+8   : 	t3 = "\n********* TEST 4 ************"
 9   : 	param t3
 10  : 	t4 = call printStr, 1
 11  : 	t5 = 5
@@ -182,7 +182,7 @@ return              int                                     local               
 14  : 	charL1 = t6
 15  : 	t7 = &numL1
 16  : 	ptrL1 = t7
-17  : 	t8 = "Hello World, I am a local string."
+17  : 	t8 = "a LOCAL STRING I am"
 18  : 	strL1 = t8
 19  : 	t9 = "\nLocal variables: "
 20  : 	param t9
@@ -235,7 +235,7 @@ return              int                                     local               
 67  : 	t38 = "\n"
 68  : 	param t38
 69  : 	t39 = call printStr, 1
-70  : 	t40 = "\nAssigning locals to globals: "
+70  : 	t40 = "\nLocals to globals: "
 71  : 	param t40
 72  : 	t41 = call printStr, 1
 73  : 	numG2 = numL1
@@ -270,11 +270,11 @@ return              int                                     local               
 102 : 	goto 109
 103 : 	if strG2 == strL1 goto 105
 104 : 	goto 109
-105 : 	t54 = "\nSUCCESS: Local variables assigned to global variables."
+105 : 	t54 = "\nSUCCESSFUL"
 106 : 	param t54
 107 : 	t55 = call printStr, 1
 108 : 	goto 112
-109 : 	t56 = "\nFAILURE: Local variables not assigned to global variables."
+109 : 	t56 = "\nFAILED"
 110 : 	param t56
 111 : 	t57 = call printStr, 1
 112 : 	t58 = "\n"
@@ -315,11 +315,11 @@ return              int                                     local               
 147 : 	goto 154
 148 : 	if strL2 == strG1 goto 150
 149 : 	goto 154
-150 : 	t74 = "\nSUCCESS: Global variables assigned to local variables."
+150 : 	t74 = "\nSUCCESSFUL"
 151 : 	param t74
 152 : 	t75 = call printStr, 1
 153 : 	goto 157
-154 : 	t76 = "\nFAILURE: Global variables not assigned to local variables."
+154 : 	t76 = "\nFAILED"
 155 : 	param t76
 156 : 	t77 = call printStr, 1
 157 : 	t78 = "\n"
@@ -360,11 +360,11 @@ return              int                                     local               
 192 : 	goto 199
 193 : 	if strG2 == strG1 goto 195
 194 : 	goto 199
-195 : 	t94 = "\nSUCCESS: Global variables assigned to global variables."
+195 : 	t94 = "\nSUCCESSFUL"
 196 : 	param t94
 197 : 	t95 = call printStr, 1
 198 : 	goto 202
-199 : 	t96 = "\nFAILURE: Global variables not assigned to global variables."
+199 : 	t96 = "\nFAILED"
 200 : 	param t96
 201 : 	t97 = call printStr, 1
 202 : 	t98 = "\n\n"

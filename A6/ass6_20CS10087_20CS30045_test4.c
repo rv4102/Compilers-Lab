@@ -5,16 +5,16 @@ int printInt(int n);
 int numG1 = 20, numG2;
 char charG1 = 'b', charG2;
 int *ptrG1, *ptrG2;
-char *strG1 = "Hello World, I am a global string.", *strG2;
+char *strG1 = "a GLOBAL STRING I am", *strG2;
 
 int main()
 {
-    printStr("\n#### TEST 4 (Global variables, pointers and addresses) ####");
+    printStr("\n********* TEST 4 ************");
 
     int numL1 = 5, numL2;
     char charL1 = 'a', charL2;
     int *ptrL1 = &numL1, *ptrL2;
-    char *strL1 = "Hello World, I am a local string.", *strL2;
+    char *strL1 = "a LOCAL STRING I am", *strL2;
 
     printStr("\nLocal variables: ");
     printStr("\nnumL1 = ");
@@ -40,7 +40,7 @@ int main()
 
     printStr("\n");
 
-    printStr("\nAssigning locals to globals: ");
+    printStr("\nLocals to globals: ");
     numG2 = numL1;
     charG2 = charL1;
     ptrG2 = ptrL1;
@@ -55,11 +55,11 @@ int main()
     printStr(strG2);
     if (numG2 == numL1 && charG2 == charL1 && ptrG2 == ptrL1 && strG2 == strL1)
     {
-        printStr("\nSUCCESS: Local variables assigned to global variables.");
+        printStr("\nSUCCESSFUL");
     }
     else
     {
-        printStr("\nFAILURE: Local variables not assigned to global variables.");
+        printStr("\nFAILED");
     }
 
     printStr("\n");
@@ -79,11 +79,11 @@ int main()
     printStr(strL2);
     if (numL2 == numG1 && charL2 == charG1 && ptrL2 == ptrG1 && strL2 == strG1)
     {
-        printStr("\nSUCCESS: Global variables assigned to local variables.");
+        printStr("\nSUCCESSFUL");
     }
     else
     {
-        printStr("\nFAILURE: Global variables not assigned to local variables.");
+        printStr("\nFAILED");
     }
 
     printStr("\n");
@@ -103,11 +103,11 @@ int main()
     printStr(strG2);
     if (numG2 == numG1 && charG2 == charG1 && ptrG2 == ptrG1 && strG2 == strG1)
     {
-        printStr("\nSUCCESS: Global variables assigned to global variables.");
+        printStr("\nSUCCESSFUL");
     }
     else
     {
-        printStr("\nFAILURE: Global variables not assigned to global variables.");
+        printStr("\nFAILED");
     }
 
     printStr("\n\n");

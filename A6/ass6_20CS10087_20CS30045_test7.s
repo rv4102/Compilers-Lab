@@ -18,11 +18,11 @@
 #	t18: -68
 #	t19: -72
 #	t2: -76
-#	t20: -84
+#	t20: -80
 #	t21: -88
-#	t22: -96
+#	t22: -92
 #	t23: -100
-#	t24: -108
+#	t24: -104
 #	t25: -112
 #	t26: -116
 #	t27: -120
@@ -41,33 +41,33 @@
 #	t39: -196
 #	t4: -204
 #	t40: -208
-#	t41: -212
+#	t41: -216
 #	t42: -220
-#	t43: -224
+#	t43: -228
 #	t44: -232
-#	t45: -236
+#	t45: -240
 #	t46: -244
 #	t47: -248
-#	t48: -252
+#	t48: -256
 #	t49: -260
 #	t5: -264
-#	t50: -268
+#	t50: -272
 #	t51: -276
-#	t52: -280
+#	t52: -284
 #	t53: -288
 #	t54: -292
-#	t55: -296
+#	t55: -300
 #	t56: -304
-#	t57: -308
+#	t57: -312
 #	t58: -316
-#	t59: -320
-#	t6: -328
+#	t59: -324
+#	t6: -332
 #	t60: -336
-#	t61: -340
+#	t61: -344
 #	t62: -348
-#	t63: -352
+#	t63: -356
 #	t64: -360
-#	t65: -364
+#	t65: -368
 #	t66: -372
 #	t67: -376
 #	t68: -380
@@ -92,67 +92,67 @@
 
 	.section	.rodata
 .LC0:
-	.string	"\n#### TEST 7 (Conditional operators) ####\n"
+	.string	"\n*********** TEST 7 ************\n"
 .LC1:
-	.string	"\nTesting == operator: "
+	.string	"\nTesting (==) operator: "
 .LC2:
-	.string	"Passed"
+	.string	"PASS"
 .LC3:
-	.string	"Failed"
+	.string	"FAIL"
 .LC4:
-	.string	"\nTesting != operator: "
+	.string	"\nTesting (!=) operator: "
 .LC5:
-	.string	"Passed"
+	.string	"PASS"
 .LC6:
-	.string	"Failed"
+	.string	"FAIL"
 .LC7:
-	.string	"\nTesting < operator (strictly less): "
+	.string	"\nTesting < operator: "
 .LC8:
-	.string	"Passed"
+	.string	"PASS"
 .LC9:
-	.string	"Failed"
+	.string	"FAIL"
 .LC10:
-	.string	"\nTesting < operator (equality): "
+	.string	"\nTesting < operator: "
 .LC11:
-	.string	"Failed"
+	.string	"FAIL"
 .LC12:
-	.string	"Passed"
+	.string	"PASS"
 .LC13:
-	.string	"\nTesting <= operator (equality): "
+	.string	"\nTesting <= operator: "
 .LC14:
-	.string	"Passed"
+	.string	"PASS"
 .LC15:
-	.string	"Failed"
+	.string	"FAIL"
 .LC16:
-	.string	"\nTesting <= operator (strictly less): "
+	.string	"\nTesting <= operator: "
 .LC17:
-	.string	"Passed"
+	.string	"PASS"
 .LC18:
-	.string	"Failed"
+	.string	"FAIL"
 .LC19:
-	.string	"\nTesting > operator (strictly greater): "
+	.string	"\nTesting > operator: "
 .LC20:
-	.string	"Passed"
+	.string	"PASS"
 .LC21:
-	.string	"Failed"
+	.string	"FAIL"
 .LC22:
-	.string	"\nTesting > operator (equality): "
+	.string	"\nTesting > operator: "
 .LC23:
-	.string	"Failed"
+	.string	"FAIL"
 .LC24:
-	.string	"Passed"
+	.string	"PASS"
 .LC25:
-	.string	"\nTesting >= operator (equality): "
+	.string	"\nTesting >= operator: "
 .LC26:
-	.string	"Passed"
+	.string	"PASS"
 .LC27:
-	.string	"Failed"
+	.string	"FAIL"
 .LC28:
-	.string	"\nTesting >= operator (strictly greater): "
+	.string	"\nTesting >= operator: "
 .LC29:
-	.string	"Passed"
+	.string	"PASS"
 .LC30:
-	.string	"Failed"
+	.string	"FAIL"
 .LC31:
 	.string	"\n\n"
 	.text
@@ -171,10 +171,10 @@ main:
 	movq    -16(%rbp), %rdi
 	call    printStr
 	movl    %eax, -20(%rbp)
-	movl    $5, -76(%rbp)
+	movl    $1, -76(%rbp)
 	movl    -76(%rbp), %eax
 	movl    %eax, -4(%rbp)
-	movl    $5, -136(%rbp)
+	movl    $1, -136(%rbp)
 	movl    -136(%rbp), %eax
 	movl    %eax, -8(%rbp)
 	movq    $.LC1, -204(%rbp)
@@ -186,8 +186,8 @@ main:
 	je      .L1
 	jmp     .L2
 .L1:
-	movq    $.LC2, -328(%rbp)
-	movq    -328(%rbp), %rdi
+	movq    $.LC2, -332(%rbp)
+	movq    -332(%rbp), %rdi
 	call    printStr
 	movl    %eax, -392(%rbp)
 	jmp     .L3
@@ -197,7 +197,7 @@ main:
 	call    printStr
 	movl    %eax, -448(%rbp)
 .L3:
-	movl    $6, -24(%rbp)
+	movl    $2, -24(%rbp)
 	movl    -24(%rbp), %eax
 	movl    %eax, -8(%rbp)
 	movq    $.LC4, -32(%rbp)
@@ -220,39 +220,39 @@ main:
 	call    printStr
 	movl    %eax, -60(%rbp)
 .L6:
-	movl    $1, -64(%rbp)
+	movl    $6, -64(%rbp)
 	movl    -64(%rbp), %eax
 	negl    %eax
 	movl    %eax, -68(%rbp)
 	movl    -68(%rbp), %eax
 	movl    %eax, -4(%rbp)
-	movl    $3, -72(%rbp)
+	movl    $2, -72(%rbp)
 	movl    -72(%rbp), %eax
+	negl    %eax
+	movl    %eax, -80(%rbp)
+	movl    -80(%rbp), %eax
 	movl    %eax, -8(%rbp)
-	movq    $.LC7, -84(%rbp)
-	movq    -84(%rbp), %rdi
+	movq    $.LC7, -88(%rbp)
+	movq    -88(%rbp), %rdi
 	call    printStr
-	movl    %eax, -88(%rbp)
+	movl    %eax, -92(%rbp)
 	movl    -8(%rbp), %eax
 	cmpl    %eax, -4(%rbp)
 	jl      .L7
 	jmp     .L8
 .L7:
-	movq    $.LC8, -96(%rbp)
-	movq    -96(%rbp), %rdi
+	movq    $.LC8, -100(%rbp)
+	movq    -100(%rbp), %rdi
 	call    printStr
-	movl    %eax, -100(%rbp)
+	movl    %eax, -104(%rbp)
 	jmp     .L9
 .L8:
-	movq    $.LC9, -108(%rbp)
-	movq    -108(%rbp), %rdi
+	movq    $.LC9, -112(%rbp)
+	movq    -112(%rbp), %rdi
 	call    printStr
-	movl    %eax, -112(%rbp)
+	movl    %eax, -116(%rbp)
 .L9:
-	movl    $1, -116(%rbp)
-	movl    -116(%rbp), %eax
-	negl    %eax
-	movl    %eax, -120(%rbp)
+	movl    $5, -120(%rbp)
 	movl    -120(%rbp), %eax
 	movl    %eax, -8(%rbp)
 	movq    $.LC10, -128(%rbp)
@@ -295,99 +295,99 @@ main:
 	call    printStr
 	movl    %eax, -196(%rbp)
 .L15:
-	movl    $2, -208(%rbp)
+	movl    $10, -208(%rbp)
 	movl    -208(%rbp), %eax
-	negl    %eax
-	movl    %eax, -212(%rbp)
-	movl    -212(%rbp), %eax
 	movl    %eax, -4(%rbp)
-	movq    $.LC16, -220(%rbp)
-	movq    -220(%rbp), %rdi
+	movq    $.LC16, -216(%rbp)
+	movq    -216(%rbp), %rdi
 	call    printStr
-	movl    %eax, -224(%rbp)
+	movl    %eax, -220(%rbp)
 	movl    -8(%rbp), %eax
 	cmpl    %eax, -4(%rbp)
 	jle     .L16
 	jmp     .L17
 .L16:
-	movq    $.LC17, -232(%rbp)
-	movq    -232(%rbp), %rdi
+	movq    $.LC17, -228(%rbp)
+	movq    -228(%rbp), %rdi
 	call    printStr
-	movl    %eax, -236(%rbp)
+	movl    %eax, -232(%rbp)
 	jmp     .L18
 .L17:
-	movq    $.LC18, -244(%rbp)
-	movq    -244(%rbp), %rdi
+	movq    $.LC18, -240(%rbp)
+	movq    -240(%rbp), %rdi
 	call    printStr
-	movl    %eax, -248(%rbp)
+	movl    %eax, -244(%rbp)
 .L18:
-	movl    $7, -252(%rbp)
-	movl    -252(%rbp), %eax
+	movl    $66, -248(%rbp)
+	movl    -248(%rbp), %eax
 	movl    %eax, -4(%rbp)
-	movq    $.LC19, -260(%rbp)
-	movq    -260(%rbp), %rdi
+	movq    $.LC19, -256(%rbp)
+	movq    -256(%rbp), %rdi
 	call    printStr
-	movl    %eax, -268(%rbp)
+	movl    %eax, -260(%rbp)
 	movl    -8(%rbp), %eax
 	cmpl    %eax, -4(%rbp)
 	jg      .L19
 	jmp     .L20
 .L19:
-	movq    $.LC20, -276(%rbp)
-	movq    -276(%rbp), %rdi
+	movq    $.LC20, -272(%rbp)
+	movq    -272(%rbp), %rdi
 	call    printStr
-	movl    %eax, -280(%rbp)
+	movl    %eax, -276(%rbp)
 	jmp     .L21
 .L20:
-	movq    $.LC21, -288(%rbp)
-	movq    -288(%rbp), %rdi
+	movq    $.LC21, -284(%rbp)
+	movq    -284(%rbp), %rdi
 	call    printStr
-	movl    %eax, -292(%rbp)
+	movl    %eax, -288(%rbp)
 .L21:
-	movl    $7, -296(%rbp)
-	movl    -296(%rbp), %eax
+	movl    $1, -292(%rbp)
+	movl    -292(%rbp), %eax
 	movl    %eax, -8(%rbp)
-	movq    $.LC22, -304(%rbp)
-	movq    -304(%rbp), %rdi
+	movq    $.LC22, -300(%rbp)
+	movq    -300(%rbp), %rdi
 	call    printStr
-	movl    %eax, -308(%rbp)
+	movl    %eax, -304(%rbp)
 	movl    -8(%rbp), %eax
 	cmpl    %eax, -4(%rbp)
 	jg      .L22
 	jmp     .L23
 .L22:
-	movq    $.LC23, -316(%rbp)
-	movq    -316(%rbp), %rdi
+	movq    $.LC23, -312(%rbp)
+	movq    -312(%rbp), %rdi
 	call    printStr
-	movl    %eax, -320(%rbp)
+	movl    %eax, -316(%rbp)
 	jmp     .L24
 .L23:
-	movq    $.LC24, -336(%rbp)
-	movq    -336(%rbp), %rdi
+	movq    $.LC24, -324(%rbp)
+	movq    -324(%rbp), %rdi
 	call    printStr
-	movl    %eax, -340(%rbp)
+	movl    %eax, -336(%rbp)
 .L24:
-	movq    $.LC25, -348(%rbp)
-	movq    -348(%rbp), %rdi
+	movq    $.LC25, -344(%rbp)
+	movq    -344(%rbp), %rdi
 	call    printStr
-	movl    %eax, -352(%rbp)
+	movl    %eax, -348(%rbp)
 	movl    -8(%rbp), %eax
 	cmpl    %eax, -4(%rbp)
 	jge     .L25
 	jmp     .L26
 .L25:
-	movq    $.LC26, -360(%rbp)
-	movq    -360(%rbp), %rdi
+	movq    $.LC26, -356(%rbp)
+	movq    -356(%rbp), %rdi
 	call    printStr
-	movl    %eax, -364(%rbp)
+	movl    %eax, -360(%rbp)
 	jmp     .L27
 .L26:
-	movq    $.LC27, -372(%rbp)
-	movq    -372(%rbp), %rdi
+	movq    $.LC27, -368(%rbp)
+	movq    -368(%rbp), %rdi
 	call    printStr
-	movl    %eax, -376(%rbp)
+	movl    %eax, -372(%rbp)
 .L27:
-	movl    $8, -380(%rbp)
+	movl    $10, -376(%rbp)
+	movl    -376(%rbp), %eax
+	negl    %eax
+	movl    %eax, -380(%rbp)
 	movl    -380(%rbp), %eax
 	movl    %eax, -4(%rbp)
 	movq    $.LC28, -388(%rbp)

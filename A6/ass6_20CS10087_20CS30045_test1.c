@@ -2,20 +2,20 @@ int printStr(char *s);
 int readInt(int *eP);
 int printInt(int n);
 
-void testIncDec(int n)
+void num(int n)
 {
-    printStr("Value passed to function = ");
+    printStr("Value  = ");
     printInt(n);
 }
 
 int main()
 {
-    printStr("\n#### TEST 1 (Arithmetic operators) ####");
+    printStr("\n********* TEST 1 ***********");
     int n1, n2, n3, n4;
-    n1 = 30;
-    n2 = 16;
-    n3 = 7;
-    n4 = -22;
+    n1 = 15;
+    n2 = 8;
+    n3 = 9;
+    n4 = -33;
 
     printStr("\nn1 = ");
     printInt(n1);
@@ -60,26 +60,25 @@ int main()
     printStr("\n-n4 = ");
     printInt(-n4);
 
-    printStr("\nTest pre increment: ");
-    testIncDec(++n1);
-    printStr(", Value after call = ");
+    printStr("\nPre increment test: ");
+    num(++n1);
+    printStr(", Value after pre increment call = ");
     printInt(n1);
 
-    printStr("\nTest post increment: ");
-    testIncDec(n1++);
-    printStr(", Value after call = ");
+    printStr("\nPost increment test: ");
+    num(n1++);
+    printStr(", Value after post increment call = ");
     printInt(n1);
 
-    printStr("\nTest pre decrement: ");
-    testIncDec(--n1);
-    printStr(", Value after call = ");
+    printStr("\nPre decrement test: ");
+    num(--n1);
+    printStr(", Value after pre increment call = ");
     printInt(n1);
 
-    printStr("\nTest post decrement: ");
-    testIncDec(n1--);
-    printStr(", Value after call = ");
+    printStr("\npost decrement test: ");
+    num(n1--);
+    printStr(", Value after post decrement call = ");
     printInt(n1);
-
     printStr("\n\n");
     return 0;
 }

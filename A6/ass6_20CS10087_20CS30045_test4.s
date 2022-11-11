@@ -118,11 +118,11 @@
 
 	.section	.rodata
 .LC0:
-	.string	"Hello World, I am a global string."
+	.string	"a GLOBAL STRING I am"
 .LC1:
-	.string	"\n#### TEST 4 (Global variables, pointers and addresses) ####"
+	.string	"\n********* TEST 4 ************"
 .LC2:
-	.string	"Hello World, I am a local string."
+	.string	"a LOCAL STRING I am"
 .LC3:
 	.string	"\nLocal variables: "
 .LC4:
@@ -146,7 +146,7 @@
 .LC13:
 	.string	"\n"
 .LC14:
-	.string	"\nAssigning locals to globals: "
+	.string	"\nLocals to globals: "
 .LC15:
 	.string	"\nnumG2 = "
 .LC16:
@@ -156,9 +156,9 @@
 .LC18:
 	.string	", strG2 = "
 .LC19:
-	.string	"\nSUCCESS: Local variables assigned to global variables."
+	.string	"\nSUCCESSFUL"
 .LC20:
-	.string	"\nFAILURE: Local variables not assigned to global variables."
+	.string	"\nFAILED"
 .LC21:
 	.string	"\n"
 .LC22:
@@ -172,9 +172,9 @@
 .LC26:
 	.string	", strL2 = "
 .LC27:
-	.string	"\nSUCCESS: Global variables assigned to local variables."
+	.string	"\nSUCCESSFUL"
 .LC28:
-	.string	"\nFAILURE: Global variables not assigned to local variables."
+	.string	"\nFAILED"
 .LC29:
 	.string	"\n"
 .LC30:
@@ -188,9 +188,9 @@
 .LC34:
 	.string	", strG2 = "
 .LC35:
-	.string	"\nSUCCESS: Global variables assigned to global variables."
+	.string	"\nSUCCESSFUL"
 .LC36:
-	.string	"\nFAILURE: Global variables not assigned to global variables."
+	.string	"\nFAILED"
 .LC37:
 	.string	"\n\n"
 	.comm	charG2,1,1

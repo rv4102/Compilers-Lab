@@ -122,23 +122,23 @@
 #	t96: -564
 #	t97: -572
 #	t98: -576
+#	num
+#	n: -4
+#	t0: -12
+#	t1: -16
+#	t2: -20
 #	printInt
 #	n: -4
 #	printStr
 #	s: -8
 #	readInt
 #	eP: -8
-#	testIncDec
-#	n: -4
-#	t0: -12
-#	t1: -16
-#	t2: -20
 
 	.section	.rodata
 .LC0:
-	.string	"Value passed to function = "
+	.string	"Value  = "
 .LC1:
-	.string	"\n#### TEST 1 (Arithmetic operators) ####"
+	.string	"\n********* TEST 1 ***********"
 .LC2:
 	.string	"\nn1 = "
 .LC3:
@@ -170,27 +170,27 @@
 .LC16:
 	.string	"\n-n4 = "
 .LC17:
-	.string	"\nTest pre increment: "
+	.string	"\nPre increment test: "
 .LC18:
-	.string	", Value after call = "
+	.string	", Value after pre increment call = "
 .LC19:
-	.string	"\nTest post increment: "
+	.string	"\nPost increment test: "
 .LC20:
-	.string	", Value after call = "
+	.string	", Value after post increment call = "
 .LC21:
-	.string	"\nTest pre decrement: "
+	.string	"\nPre decrement test: "
 .LC22:
-	.string	", Value after call = "
+	.string	", Value after pre increment call = "
 .LC23:
-	.string	"\nTest post decrement: "
+	.string	"\npost decrement test: "
 .LC24:
-	.string	", Value after call = "
+	.string	", Value after post decrement call = "
 .LC25:
 	.string	"\n\n"
 	.text
-	.globl  testIncDec
-	.type   testIncDec, @function
-testIncDec:
+	.globl  num
+	.type   num, @function
+num:
 .LFB0:
 	.cfi_startproc
 	pushq   %rbp
@@ -213,7 +213,7 @@ testIncDec:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-	.size   testIncDec, .-testIncDec
+	.size   num, .-num
 	.text
 	.globl  main
 	.type   main, @function
@@ -230,16 +230,16 @@ main:
 	movq    -224(%rbp), %rdi
 	call    printStr
 	movl    %eax, -284(%rbp)
-	movl    $30, -328(%rbp)
+	movl    $15, -328(%rbp)
 	movl    -328(%rbp), %eax
 	movl    %eax, -4(%rbp)
-	movl    $16, -372(%rbp)
+	movl    $8, -372(%rbp)
 	movl    -372(%rbp), %eax
 	movl    %eax, -24(%rbp)
-	movl    $7, -424(%rbp)
+	movl    $9, -424(%rbp)
 	movl    -424(%rbp), %eax
 	movl    %eax, -28(%rbp)
-	movl    $22, -480(%rbp)
+	movl    $33, -480(%rbp)
 	movl    -480(%rbp), %eax
 	negl    %eax
 	movl    %eax, -532(%rbp)
@@ -458,7 +458,7 @@ main:
 	movl    %eax, -512(%rbp)
 	incl    -4(%rbp)
 	movl    -4(%rbp), %edi
-	call    testIncDec
+	call    num
 	movq    $.LC18, -520(%rbp)
 	movq    -520(%rbp), %rdi
 	call    printStr
@@ -474,7 +474,7 @@ main:
 	movl    %eax, -548(%rbp)
 	incl    -4(%rbp)
 	movl    -548(%rbp), %edi
-	call    testIncDec
+	call    num
 	movq    $.LC20, -556(%rbp)
 	movq    -556(%rbp), %rdi
 	call    printStr
@@ -488,7 +488,7 @@ main:
 	movl    %eax, -576(%rbp)
 	decl    -4(%rbp)
 	movl    -4(%rbp), %edi
-	call    testIncDec
+	call    num
 	movq    $.LC22, -68(%rbp)
 	movq    -68(%rbp), %rdi
 	call    printStr
@@ -504,7 +504,7 @@ main:
 	movl    %eax, -92(%rbp)
 	decl    -4(%rbp)
 	movl    -92(%rbp), %edi
-	call    testIncDec
+	call    num
 	movq    $.LC24, -100(%rbp)
 	movq    -100(%rbp), %rdi
 	call    printStr

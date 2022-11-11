@@ -4,114 +4,114 @@ int printInt(int n);
 
 int main()
 {
-    printStr("\n#### TEST 7 (Conditional operators) ####\n");
+    printStr("\n*********** TEST 7 ************\n");
 
     int n1, n2;
 
-    n1 = 5, n2 = 5;
-    printStr("\nTesting == operator: ");
+    n1 = 1, n2 = 1;
+    printStr("\nTesting (==) operator: ");
     if (n1 == n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n2 = 6;
-    printStr("\nTesting != operator: ");
+    n2 = 2;
+    printStr("\nTesting (!=) operator: ");
     if (n1 != n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n1 = -1, n2 = 3;
-    printStr("\nTesting < operator (strictly less): ");
+    n1 = -6, n2 = -2;
+    printStr("\nTesting < operator: ");
     if (n1 < n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n2 = -1;
-    printStr("\nTesting < operator (equality): ");
+    n2 = 5;
+    printStr("\nTesting < operator: ");
     if (n1 < n2)
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
     else
     {
-        printStr("Passed");
+        printStr("PASS");
     }
-    printStr("\nTesting <= operator (equality): ");
+    printStr("\nTesting <= operator: ");
     if (n1 <= n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n1 = -2;
-    printStr("\nTesting <= operator (strictly less): ");
+    n1 = 10;
+    printStr("\nTesting <= operator: ");
     if (n1 <= n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n1 = 7;
-    printStr("\nTesting > operator (strictly greater): ");
+    n1 = 66;
+    printStr("\nTesting > operator: ");
     if (n1 > n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n2 = 7;
-    printStr("\nTesting > operator (equality): ");
+    n2 = 1;
+    printStr("\nTesting > operator: ");
     if (n1 > n2)
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
     else
     {
-        printStr("Passed");
+        printStr("PASS");
     }
-    printStr("\nTesting >= operator (equality): ");
+    printStr("\nTesting >= operator: ");
     if (n1 >= n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
-    n1 = 8;
-    printStr("\nTesting >= operator (strictly greater): ");
+    n1 = -10;
+    printStr("\nTesting >= operator: ");
     if (n1 >= n2)
     {
-        printStr("Passed");
+        printStr("PASS");
     }
     else
     {
-        printStr("Failed");
+        printStr("FAIL");
     }
 
     printStr("\n\n");
