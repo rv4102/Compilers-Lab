@@ -30,5 +30,5 @@ clean:
 
 test: parser.out libass2_20CS30045.a
 	./parser.out ass6_20CS10087_20CS30045_test1 > ass6_20CS10087_20CS30045_quads1.out
-	gcc ass6_20CS10087_20CS30045_test1.s -L. -lass2_19CS30031 -no-pie -o test1
+	gcc ass6_20CS10087_20CS30045_test1.s -L. -lass2_20CS30045 -no-pie -o test1
 	@./test1
