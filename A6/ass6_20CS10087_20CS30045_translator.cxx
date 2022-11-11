@@ -15,6 +15,7 @@ SymbolTable *currentTable, *globalTable, *parentTable;
 Symbol *currentSymbol;
 SymbolType::typeEnum currentType;
 int tableCount, temporaryCount;
+vector<string> stringLiterals;
 
 /** @brief Implementation of activation record class
  */

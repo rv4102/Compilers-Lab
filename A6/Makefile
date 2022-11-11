@@ -27,3 +27,8 @@ ass2_20CS30045.o: ass2_20CS30045.c myl.h
 
 clean:
 	rm libass2_20CS30045.a ass2_20CS30045.o parser.out ass6_20CS10087_20CS30045_translator.o ass6_20CS10087_20CS30045_target_translator.o lex.yy.* y.tab.* y.output test*
+
+test: parser.out libass2_20CS30045.a
+	./parser.out ass6_20CS10087_20CS30045_test1 > ass6_20CS10087_20CS30045_quads1.out
+	gcc ass6_20CS10087_20CS30045_test1.s -L. -lass2_19CS30031 -no-pie -o test1
+	@./test1

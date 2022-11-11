@@ -9,6 +9,8 @@
 #include <functional>
 #include <string>
 #include <string.h>
+#include <stack>
+#include <fstream>
 using namespace std;
 
 class Symbol;
@@ -119,7 +121,8 @@ void emit(string _op, string _result, string _arg1 = "", string _arg2 = "");
 void emit(string _op, string _result, int _arg1, string _arg2 = "");         
 void emit(string _op, string _result, float _arg1, string _arg2 = "");         
 
-void backpatch(list<int> _list, int add);       
+void backpatch(list<int> _list, int add);
+void finalBackpatch();    
 list<int> makeList(int i);              
 list<int> merge(list<int>, list<int>); 
 
